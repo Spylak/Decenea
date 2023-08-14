@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Decenea.Domain\Decenea.Domain.csproj" />
+        <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MailKit" Version="4.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="FastEndpoints">
+        <HintPath>..\..\..\.nuget\packages\fastendpoints\5.15.0\lib\net7.0\FastEndpoints.dll</HintPath>
+      </Reference>
+      <Reference Include="FastEndpoints.Security">
+        <HintPath>..\..\..\.nuget\packages\fastendpoints.security\5.15.0\lib\net7.0\FastEndpoints.Security.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.AspNetCore.Identity">
+        <HintPath>..\..\..\..\..\usr\lib64\dotnet\shared\Microsoft.AspNetCore.App\7.0.9\Microsoft.AspNetCore.Identity.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Options\" />
+    </ItemGroup>
+</Project>
