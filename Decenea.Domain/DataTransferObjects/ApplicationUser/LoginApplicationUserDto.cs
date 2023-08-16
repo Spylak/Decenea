@@ -1,4 +1,4 @@
-namespace Decenea.Domain.DataTransferObjects.ApplicationUser.LoginApplicationUser;
+namespace Decenea.Domain.DataTransferObjects.ApplicationUser;
 
 public class LoginApplicationUserDto
 {

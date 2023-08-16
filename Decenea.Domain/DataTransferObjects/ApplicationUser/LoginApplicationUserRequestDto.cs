@@ -1,6 +1,6 @@
-namespace Decenea.Domain.DataTransferObjects.ApplicationUser.LoginApplicationUser;
+namespace Decenea.Domain.DataTransferObjects.ApplicationUser;
 
-public class LoginApplicationUserRequest
+public class LoginApplicationUserRequestDto
 {
     public string Email { get; set; }
     public string Password { get; set; }

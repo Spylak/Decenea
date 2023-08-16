@@ -3,8 +3,7 @@ using Decenea.Application.Mappers;
 using Decenea.Application.Services.CommandServices.ICommandServices;
 using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
-using Decenea.Domain.DataTransferObjects.ApplicationUser.LoginApplicationUser;
-using Decenea.Domain.DataTransferObjects.ApplicationUser.RegisterApplicationUser;
+using Decenea.Domain.DataTransferObjects.ApplicationUser;
 using Decenea.Domain.Entities.ApplicationUser;
 using Decenea.Infrastructure.Data;
 using FastEndpoints.Security;
@@ -22,25 +21,25 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
         _userManager = userManager;
         _dbContext = dbContext;
     }
-    public async Task<Result<IdentityResult, Exception>> RegisterUser(RegisterApplicationUserRequest request)
+    public async Task<Result<IdentityResult, Exception>> RegisterUser(RegisterApplicationUserRequestDto requestDto)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
         {
             var user = new ApplicationUser()
             {
-                FirstName = request.FirstName,
-                Email = request.Email,
-                UserName = request.Email,
-                LastName = request.LastName,
-                MiddleName = request.MiddleName,
-                PhoneNumber = request.PhoneNumber,
+                FirstName = requestDto.FirstName,
+                Email = requestDto.Email,
+                UserName = requestDto.Email,
+                LastName = requestDto.LastName,
+                MiddleName = requestDto.MiddleName,
+                PhoneNumber = requestDto.PhoneNumber,
                 CreatedBy = "ApplicationUserCommandService",
-                ResidenceOf = request.ResidenceOf
+                ResidenceOf = requestDto.ResidenceOf
             };
             
             var registration = await _userManager
-                .CreateAsync(user, request.Password);
+                .CreateAsync(user, requestDto.Password);
 
             if (!registration.Succeeded)
             {
@@ -66,7 +65,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
         }
     }
 
-    public async Task<Result<LoginApplicationUserDto, Exception>> LoginUser(LoginApplicationUserRequest request)
+    public async Task<Result<LoginApplicationUserDto, Exception>> LoginUser(LoginApplicationUserRequestDto requestDto)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
@@ -76,7 +75,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             var user = await _userManager.Users
                 .Include(i =>i.UserRoles)
                 .ThenInclude(i => i.Role)
-                .FirstOrDefaultAsync(i=> i.Email == request.Email);
+                .FirstOrDefaultAsync(i=> i.Email == requestDto.Email);
             
             if (user is null)
                 return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User not found.");
@@ -84,7 +83,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             if(user.LockoutEnabled)
                 return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User is locked.");
             
-            if (!await _userManager.CheckPasswordAsync(user, request.Password))
+            if (!await _userManager.CheckPasswordAsync(user, requestDto.Password))
             {
                 return Result<LoginApplicationUserDto, Exception>.Anticipated(userDto,"Credentials don't match.");
             }
@@ -99,12 +98,12 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                     
                     u.Permissions.AddRange(new[] { "Browse" });
                     
-                    u.Claims.Add(new("UserName", request.Email));
+                    u.Claims.Add(new("UserName", requestDto.Email));
                     
                     u["UserID"] = user.Id.ToString(); //indexer based claim setting
                 });
             
-            if (request.RememberMe)
+            if (requestDto.RememberMe)
             {
                 var randomBytes = RandomNumberGenerator.GetBytes(64);
                 var refreshToken = Convert.ToBase64String(randomBytes);
@@ -127,7 +126,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
         {
             await transaction.RollbackAsync();
             return Result<LoginApplicationUserDto, Exception>
-                .Excepted(ex,$"Didn't manage to login user{request.Email}");
+                .Excepted(ex,$"Didn't manage to login user{requestDto.Email}");
         }
     }
 }

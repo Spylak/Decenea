@@ -1,4 +1,4 @@
-using Decenea.Domain.DataTransferObjects.ApplicationUser.LoginApplicationUser;
+using Decenea.Domain.DataTransferObjects.ApplicationUser;
 using Decenea.Domain.Entities.ApplicationUser;
 
 namespace Decenea.Application.Mappers;

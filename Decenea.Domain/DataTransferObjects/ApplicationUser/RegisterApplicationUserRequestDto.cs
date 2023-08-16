@@ -1,6 +1,6 @@
-namespace Decenea.Domain.DataTransferObjects.ApplicationUser.RegisterApplicationUser;
+namespace Decenea.Domain.DataTransferObjects.ApplicationUser;
 
-public class RegisterApplicationUserRequest
+public class RegisterApplicationUserRequestDto
 {
     public string Email { get; set; }
     public string FirstName { get; set; }

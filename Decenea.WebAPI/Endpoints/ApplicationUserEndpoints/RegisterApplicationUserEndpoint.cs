@@ -1,11 +1,11 @@
 using Decenea.Application.Services.CommandServices.ICommandServices;
 using Decenea.Domain.Common;
-using Decenea.Domain.DataTransferObjects.ApplicationUser.RegisterApplicationUser;
+using Decenea.Domain.DataTransferObjects.ApplicationUser;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 
-public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserRequest,ApiResponse<IdentityResult>>
+public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserRequestDto,ApiResponse<IdentityResult>>
 {
     private readonly IApplicationUserCommandService _applicationUserCommandService;
     
@@ -20,7 +20,7 @@ public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserR
         AllowAnonymous();
     }
 
-    public override async Task<ApiResponse<IdentityResult>> ExecuteAsync(RegisterApplicationUserRequest req, CancellationToken ct)
+    public override async Task<ApiResponse<IdentityResult>> ExecuteAsync(RegisterApplicationUserRequestDto req, CancellationToken ct)
     {
         var result = await _applicationUserCommandService.RegisterUser(req);
         
