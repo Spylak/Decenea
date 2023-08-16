@@ -7,6 +7,13 @@ public class ApiResponse
         IsSuccess = isSuccess ?? false;
         Messages = messages ?? new List<string>();
     }
+    public ApiResponse(bool? isSuccess = null, string? message = null)
+    {
+        IsSuccess = isSuccess ?? false;
+        Messages = new List<string>();
+        if(message is not null)
+            Messages.Add(message);
+    }
 
     public bool? IsSuccess { get; set; }
     public List<string> Messages { get; set; } 
@@ -19,5 +26,9 @@ public class ApiResponse<T> : ApiResponse where T : class?
         Data = data;
     }
     
+    public ApiResponse(T? data = null, bool? isSuccess = null, string? message = null) : base(isSuccess, message)
+    {
+        Data = data;
+    }
     public T? Data { get; set; }
 }

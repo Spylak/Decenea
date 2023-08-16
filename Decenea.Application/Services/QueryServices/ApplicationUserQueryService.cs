@@ -18,6 +18,6 @@ public class ApplicationUserQueryService : IApplicationUserQueryService
     public async Task<Result<List<ApplicationUser>, Exception>> GetManyApplicationUsers()
     {
         var users = await _dbContext.Users.ToListAsync();
-        return new Result<List<ApplicationUser>, Exception>(users);
+        return Result<List<ApplicationUser>, Exception>.Anticipated(users);
     }
 }

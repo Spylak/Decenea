@@ -1,9 +1,11 @@
 using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Domain.Common;
 using Decenea.Domain.DataTransferObjects.ApplicationUser.RegisterApplicationUser;
+using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 
-public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserRequest,RegisterApplicationUserResponse>
+public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserRequest,ApiResponse<IdentityResult>>
 {
     private readonly IApplicationUserCommandService _applicationUserCommandService;
     
@@ -18,23 +20,19 @@ public class RegisterApplicationUserEndpoint : Endpoint<RegisterApplicationUserR
         AllowAnonymous();
     }
 
-    public override async Task<RegisterApplicationUserResponse> ExecuteAsync(RegisterApplicationUserRequest req, CancellationToken ct)
+    public override async Task<ApiResponse<IdentityResult>> ExecuteAsync(RegisterApplicationUserRequest req, CancellationToken ct)
     {
-        var response = new RegisterApplicationUserResponse();
-        
         var result = await _applicationUserCommandService.RegisterUser(req);
         
-        if (result.Value is not null)
+        if(result.IsSuccess)
         {
-            response.IsSuccess = result.Value.Succeeded;
-            response.Messages.AddRange(result.Value.Errors.Select(j => j.Description));
-        }
-        else
-        {
-            response.IsSuccess = result.IsSuccess;
-            response.Messages.Add("Did not manage to create the user.");
+            var errorMessages = result.Value?
+                .Errors
+                .Select(j => j.Description)
+                .ToList();
+            return new ApiResponse<IdentityResult>(result.Value,result.IsSuccess,errorMessages);
         }
         
-        return response;
+        return new ApiResponse<IdentityResult>(result.Value,result.IsSuccess,result.Message);
     }
 }

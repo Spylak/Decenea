@@ -1,32 +1,39 @@
 namespace Decenea.Domain.Common;
 
-public record Result<TValue, TError>
+public record Result<TValue, TException>
 {
     public TValue? Value { get; init; }
-    public TError? Error { get; init; }
-    public bool IsError { get; init; }
+    public TException? Exception { get; init; }
+    public string? Message { get; init; }
+    public bool IsExcepted { get; init; }
     
-    public bool IsSuccess => !IsError;
+    public bool IsSuccess => !IsExcepted && Value is not null;
     
-    public Result(TValue value)
+    private Result(TValue? value, string? message)
     {
-        IsError = false;
+        IsExcepted = false;
         Value = value;
-        Error = default;
+        Exception = default;
+        Message = message;
     }
 
-    public Result(TError error)
+    private Result(TException? error, string? message)
     {
-        IsError = true;
-        Error = error;
+        IsExcepted = true;
+        Exception = error;
         Value = default;
+        Message = message;
     }
-
-    public static implicit operator Result<TValue, TError>(TValue value) => new(value);
-    public static implicit operator Result<TValue, TError>(TError error) => new(error);
 
     public TResult Match<TResult>(
         Func<TValue, TResult> success,
-        Func<TError, TResult> failure) =>
-        !IsError ? success(Value!) : failure(Error!);
-}
+        Func<TException, TResult> failure) =>
+        !IsExcepted ? success(Value!) : failure(Exception!);
+    
+    public static Result<TValue, TException> Anticipated(TValue? value, string? message = null) => 
+        new(value, message);
+    
+    public static Result<TValue, TException> Excepted(TException? error, string? message = null) => 
+        new(error, message);
+
+} 

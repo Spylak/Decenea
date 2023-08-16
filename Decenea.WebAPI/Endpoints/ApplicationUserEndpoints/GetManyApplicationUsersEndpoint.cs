@@ -1,10 +1,12 @@
 using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.Domain.Common;
+using Decenea.Domain.Constants;
 using Decenea.Domain.DataTransferObjects.ApplicationUser.GetManyApplicationUsers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Decenea.Domain.Entities.ApplicationUser;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 
-public class GetManyApplicationUsersEndpoint : Endpoint<GetManyApplicationUsersRequest, GetManyApplicationUsersResponse>
+public class GetManyApplicationUsersEndpoint : Endpoint<GetManyApplicationUsersRequest, ApiResponse<List<ApplicationUser>>>
 {
     private readonly IApplicationUserQueryService _applicationUserQueryService;
     public GetManyApplicationUsersEndpoint(IApplicationUserQueryService applicationUserQueryService)
@@ -15,14 +17,12 @@ public class GetManyApplicationUsersEndpoint : Endpoint<GetManyApplicationUsersR
     public override void Configure()
     {
         Get("/ApplicationUser/GetMany");
-        Roles("Guest");
+        Roles(ApplicationRoles.SuperAdmin);
     }
 
-    public override async Task<GetManyApplicationUsersResponse> ExecuteAsync(GetManyApplicationUsersRequest req, CancellationToken ct)
+    public override async Task<ApiResponse<List<ApplicationUser>>> ExecuteAsync(GetManyApplicationUsersRequest req, CancellationToken ct)
     {
-        var context = HttpContext.Request.Headers["Authorization"];
-        var currentUser = HttpContext.User;
         var result = await _applicationUserQueryService.GetManyApplicationUsers();
-        return new GetManyApplicationUsersResponse() { Data = result.Value };
+        return new ApiResponse<List<ApplicationUser>>(result.Value, result.IsSuccess, result.Message);
     }
 }

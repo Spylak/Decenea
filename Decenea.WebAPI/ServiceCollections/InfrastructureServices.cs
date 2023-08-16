@@ -1,7 +1,11 @@
+using System.Security.Cryptography;
+using System.Text;
 using Decenea.Domain.Entities.ApplicationUser;
 using Decenea.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Decenea.WebAPI.ServiceCollections;
 
@@ -30,6 +34,26 @@ public static class InfrastructureServices
             .AddRoles<ApplicationRole>()
             .AddRoleManager<RoleManager<ApplicationRole>>()
             .AddDefaultTokenProviders();
+        
+        builder.Services
+            .AddAuthentication(o => o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(o =>
+            {
+                SecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWTSigningKey"]!));
 
+                //set defaults
+                o.TokenValidationParameters.IssuerSigningKey = key;
+                o.TokenValidationParameters.ValidateIssuerSigningKey = true;
+                o.TokenValidationParameters.ValidateLifetime = true;
+                o.TokenValidationParameters.ClockSkew = TimeSpan.FromSeconds(60);
+                o.TokenValidationParameters.ValidAudience = null;
+                o.TokenValidationParameters.ValidateAudience = false;
+                o.TokenValidationParameters.ValidIssuer = null;
+                o.TokenValidationParameters.ValidateIssuer = false;
+                
+                //correct any user mistake
+                o.TokenValidationParameters.ValidateAudience = o.TokenValidationParameters.ValidAudience is not null;
+                o.TokenValidationParameters.ValidateIssuer = o.TokenValidationParameters.ValidIssuer is not null;
+            });
     }
 }

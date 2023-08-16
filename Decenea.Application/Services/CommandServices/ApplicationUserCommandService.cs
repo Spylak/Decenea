@@ -45,7 +45,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             if (!registration.Succeeded)
             {
                 await transaction.RollbackAsync();
-                return new Result<IdentityResult, Exception>(registration);
+                return Result<IdentityResult, Exception>.Anticipated(registration);
             }
 
             var roleResult = await _userManager
@@ -53,16 +53,16 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             if (!roleResult.Succeeded)
             {
                 await transaction.RollbackAsync();
-                return new Result<IdentityResult, Exception>(roleResult);
+                return Result<IdentityResult, Exception>.Anticipated(roleResult);
             }
             
             await transaction.CommitAsync();
-            return new Result<IdentityResult, Exception>(roleResult);
+            return Result<IdentityResult, Exception>.Anticipated(roleResult);
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            return new Result<IdentityResult, Exception>(ex);
+            return Result<IdentityResult, Exception>.Excepted(ex);
         }
     }
 
@@ -79,14 +79,14 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                 .FirstOrDefaultAsync(i=> i.Email == request.Email);
             
             if (user is null)
-                return new Result<LoginApplicationUserDto, Exception>(userDto);
+                return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User not found.");
             
-            // var signIn = await _signInManager
-            //     .PasswordSignInAsync(user,request.Password, false, user.LockoutEnabled);
-
+            if(user.LockoutEnabled)
+                return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User is locked.");
+            
             if (!await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return new Result<LoginApplicationUserDto, Exception>(userDto);
+                return Result<LoginApplicationUserDto, Exception>.Anticipated(userDto,"Credentials don't match.");
             }
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
@@ -121,12 +121,13 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             user.ApplicationUserToLoginApplicationUserDto(userDto);
 
             await transaction.CommitAsync();
-            return new Result<LoginApplicationUserDto, Exception>(userDto);
+            return Result<LoginApplicationUserDto, Exception>.Anticipated(userDto);
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            return new Result<LoginApplicationUserDto, Exception>(ex);
+            return Result<LoginApplicationUserDto, Exception>
+                .Excepted(ex,$"Didn't manage to login user{request.Email}");
         }
     }
 }

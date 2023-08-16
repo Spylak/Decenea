@@ -1,9 +1,10 @@
 using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Domain.Common;
 using Decenea.Domain.DataTransferObjects.ApplicationUser.LoginApplicationUser;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 
-public class LoginApplicationUserEndpoint : Endpoint<LoginApplicationUserRequest, LoginApplicationUserResponse>
+public class LoginApplicationUserEndpoint : Endpoint<LoginApplicationUserRequest, ApiResponse<LoginApplicationUserDto>>
 {
     private readonly IApplicationUserCommandService _applicationUserCommandService;
 
@@ -18,17 +19,10 @@ public class LoginApplicationUserEndpoint : Endpoint<LoginApplicationUserRequest
         AllowAnonymous();
     }
 
-    public override async Task<LoginApplicationUserResponse> ExecuteAsync(LoginApplicationUserRequest req,
+    public override async Task<ApiResponse<LoginApplicationUserDto>> ExecuteAsync(LoginApplicationUserRequest req,
         CancellationToken ct)
     {
-        var response = new LoginApplicationUserResponse();
         var result = await _applicationUserCommandService.LoginUser(req);
-        
-        response.Data = result.Value;
-        response.IsSuccess = result.IsSuccess;
-        if(result.IsError)
-            response.Messages.Add("Did not manage to log in.");
-        
-        return response;
+        return new ApiResponse<LoginApplicationUserDto>(result.Value, result.IsSuccess, result.Message);
     }
 }
