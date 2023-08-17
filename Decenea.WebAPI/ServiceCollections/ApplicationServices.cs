@@ -1,4 +1,4 @@
-using Decenea.Application.CommandServices;
+using Decenea.Application.Services.CommandServices;
 using Decenea.Application.Services.CommandServices.ICommandServices;
 using Decenea.Application.Services.QueryServices;
 using Decenea.Application.Services.QueryServices.IQueryServices;

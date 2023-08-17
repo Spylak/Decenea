@@ -1,6 +1,6 @@
 namespace Decenea.Domain.DataTransferObjects.ApplicationUser;
 
-public class LoginApplicationUserDto
+public class LoginApplicationUserResponseDto
 {
     public string ResidenceOf { get; set; }
     public string FirstName { get; set; }

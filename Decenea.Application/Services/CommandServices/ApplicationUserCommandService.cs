@@ -1,16 +1,18 @@
-using System.Security.Cryptography;
+using Decenea.Application.Extensions;
+using Decenea.Application.Helpers;
 using Decenea.Application.Mappers;
 using Decenea.Application.Services.CommandServices.ICommandServices;
 using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
 using Decenea.Domain.DataTransferObjects.ApplicationUser;
+using Decenea.Domain.DataTransferObjects.Auth;
 using Decenea.Domain.Entities.ApplicationUser;
 using Decenea.Infrastructure.Data;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Decenea.Application.CommandServices;
+namespace Decenea.Application.Services.CommandServices;
 
 public class ApplicationUserCommandService : IApplicationUserCommandService
 {
@@ -65,12 +67,12 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
         }
     }
 
-    public async Task<Result<LoginApplicationUserDto, Exception>> LoginUser(LoginApplicationUserRequestDto requestDto)
+    public async Task<Result<LoginApplicationUserResponseDto, Exception>> LoginUser(LoginApplicationUserRequestDto requestDto)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
         {
-            var userDto = new LoginApplicationUserDto();
+            var userDto = new LoginApplicationUserResponseDto();
             
             var user = await _userManager.Users
                 .Include(i =>i.UserRoles)
@@ -78,15 +80,21 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                 .FirstOrDefaultAsync(i=> i.Email == requestDto.Email);
             
             if (user is null)
-                return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User not found.");
+                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(null,"User not found.");
             
             if(user.LockoutEnabled)
-                return Result<LoginApplicationUserDto, Exception>.Anticipated(null,"User is locked.");
+                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(null,"User is locked.");
             
             if (!await _userManager.CheckPasswordAsync(user, requestDto.Password))
             {
-                return Result<LoginApplicationUserDto, Exception>.Anticipated(userDto,"Credentials don't match.");
+                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(userDto,"Credentials don't match.");
             }
+            
+            var userRoles = user.UserRoles
+                .Select(i => i.Role.Name)
+                .Where(i => i != null)
+                .Cast<string>() 
+                .ToList();
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
@@ -94,7 +102,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                 expireAt: accessTokenExpiryTime,
                 priviledges: u =>
                 {
-                    u.Roles.AddRange(user.UserRoles.Select(i => i.Role.Name));
+                    u.Roles.AddRange(userRoles);
                     
                     u.Permissions.AddRange(new[] { "Browse" });
                     
@@ -105,13 +113,11 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             
             if (requestDto.RememberMe)
             {
-                var randomBytes = RandomNumberGenerator.GetBytes(64);
-                var refreshToken = Convert.ToBase64String(randomBytes);
-                var refreshTokenExpiryTime = DateTime.UtcNow.AddDays(30);
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = refreshTokenExpiryTime;
-                userDto.RefreshToken = refreshToken;
-                userDto.RefreshTokenExpiryTime = refreshTokenExpiryTime;
+                var refreshToken = AuthTokenHelper.GenerateRefreshToken();
+                userDto.RefreshToken = refreshToken.RefreshToken;
+                userDto.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
+                user.RefreshToken = refreshToken.RefreshToken;
+                user.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
                 await _userManager.UpdateAsync(user);
             }
             
@@ -120,13 +126,91 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
             user.ApplicationUserToLoginApplicationUserDto(userDto);
 
             await transaction.CommitAsync();
-            return Result<LoginApplicationUserDto, Exception>.Anticipated(userDto);
+            return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(userDto);
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            return Result<LoginApplicationUserDto, Exception>
+            return Result<LoginApplicationUserResponseDto, Exception>
                 .Excepted(ex,$"Didn't manage to login user{requestDto.Email}");
+        }
+    }
+
+    public async Task<Result<RegenerateAuthTokensResponseDto, Exception>> RegenerateAuthTokens(RegenerateAuthTokensRequestDto requestDto)
+    {
+        
+        var claims = AuthTokenHelper
+            .GetTokenClaims(requestDto.AccessToken);
+        
+        if (claims.Value is null)
+        {
+            return Result<RegenerateAuthTokensResponseDto, Exception>
+                .Excepted(claims.Exception);
+        }
+        
+        var username = claims.Value
+            .GetUserNameClaimValue();       
+        
+        if (username is null)
+        {
+            return Result<RegenerateAuthTokensResponseDto, Exception>
+                .Anticipated(null,"Username not found.");
+        }
+        
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+         
+        try
+        {
+            var user = await _userManager
+                .Users
+                .Include(i => i.UserRoles)
+                .ThenInclude(i => i.Role)
+                .FirstOrDefaultAsync(i=> i.UserName == username);
+            
+            if (user is null)
+                return Result<RegenerateAuthTokensResponseDto, Exception>.Anticipated(null,"User not found.");
+            
+            if(user.RefreshToken != requestDto.RefreshToken)
+                return Result<RegenerateAuthTokensResponseDto, Exception>.Anticipated(null,"Invalid refresh token.");
+            
+            if(user.RefreshTokenExpiryTime < DateTime.UtcNow)
+                return Result<RegenerateAuthTokensResponseDto, Exception>.Anticipated(null,"Expired refresh token.");
+            
+            var userRoles = user.UserRoles
+                .Select(i => i.Role.Name)
+                .Where(i => i != null)
+                .Cast<string>() 
+                .ToList();
+            
+            var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+            var jwtToken = JWTBearer.CreateToken(
+                signingKey: "ApplicationTokenSigningKey",
+                expireAt: accessTokenExpiryTime,
+                priviledges: u =>
+                {
+                    u.Roles.AddRange(userRoles);
+                    
+                    u.Permissions.AddRange(new[] { "Browse" , "Edit" });
+                    
+                    u.Claims.Add(new("UserName", username));
+                    
+                    u["UserID"] = user.Id.ToString(); //indexer based claim setting
+                });
+
+            var refreshToken = AuthTokenHelper.GenerateRefreshToken();
+            user.RefreshToken = refreshToken.RefreshToken;
+            user.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
+            await _userManager.UpdateAsync(user);
+            await transaction.CommitAsync();
+
+            return Result<RegenerateAuthTokensResponseDto, Exception>
+                .Anticipated(new RegenerateAuthTokensResponseDto(jwtToken,refreshToken.RefreshToken,refreshToken.RefreshTokenExpiryTime,accessTokenExpiryTime));
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            return Result<RegenerateAuthTokensResponseDto, Exception>
+                .Excepted(e,$"Didn't manage to RegenerateAuthTokens user: {username}");
         }
     }
 }
