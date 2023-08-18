@@ -13,6 +13,12 @@ public class CountryConfiguration : IEntityTypeConfiguration<Country>
                 builder.HasIndex(i => i.Name)
                         .IsUnique();
                 
+                builder.Property(i => i.AsciiName)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.AlternativeName)
+                        .IsRequired(false);
+                
                 builder.HasMany(i => i.Cities)
                         .WithOne(i => i.Country)
                         .HasForeignKey(i => i.CountryId);

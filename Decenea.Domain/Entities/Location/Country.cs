@@ -5,6 +5,9 @@ namespace Decenea.Domain.Entities.Location;
 public class Country : AuditableEntity
 {
     public string Name { get; set; }
+    
+    public string? AsciiName { get; set; }
+    public string? AlternativeName { get; set; }
     public string CountryCode { get; set; }
     public string Timezone { get; set; }
     public ICollection<Region> Regions { get; set; }
