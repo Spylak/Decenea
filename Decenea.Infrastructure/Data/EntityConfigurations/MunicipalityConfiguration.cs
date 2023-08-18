@@ -9,9 +9,6 @@ public class MunicipalityConfiguration : IEntityTypeConfiguration<Municipality>
         public void Configure(EntityTypeBuilder<Municipality> builder)
         {
                 builder.ToTable(name: "Municipalities");
-
-                builder.HasIndex(i => i.Name)
-                        .IsUnique();
                 
                 builder.Property(i => i.AsciiName)
                         .IsRequired(false);
@@ -19,26 +16,9 @@ public class MunicipalityConfiguration : IEntityTypeConfiguration<Municipality>
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
                 
-                builder.HasOne(i => i.Country)
+                builder.HasOne(i => i.RegionalUnit)
                         .WithMany(i => i.Municipalities)
-                        .HasForeignKey(i => i.CountryId);
-                
-                builder.HasOne(i => i.Seat)
-                        .WithOne()
-                        .HasForeignKey<Municipality>(i => i.SeatId)
-                        .IsRequired(false);
-                
-                builder.HasOne(i => i.Region)
-                        .WithMany(i => i.Municipalities)
-                        .HasForeignKey(i => i.RegionId);
-                
-                builder.HasOne(i => i.Prefecture)
-                        .WithMany(i => i.Municipalities)
-                        .HasForeignKey(i => i.PrefectureId);
-                
-                builder.HasMany(i => i.Cities)
-                        .WithOne(i => i.Municipality)
-                        .HasForeignKey(i => i.MunicipalityId);
+                        .HasForeignKey(i => i.RegionalUnitId);
                 
                 builder.HasMany(i => i.MunicipalUnits)
                         .WithOne(i => i.Municipality)

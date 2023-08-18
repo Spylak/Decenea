@@ -3,6 +3,7 @@ using System;
 using Decenea.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    partial class DeceneaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818180008_Locations6")]
+    partial class Locations6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -468,7 +471,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasIndex("MunicipalityId");
 
-                    b.ToTable("MunicipalUnits", (string)null);
+                    b.ToTable("MunicipalUnit");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>

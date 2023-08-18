@@ -9,11 +9,5 @@ public class Region : AuditableEntity
     public string? AlternativeName { get; set; }
     public string CountryId { get; set; }
     public Country Country { get; set; }
-    public string? CapitalId { get; set; }
-    public City? Capital { get; set; }
-    public ICollection<City> Cities { get; set; }
-    public ICollection<Municipality> Municipalities { get; set; }
-    public ICollection<Prefecture> Prefectures { get; set; }
-    public ICollection<MunicipalUnit> MunicipalUnits { get; set; }
-
+    public ICollection<RegionalUnit> RegionalUnits { get; set; }
 }

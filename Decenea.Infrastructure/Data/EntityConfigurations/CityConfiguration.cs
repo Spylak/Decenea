@@ -10,9 +10,6 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
         {
                 builder.ToTable(name: "Cities");
                 
-                builder.HasIndex(i => i.Name)
-                        .IsUnique();
-                
                 builder.Property(i => i.AsciiName)
                         .IsRequired(false);
                 
@@ -22,21 +19,10 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
                 builder.HasOne(i => i.Country)
                         .WithMany(i => i.Cities)
                         .HasForeignKey(i => i.CountryId);
-
-                builder.HasOne(i => i.Prefecture)
+                
+                builder.HasOne(i => i.Community)
                         .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.PrefectureId);
-
-                builder.HasOne(i => i.Municipality)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.MunicipalityId);
-
-                builder.HasOne(i => i.Region)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.RegionId);
-
-                builder.HasOne(i => i.MunicipalUnit)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.MunicipalityId);
+                        .HasForeignKey(i => i.CommunityId)
+                        .IsRequired(false);
         }
 }

@@ -1,5 +1,6 @@
 using Decenea.Domain.Entities.ApplicationUser;
 using Decenea.Domain.Entities.Common;
+using Decenea.Domain.Entities.Location;
 using Decenea.Infrastructure.Data.EntityConfigurations;
 using Decenea.Infrastructure.DataSeed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -39,7 +40,9 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
         builder.ApplyConfiguration(new CountryConfiguration());
         builder.ApplyConfiguration(new RegionConfiguration());
         builder.ApplyConfiguration(new MunicipalityConfiguration());
-        builder.ApplyConfiguration(new PrefectureConfiguration());
+        builder.ApplyConfiguration(new MunicipalUnitConfiguration());
+        builder.ApplyConfiguration(new RegionalUnitConfiguration());
+        builder.ApplyConfiguration(new CommunityConfiguration());
     }
 
     public override int SaveChanges()

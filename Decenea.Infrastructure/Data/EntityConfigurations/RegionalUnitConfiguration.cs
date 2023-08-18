@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Data.EntityConfigurations;
 
-public class RegionConfiguration : IEntityTypeConfiguration<Region>
+public class RegionalUnitConfiguration : IEntityTypeConfiguration<RegionalUnit>
 {
-        public void Configure(EntityTypeBuilder<Region> builder)
+        public void Configure(EntityTypeBuilder<RegionalUnit> builder)
         {
-                builder.ToTable(name: "Regions");
+                builder.ToTable(name: "RegionalUnits");
                 
                 builder.Property(i => i.AsciiName)
                         .IsRequired(false);
@@ -16,12 +16,12 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
                 
-                builder.HasOne(i => i.Country)
-                        .WithMany(i => i.Regions)
-                        .HasForeignKey(i => i.CountryId);
-                
-                builder.HasMany(i => i.RegionalUnits)
-                        .WithOne(i => i.Region)
+                builder.HasOne(i => i.Region)
+                        .WithMany(i => i.RegionalUnits)
                         .HasForeignKey(i => i.RegionId);
+                
+                builder.HasMany(i => i.Municipalities)
+                        .WithOne(i => i.RegionalUnit)
+                        .HasForeignKey(i => i.RegionalUnitId);
         }
 }
