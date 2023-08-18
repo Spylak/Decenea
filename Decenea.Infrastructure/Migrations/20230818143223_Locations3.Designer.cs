@@ -3,6 +3,7 @@ using System;
 using Decenea.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    partial class DeceneaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818143223_Locations3")]
+    partial class Locations3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,20 +324,16 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<double?>("Lat")
+                    b.Property<double>("Lat")
                         .HasColumnType("double precision");
 
-                    b.Property<double?>("Long")
+                    b.Property<double>("Long")
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MunicipalUnitId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MunicipalityId")
@@ -358,9 +357,6 @@ namespace Decenea.Infrastructure.Migrations
                     b.HasIndex("CountryId");
 
                     b.HasIndex("MunicipalityId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("PrefectureId");
 
@@ -403,69 +399,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Countries", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MunicipalityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PrefectureId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RegionId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("MunicipalityId");
-
-                    b.HasIndex("PrefectureId");
-
-                    b.HasIndex("RegionId");
-
-                    b.ToTable("MunicipalUnit");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>
@@ -510,22 +444,13 @@ namespace Decenea.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SeatId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("PrefectureId");
 
                     b.HasIndex("RegionId");
-
-                    b.HasIndex("SeatId")
-                        .IsUnique();
 
                     b.ToTable("Municipalities", (string)null);
                 });
@@ -571,9 +496,6 @@ namespace Decenea.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("RegionId");
 
@@ -623,9 +545,6 @@ namespace Decenea.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasIndex("CountryId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Regions", (string)null);
                 });
@@ -701,12 +620,6 @@ namespace Decenea.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Decenea.Domain.Entities.Location.MunicipalUnit", "MunicipalUnit")
-                        .WithMany("Cities")
-                        .HasForeignKey("MunicipalityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Decenea.Domain.Entities.Location.Municipality", "Municipality")
                         .WithMany("Cities")
                         .HasForeignKey("MunicipalityId")
@@ -721,43 +634,6 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasOne("Decenea.Domain.Entities.Location.Region", "Region")
                         .WithMany("Cities")
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("MunicipalUnit");
-
-                    b.Navigation("Municipality");
-
-                    b.Navigation("Prefecture");
-
-                    b.Navigation("Region");
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
-                {
-                    b.HasOne("Decenea.Domain.Entities.Location.Country", "Country")
-                        .WithMany("MunicipalUnits")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Decenea.Domain.Entities.Location.Municipality", "Municipality")
-                        .WithMany("MunicipalUnits")
-                        .HasForeignKey("MunicipalityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Decenea.Domain.Entities.Location.Prefecture", "Prefecture")
-                        .WithMany("MunicipalUnits")
-                        .HasForeignKey("PrefectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Decenea.Domain.Entities.Location.Region", "Region")
-                        .WithMany("MunicipalUnits")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -791,17 +667,11 @@ namespace Decenea.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Decenea.Domain.Entities.Location.City", "Seat")
-                        .WithOne()
-                        .HasForeignKey("Decenea.Domain.Entities.Location.Municipality", "SeatId");
-
                     b.Navigation("Country");
 
                     b.Navigation("Prefecture");
 
                     b.Navigation("Region");
-
-                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Prefecture", b =>
@@ -862,8 +732,6 @@ namespace Decenea.Infrastructure.Migrations
                 {
                     b.Navigation("Cities");
 
-                    b.Navigation("MunicipalUnits");
-
                     b.Navigation("Municipalities");
 
                     b.Navigation("Prefectures");
@@ -871,23 +739,14 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Regions");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
-                {
-                    b.Navigation("Cities");
-                });
-
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>
                 {
                     b.Navigation("Cities");
-
-                    b.Navigation("MunicipalUnits");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Prefecture", b =>
                 {
                     b.Navigation("Cities");
-
-                    b.Navigation("MunicipalUnits");
 
                     b.Navigation("Municipalities");
                 });
@@ -895,8 +754,6 @@ namespace Decenea.Infrastructure.Migrations
             modelBuilder.Entity("Decenea.Domain.Entities.Location.Region", b =>
                 {
                     b.Navigation("Cities");
-
-                    b.Navigation("MunicipalUnits");
 
                     b.Navigation("Municipalities");
 

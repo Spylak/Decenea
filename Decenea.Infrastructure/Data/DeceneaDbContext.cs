@@ -35,6 +35,11 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
         builder.ApplyConfiguration(new ApplicationRoleClaimConfiguration());
         builder.ApplyConfiguration(new ApplicationUserRoleConfiguration());
         builder.ApplyConfiguration(new ApplicationUserTokenConfiguration());
+        builder.ApplyConfiguration(new CityConfiguration());
+        builder.ApplyConfiguration(new CountryConfiguration());
+        builder.ApplyConfiguration(new RegionConfiguration());
+        builder.ApplyConfiguration(new MunicipalityConfiguration());
+        builder.ApplyConfiguration(new PrefectureConfiguration());
     }
 
     public override int SaveChanges()
