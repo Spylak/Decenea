@@ -1,6 +1,6 @@
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Domain.Entities.Common;
-using Decenea.Domain.Entities.Location;
+using Decenea.Domain.Entities.LocationEntities;
 using Decenea.Infrastructure.Data.EntityConfigurations;
 using Decenea.Infrastructure.DataSeed;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

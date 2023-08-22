@@ -2,7 +2,7 @@ using Decenea.Application.Services.QueryServices.IQueryServices;
 using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
 using Decenea.Domain.DataTransferObjects.ApplicationUser;
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 

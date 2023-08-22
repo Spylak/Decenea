@@ -1,6 +1,6 @@
 using Decenea.Domain.Entities.Common;
 
-namespace Decenea.Domain.Entities.Location;
+namespace Decenea.Domain.Entities.LocationEntities;
 
 public class MunicipalUnit : AuditableEntity
 {
@@ -9,5 +9,5 @@ public class MunicipalUnit : AuditableEntity
     public string? AlternativeName { get; set; }
     public string MunicipalityId { get; set; }
     public Municipality Municipality { get; set; }
-    public List<Community> Communities { get; set; }
+    public ICollection<Community> Communities { get; set; }
 }

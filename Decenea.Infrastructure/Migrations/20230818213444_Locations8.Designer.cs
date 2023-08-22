@@ -25,7 +25,7 @@ namespace Decenea.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace Decenea.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRoleClaim", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +104,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("RoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,7 +217,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserClaim", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,7 +241,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserLogin", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -264,7 +264,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserRole", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -279,7 +279,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserToken", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserToken", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -300,7 +300,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.City", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.City", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -352,7 +352,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Cities", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Community", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -393,7 +393,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Communities", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Country", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Country", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -439,7 +439,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Countries", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.MunicipalUnit", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -480,7 +480,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("MunicipalUnits", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Municipality", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -521,7 +521,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Municipalities", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Region", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Region", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -562,7 +562,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Regions", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.RegionalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.RegionalUnit", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -603,9 +603,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("RegionalUnits", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", "Role")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", "Role")
                         .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -614,9 +614,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserClaim", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserClaims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -625,9 +625,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserLogin", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserLogin", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserLogins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -636,15 +636,15 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserRole", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", "Role")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -655,9 +655,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserToken", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserToken", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -666,13 +666,13 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.City", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.City", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.Community", "Community")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Community", "Community")
                         .WithMany("Cities")
                         .HasForeignKey("CommunityId");
 
-                    b.HasOne("Decenea.Domain.Entities.Location.Country", "Country")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -683,9 +683,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Community", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.MunicipalUnit", "MunicipalUnit")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.MunicipalUnit", "MunicipalUnit")
                         .WithMany("Communities")
                         .HasForeignKey("MunicipalUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -694,9 +694,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("MunicipalUnit");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.MunicipalUnit", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.Municipality", "Municipality")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Municipality", "Municipality")
                         .WithMany("MunicipalUnits")
                         .HasForeignKey("MunicipalityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -705,9 +705,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Municipality");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Municipality", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.RegionalUnit", "RegionalUnit")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.RegionalUnit", "RegionalUnit")
                         .WithMany("Municipalities")
                         .HasForeignKey("RegionalUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -716,9 +716,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("RegionalUnit");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Region", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Region", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.Country", "Country")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Country", "Country")
                         .WithMany("Regions")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -727,9 +727,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.RegionalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.RegionalUnit", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.Location.Region", "Region")
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Region", "Region")
                         .WithMany("RegionalUnits")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -738,14 +738,14 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Region");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
                 {
                     b.Navigation("RoleClaims");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
                 {
                     b.Navigation("UserClaims");
 
@@ -756,34 +756,34 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("UserTokens");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Community", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
                 {
                     b.Navigation("Cities");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Country", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Country", b =>
                 {
                     b.Navigation("Cities");
 
                     b.Navigation("Regions");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.MunicipalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.MunicipalUnit", b =>
                 {
                     b.Navigation("Communities");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Municipality", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Municipality", b =>
                 {
                     b.Navigation("MunicipalUnits");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.Region", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Region", b =>
                 {
                     b.Navigation("RegionalUnits");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.Location.RegionalUnit", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.RegionalUnit", b =>
                 {
                     b.Navigation("Municipalities");
                 });

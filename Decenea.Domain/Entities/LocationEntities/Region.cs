@@ -1,6 +1,6 @@
 using Decenea.Domain.Entities.Common;
 
-namespace Decenea.Domain.Entities.Location;
+namespace Decenea.Domain.Entities.LocationEntities;
 
 public class Region : AuditableEntity
 {
@@ -9,5 +9,7 @@ public class Region : AuditableEntity
     public string? AlternativeName { get; set; }
     public string CountryId { get; set; }
     public Country Country { get; set; }
+    public ICollection<City> Cities { get; set; }
+
     public ICollection<RegionalUnit> RegionalUnits { get; set; }
 }

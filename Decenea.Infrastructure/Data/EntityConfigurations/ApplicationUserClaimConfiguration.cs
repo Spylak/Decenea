@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

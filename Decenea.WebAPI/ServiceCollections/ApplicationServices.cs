@@ -11,5 +11,6 @@ public static class ApplicationServices
     {
         builder.Services.AddTransient<IApplicationUserCommandService, ApplicationUserCommandService>();
         builder.Services.AddTransient<IApplicationUserQueryService, ApplicationUserQueryService>();
+        builder.Services.AddTransient<ILocationQueryService, LocationQueryService>();
     }
 }

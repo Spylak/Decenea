@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    [Migration("20230818180008_Locations6")]
-    partial class Locations6
+    [Migration("20230821124736_Locations9")]
+    partial class Locations9
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,11 +343,16 @@ namespace Decenea.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RegionId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Cities", (string)null);
                 });
@@ -396,6 +401,12 @@ namespace Decenea.Infrastructure.Migrations
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Country", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
                         .HasColumnType("text");
 
                     b.Property<string>("CountryCode")
@@ -471,7 +482,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasIndex("MunicipalityId");
 
-                    b.ToTable("MunicipalUnit");
+                    b.ToTable("MunicipalUnits", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Municipality", b =>
@@ -672,9 +683,15 @@ namespace Decenea.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Region", "Region")
+                        .WithMany("Cities")
+                        .HasForeignKey("RegionId");
+
                     b.Navigation("Community");
 
                     b.Navigation("Country");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
@@ -774,6 +791,8 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Region", b =>
                 {
+                    b.Navigation("Cities");
+
                     b.Navigation("RegionalUnits");
                 });
 

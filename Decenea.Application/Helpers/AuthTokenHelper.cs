@@ -11,7 +11,7 @@ public static  class AuthTokenHelper
     public static RefreshTokenDto GenerateRefreshToken(int numberOfBytes = 64, DateTime? refreshTokenExpiryTime = null)
     {
         refreshTokenExpiryTime ??= DateTime.UtcNow.AddDays(30);
-        var randomBytes = RandomNumberGenerator.GetBytes(64);
+        var randomBytes = RandomNumberGenerator.GetBytes(numberOfBytes);
         var refreshToken = Convert.ToBase64String(randomBytes);
         return new RefreshTokenDto(refreshToken, refreshTokenExpiryTime.Value);
     }

@@ -6,7 +6,7 @@ using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
 using Decenea.Domain.DataTransferObjects.ApplicationUser;
 using Decenea.Domain.DataTransferObjects.Auth;
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Infrastructure.Data;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Identity;

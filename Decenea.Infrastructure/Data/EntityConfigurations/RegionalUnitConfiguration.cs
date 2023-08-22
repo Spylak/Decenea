@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.Location;
+using Decenea.Domain.Entities.LocationEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

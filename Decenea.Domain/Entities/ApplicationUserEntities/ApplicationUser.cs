@@ -1,7 +1,8 @@
+using Decenea.Domain.Entities.AdvertisementEntities;
 using Decenea.Domain.Entities.Common;
 using Microsoft.AspNetCore.Identity;
 
-namespace Decenea.Domain.Entities.ApplicationUser;
+namespace Decenea.Domain.Entities.ApplicationUserEntities;
 
 public class ApplicationUser : IdentityUser<long> , IAuditableEntity
 {
@@ -19,6 +20,7 @@ public class ApplicationUser : IdentityUser<long> , IAuditableEntity
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
     public DateTime DateVerified { get; set; }
+    public ICollection<MicroAd> MicroAds { get; set; }
     public ICollection<ApplicationUserRole> UserRoles { get; set; }
     public ICollection<ApplicationUserLogin> UserLogins { get; set; }
     public ICollection<ApplicationUserClaim> UserClaims { get; set; }

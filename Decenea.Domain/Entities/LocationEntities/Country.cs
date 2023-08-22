@@ -1,6 +1,6 @@
 using Decenea.Domain.Entities.Common;
 
-namespace Decenea.Domain.Entities.Location;
+namespace Decenea.Domain.Entities.LocationEntities;
 
 public class Country : AuditableEntity
 {

@@ -25,7 +25,7 @@ namespace Decenea.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace Decenea.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRoleClaim", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +104,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("RoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -217,7 +217,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserClaim", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,7 +241,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserLogin", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -264,7 +264,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserRole", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -279,7 +279,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserToken", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserToken", b =>
                 {
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -300,9 +300,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", "Role")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", "Role")
                         .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -311,9 +311,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserClaim", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserClaim", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserClaims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -322,9 +322,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserLogin", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserLogin", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserLogins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -333,15 +333,15 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserRole", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", "Role")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -352,9 +352,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUserToken", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserToken", b =>
                 {
-                    b.HasOne("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", "User")
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
                         .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -363,14 +363,14 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationRole", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
                 {
                     b.Navigation("RoleClaims");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUser.ApplicationUser", b =>
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
                 {
                     b.Navigation("UserClaims");
 

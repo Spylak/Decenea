@@ -1,5 +1,5 @@
 using Decenea.Domain.DataTransferObjects.ApplicationUser;
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 
 namespace Decenea.Application.Mappers;
 

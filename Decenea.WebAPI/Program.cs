@@ -1,5 +1,5 @@
 global using FastEndpoints;
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Infrastructure.Data;
 using Decenea.Infrastructure.DataSeed;
 using Decenea.WebAPI.ServiceCollections;

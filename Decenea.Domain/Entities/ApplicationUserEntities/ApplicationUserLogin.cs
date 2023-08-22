@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Decenea.Domain.Entities.ApplicationUser;
+namespace Decenea.Domain.Entities.ApplicationUserEntities;
 
 public class ApplicationUserLogin : IdentityUserLogin<long>
 {

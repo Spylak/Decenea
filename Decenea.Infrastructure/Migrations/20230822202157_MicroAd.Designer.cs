@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    [Migration("20230818180008_Locations6")]
-    partial class Locations6
+    [Migration("20230822202157_MicroAd")]
+    partial class MicroAd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,58 @@ namespace Decenea.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Decenea.Domain.Entities.AdvertisementEntities.MicroAd", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<long>("ApplicationUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("MicroAd");
+                });
 
             modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
                 {
@@ -343,11 +395,16 @@ namespace Decenea.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("RegionId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Cities", (string)null);
                 });
@@ -396,6 +453,12 @@ namespace Decenea.Infrastructure.Migrations
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Country", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
                         .HasColumnType("text");
 
                     b.Property<string>("CountryCode")
@@ -471,7 +534,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasIndex("MunicipalityId");
 
-                    b.ToTable("MunicipalUnit");
+                    b.ToTable("MunicipalUnits", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Municipality", b =>
@@ -597,6 +660,25 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("RegionalUnits", (string)null);
                 });
 
+            modelBuilder.Entity("Decenea.Domain.Entities.AdvertisementEntities.MicroAd", b =>
+                {
+                    b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "ApplicationUser")
+                        .WithMany("MicroAds")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.City", "City")
+                        .WithMany("MicroAds")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRoleClaim", b =>
                 {
                     b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", "Role")
@@ -672,9 +754,15 @@ namespace Decenea.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.Region", "Region")
+                        .WithMany("Cities")
+                        .HasForeignKey("RegionId");
+
                     b.Navigation("Community");
 
                     b.Navigation("Country");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
@@ -741,6 +829,8 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
                 {
+                    b.Navigation("MicroAds");
+
                     b.Navigation("UserClaims");
 
                     b.Navigation("UserLogins");
@@ -748,6 +838,11 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("UserRoles");
 
                     b.Navigation("UserTokens");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.City", b =>
+                {
+                    b.Navigation("MicroAds");
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Community", b =>
@@ -774,6 +869,8 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.Region", b =>
                 {
+                    b.Navigation("Cities");
+
                     b.Navigation("RegionalUnits");
                 });
 

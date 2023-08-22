@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.ApplicationUser;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +9,9 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
                 builder.ToTable(name: "Users");
-                
+
+                builder.HasMany(i => i.MicroAds)
+                        .WithOne(i => i.ApplicationUser)
+                        .HasForeignKey(i => i.ApplicationUserId);
         }
 }

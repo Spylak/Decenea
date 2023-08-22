@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.Location;
+using Decenea.Domain.Entities.LocationEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -24,5 +24,14 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
                         .WithMany(i => i.Cities)
                         .HasForeignKey(i => i.CommunityId)
                         .IsRequired(false);
+                
+                builder.HasOne(i => i.Region)
+                        .WithMany(i => i.Cities)
+                        .HasForeignKey(i => i.RegionId)
+                        .IsRequired(false);
+                
+                builder.HasMany(i => i.MicroAds)
+                        .WithOne(i => i.City)
+                        .HasForeignKey(i => i.CityId);
         }
 }
