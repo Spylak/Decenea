@@ -43,6 +43,7 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
         builder.ApplyConfiguration(new MunicipalUnitConfiguration());
         builder.ApplyConfiguration(new RegionalUnitConfiguration());
         builder.ApplyConfiguration(new CommunityConfiguration());
+        builder.ApplyConfiguration(new MicroAdConfiguration());
     }
 
     public override int SaveChanges()
@@ -80,7 +81,7 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
         return base.SaveChanges();
     }
 
-    public async Task<int> SaveChangesAsync(string userId, CancellationToken cancellationToken)
+    public async Task<int> SaveChangesAsync(string userId, CancellationToken cancellationToken = default)
     {
         var updatedEntityList = ChangeTracker.Entries()
             .Where(x => x.Entity is IAuditableEntity && x.State == EntityState.Modified);

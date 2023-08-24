@@ -9,7 +9,12 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
                 builder.ToTable(name: "Users");
-
+                
+                builder.HasOne(i => i.City)
+                        .WithMany(i => i.ApplicationUsers)
+                        .HasForeignKey(i => i.CityId)
+                        .IsRequired(false);
+                
                 builder.HasMany(i => i.MicroAds)
                         .WithOne(i => i.ApplicationUser)
                         .HasForeignKey(i => i.ApplicationUserId);

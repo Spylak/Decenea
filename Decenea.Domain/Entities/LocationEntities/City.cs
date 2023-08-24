@@ -1,4 +1,5 @@
 using Decenea.Domain.Entities.AdvertisementEntities;
+using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Domain.Entities.Common;
 
 namespace Decenea.Domain.Entities.LocationEntities;
@@ -16,5 +17,6 @@ public class City : AuditableEntity
     public Region? Region { get; set; }
     public string? CommunityId { get; set; }
     public Community? Community { get; set; }
+    public ICollection<ApplicationUser> ApplicationUsers { get; set; }
     public ICollection<MicroAd> MicroAds { get; set; }
 }

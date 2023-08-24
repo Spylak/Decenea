@@ -33,5 +33,10 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
                 builder.HasMany(i => i.MicroAds)
                         .WithOne(i => i.City)
                         .HasForeignKey(i => i.CityId);
+                
+                builder.HasMany(i => i.ApplicationUsers)
+                        .WithOne(i => i.City)
+                        .HasForeignKey(i => i.CityId)
+                        .OnDelete(DeleteBehavior.SetNull);
         }
 }

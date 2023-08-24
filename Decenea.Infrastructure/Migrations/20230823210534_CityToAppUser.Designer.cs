@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    [Migration("20230822202157_MicroAd")]
-    partial class AddMicroAd
+    [Migration("20230823210534_CityToAppUser")]
+    partial class CityToAppUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("MicroAd");
+                    b.ToTable("MicroAds", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationRole", b =>
@@ -167,6 +167,9 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
+                    b.Property<string>("CityId")
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -258,6 +261,8 @@ namespace Decenea.Infrastructure.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -690,6 +695,16 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", b =>
+                {
+                    b.HasOne("Decenea.Domain.Entities.LocationEntities.City", "City")
+                        .WithMany("ApplicationUsers")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUserClaim", b =>
                 {
                     b.HasOne("Decenea.Domain.Entities.ApplicationUserEntities.ApplicationUser", "User")
@@ -842,6 +857,8 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Entities.LocationEntities.City", b =>
                 {
+                    b.Navigation("ApplicationUsers");
+
                     b.Navigation("MicroAds");
                 });
 

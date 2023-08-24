@@ -5,7 +5,7 @@ using Decenea.Domain.DataTransferObjects.Auth;
 
 namespace Decenea.WebAPI.Endpoints.ApplicationUserEndpoints;
 
-public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequestDto, ApiResponse<RegenerateAuthTokensResponseDto>>
+public class RegenerateAuthTokensEndpoint : Endpoint<EmptyRequest, ApiResponse<RegenerateAuthTokensResponseDto>>
 {
     private readonly IApplicationUserCommandService _applicationUserCommandService;
 
@@ -17,13 +17,19 @@ public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest
     public override void Configure()
     {
         Put("/ApplicationUser/RegenerateAuthTokens");
-        Claims();
     }
 
-    public override async Task<ApiResponse<RegenerateAuthTokensResponseDto>> ExecuteAsync(RegenerateAuthTokensRequestDto req,
+    public override async Task<ApiResponse<RegenerateAuthTokensResponseDto>> ExecuteAsync(EmptyRequest emptyRequest,
         CancellationToken ct)
     {
-        var result = await _applicationUserCommandService.RegenerateAuthTokens(req);
+        var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
+        var refreshToken = HttpContext.Request.Headers["RefreshToken"].ToString();
+        var regenerateAuthTokensRequestDto = new RegenerateAuthTokensRequestDto()
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken
+        };
+        var result = await _applicationUserCommandService.RegenerateAuthTokens(regenerateAuthTokensRequestDto);
         return new ApiResponse<RegenerateAuthTokensResponseDto>(result.Value, result.IsSuccess, result.Message);
     }
 }

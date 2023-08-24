@@ -11,6 +11,7 @@ using Decenea.Infrastructure.Data;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Decenea.Application.Services.CommandServices;
 
@@ -108,7 +109,8 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                     
                     u.Claims.Add(new("UserName", requestDto.Email));
                     
-                    u["UserID"] = user.Id.ToString(); //indexer based claim setting
+                    u["UserId"] = user.Id.ToString(); //indexer based claim setting
+                    u["CityId"] = user.CityId; 
                 });
             
             if (requestDto.RememberMe)
@@ -194,7 +196,8 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
                     
                     u.Claims.Add(new("UserName", username));
                     
-                    u["UserID"] = user.Id.ToString(); //indexer based claim setting
+                    u["UserId"] = user.Id.ToString(); //indexer based claim setting
+                    u["CityId"] = user.CityId; 
                 });
 
             var refreshToken = AuthTokenHelper.GenerateRefreshToken();
@@ -209,6 +212,7 @@ public class ApplicationUserCommandService : IApplicationUserCommandService
         catch (Exception e)
         {
             await transaction.RollbackAsync();
+            Log.Error("Failed to RegenerateAuthTokens for {user}, with error : {ex}",username,e);
             return Result<RegenerateAuthTokensResponseDto, Exception>
                 .Excepted(e,$"Didn't manage to RegenerateAuthTokens user: {username}");
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Decenea.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class MicroAd : Migration
+    public partial class AddMicroAd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

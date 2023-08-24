@@ -6,6 +6,7 @@ using Decenea.Domain.DataTransferObjects.Location;
 using Decenea.Domain.Entities.LocationEntities;
 using Decenea.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Decenea.Application.Services.QueryServices;
 
@@ -35,15 +36,16 @@ public class LocationQueryService : ILocationQueryService
                 .ToListAsync();
         
             var cityDtos = cities
-                .Select(i => LocationMapper.CityToCityDto(i))
+                .Select(i => i.CityToCityDto())
                 .ToList();
 
             return Result<List<CityDto>, Exception>.Anticipated(cityDtos);
         }
         catch (Exception ex)
         {
+            Log.Error("Error on GetManyCities: {ex}",ex);
             return Result<List<CityDto>, Exception>
-                .Excepted(ex,$"Didn't manage to get list of cities user.");
+                .Excepted(ex,$"Didn't manage to get list of cities.");
         }
     }
 }

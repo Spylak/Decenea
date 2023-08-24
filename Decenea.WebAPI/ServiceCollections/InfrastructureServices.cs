@@ -14,8 +14,10 @@ public static class InfrastructureServices
     public static void AddInfrastructureServices(this WebApplicationBuilder builder)
     {
         //DbContext needs to be stateless to use ContextPool
-        builder.Services.AddDbContextPool<DeceneaDbContext>(options => 
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DeceneaDbConnectionString")));
+        builder.Services.AddDbContextPool<DeceneaDbContext>(options =>
+        {
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DeceneaDbConnectionString"));
+        });
         
         builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {

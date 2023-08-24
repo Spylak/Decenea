@@ -3,7 +3,7 @@ using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
 using Decenea.Domain.DataTransferObjects.Location;
 
-namespace Decenea.WebAPI.Endpoints.Location;
+namespace Decenea.WebAPI.Endpoints.LocationEndpoints;
 
 public class GetManyCitiesEndpoint : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<CityDto>>>
 {
@@ -15,7 +15,7 @@ public class GetManyCitiesEndpoint : Endpoint<GetManyCitiesRequestDto, ApiRespon
     public override void Configure()
     {
         Get("/City/GetMany");
-        Roles(ApplicationRoles.SuperAdmin);
+        AllowAnonymous();
     }
 
     public override async Task<ApiResponse<List<CityDto>>> ExecuteAsync(GetManyCitiesRequestDto req, CancellationToken ct)
