@@ -1,0 +1,46 @@
+using Decenea.WebAPI.Services.CommandServices.ICommandServices;
+using Decenea.WebAPI.Domain.Common;
+using Decenea.Domain.DataTransferObjects.Advertisement;
+using Decenea.Domain.Entities.AdvertisementEntities;
+using Decenea.WebAPI.Infrastructure.Data;
+using Serilog;
+
+namespace Decenea.WebAPI.Services.CommandServices;
+
+public class AdvertisementCommandService : IAdvertisementCommandService
+{
+    private readonly DeceneaDbContext _dbContext;
+
+    public AdvertisementCommandService(DeceneaDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+    
+    public async Task<Result<object, Exception>> CreateMicroAd(CreateMicroAdServiceRequestDto requestDto)
+    {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            var newMicroAd = new MicroAd()
+            {
+                Title = requestDto.Title,
+                Description = requestDto.Description,
+                CityId = requestDto.CityId,
+                ApplicationUserId = requestDto.ApplicationUserId,
+                ContactEmail = requestDto.ContactEmail,
+                ContactPhone = requestDto.ContactPhone
+            };
+            
+            await _dbContext.Set<MicroAd>().AddAsync(newMicroAd);
+            await _dbContext.SaveChangesAsync(requestDto.ApplicationUserId.ToString());
+            await transaction.CommitAsync();
+            return Result<object, Exception>.Anticipated(null,"Successfully created!");
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            Log.Error("Failed to CreateMicroAd from request: {requestDto} with error: {ex}",requestDto,ex);
+            return Result<object, Exception>.Excepted(ex);
+        }
+    }
+}

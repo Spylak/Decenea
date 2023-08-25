@@ -1,7 +1,7 @@
-using Decenea.Application.Services.CommandServices;
-using Decenea.Application.Services.CommandServices.ICommandServices;
-using Decenea.Application.Services.QueryServices;
-using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.WebAPI.Services.CommandServices;
+using Decenea.WebAPI.Services.CommandServices.ICommandServices;
+using Decenea.WebAPI.Services.QueryServices;
+using Decenea.WebAPI.Services.QueryServices.IQueryServices;
 
 namespace Decenea.WebAPI.ServiceCollections;
 

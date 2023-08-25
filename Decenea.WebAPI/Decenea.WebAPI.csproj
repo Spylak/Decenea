@@ -24,10 +24,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Decenea.Application\Decenea.Application.csproj" />
-      <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
+      <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+        <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.identity.entityframeworkcore\7.0.10\lib\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
+      </Reference>
+      <Reference Include="Ulid">
+        <HintPath>..\..\..\.nuget\packages\ulid\1.3.0\lib\net7.0\Ulid.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Decenea.Shared\Decenea.Shared.csproj" />
+    </ItemGroup>
 
-
+    <ItemGroup>
+      <Folder Include="Domain\DataTransferObjects\" />
+    </ItemGroup>
 </Project>

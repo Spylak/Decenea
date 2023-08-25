@@ -1,7 +1,7 @@
 global using FastEndpoints;
 using Decenea.Domain.Entities.ApplicationUserEntities;
-using Decenea.Infrastructure.Data;
-using Decenea.Infrastructure.DataSeed;
+using Decenea.WebAPI.Infrastructure.Data;
+using Decenea.WebAPI.Infrastructure.DataSeed;
 using Decenea.WebAPI.ServiceCollections;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Identity;

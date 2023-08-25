@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Decenea.Domain.Entities.ApplicationUserEntities;
-using Decenea.Infrastructure.Data;
+using Decenea.WebAPI.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
