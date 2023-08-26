@@ -1,7 +1,9 @@
 global using FastEndpoints;
+using Decenea.Application;
 using Decenea.Domain.Entities.ApplicationUserEntities;
-using Decenea.WebAPI.Infrastructure.Data;
-using Decenea.WebAPI.Infrastructure.DataSeed;
+using Decenea.Infrastructure;
+using Decenea.Infrastructure.DataSeed;
+using Decenea.Infrastructure.Persistance;
 using Decenea.WebAPI.ServiceCollections;
 using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Identity;
@@ -21,11 +23,14 @@ Log.Logger = new LoggerConfiguration()
 builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json");
 
-builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument(); 
+builder.Services
+    .AddFastEndpoints()
+    .AddInfrastructure(builder.Configuration);
 
-builder.AddInfrastructureServices();
-builder.AddApplicationServices();
+builder.Services.SwaggerDocument()
+    .AddApplication(); 
+
+builder.AddAuthServices();
 
 var app = builder.Build();
 app.UseAuthentication();

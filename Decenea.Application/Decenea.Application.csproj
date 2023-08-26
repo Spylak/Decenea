@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
+      <ProjectReference Include="..\Decenea.Domain\Decenea.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FastEndpoints.Security" Version="5.15.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.10" />
+      <PackageReference Include="Serilog" Version="3.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
+        <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.identity.entityframeworkcore\7.0.10\lib\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

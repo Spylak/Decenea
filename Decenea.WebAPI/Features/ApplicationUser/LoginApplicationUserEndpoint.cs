@@ -1,6 +1,6 @@
-using Decenea.WebAPI.Services.CommandServices.ICommandServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.Domain.DataTransferObjects.ApplicationUser;
+using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.ApplicationUser;
 
 namespace Decenea.WebAPI.Features.ApplicationUser;
 
@@ -23,6 +23,6 @@ public class LoginApplicationUser : Endpoint<LoginApplicationUserRequestDto, Api
         CancellationToken ct)
     {
         var result = await _applicationUserCommandService.LoginUser(req);
-        return new ApiResponse<LoginApplicationUserResponseDto>(result.Value, result.IsSuccess, result.Message);
+        return new ApiResponse<LoginApplicationUserResponseDto>(result.Value, result.IsSuccess, result.Messages);
     }
 }

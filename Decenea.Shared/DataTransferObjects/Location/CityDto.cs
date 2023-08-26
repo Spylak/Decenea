@@ -1,4 +1,4 @@
-namespace Decenea.Domain.DataTransferObjects.Location;
+namespace Decenea.Shared.DataTransferObjects.Location;
 
 public class CityDto
 {

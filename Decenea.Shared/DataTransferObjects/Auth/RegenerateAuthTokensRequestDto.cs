@@ -1,7 +1,3 @@
-namespace Decenea.Domain.DataTransferObjects.Auth;
+namespace Decenea.Shared.DataTransferObjects.Auth;
 
-public class RegenerateAuthTokensRequestDto
-{
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-}
+public record RegenerateAuthTokensRequestDto(string AccessToken, string RefreshToken);

@@ -1,4 +1,4 @@
-namespace Decenea.Domain.DataTransferObjects.Advertisement;
+namespace Decenea.Shared.DataTransferObjects.Advertisement;
 
 public class CreateMicroAdRequestDto
 {

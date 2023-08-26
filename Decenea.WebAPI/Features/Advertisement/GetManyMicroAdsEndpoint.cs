@@ -1,6 +1,6 @@
-using Decenea.WebAPI.Services.QueryServices.IQueryServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.Domain.DataTransferObjects.Advertisement;
+using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.Advertisement;
 
 namespace Decenea.WebAPI.Features.Advertisement;
 
@@ -21,6 +21,6 @@ public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequestDto, ApiResponse<L
     public override async Task<ApiResponse<List<MicroAdDto>>> ExecuteAsync(GetManyMicroAdsRequestDto req, CancellationToken ct)
     {
         var result = await _advertisementQueryService.GetManyMicroAds(req);
-        return new ApiResponse<List<MicroAdDto>>(result.Value, result.IsSuccess, result.Message);
+        return new ApiResponse<List<MicroAdDto>>(result.Value, result.IsSuccess, result.Messages);
     }
 }

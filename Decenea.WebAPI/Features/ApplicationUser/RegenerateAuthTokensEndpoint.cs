@@ -1,7 +1,6 @@
-using Decenea.WebAPI.Services.CommandServices.ICommandServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.Domain.DataTransferObjects.ApplicationUser;
-using Decenea.Domain.DataTransferObjects.Auth;
+using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.Auth;
 
 namespace Decenea.WebAPI.Features.ApplicationUser;
 
@@ -24,12 +23,8 @@ public class RegenerateAuthTokens : Endpoint<EmptyRequest, ApiResponse<Regenerat
     {
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
         var refreshToken = HttpContext.Request.Headers["RefreshToken"].ToString();
-        var regenerateAuthTokensRequestDto = new RegenerateAuthTokensRequestDto()
-        {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
-        };
+        var regenerateAuthTokensRequestDto = new RegenerateAuthTokensRequestDto(accessToken, refreshToken);
         var result = await _applicationUserCommandService.RegenerateAuthTokens(regenerateAuthTokensRequestDto);
-        return new ApiResponse<RegenerateAuthTokensResponseDto>(result.Value, result.IsSuccess, result.Message);
+        return new ApiResponse<RegenerateAuthTokensResponseDto>(result.Value, result.IsSuccess, result.Messages);
     }
 }

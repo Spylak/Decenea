@@ -1,4 +1,4 @@
-using Decenea.Domain.DataTransferObjects.Auth;
+using Decenea.Shared.DataTransferObjects.Auth;
 
 namespace Decenea.Shared.Extensions;
 

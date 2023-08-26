@@ -1,9 +1,9 @@
-using Decenea.WebAPI.Services.CommandServices.ICommandServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.WebAPI.Domain.Constants;
-using Decenea.Domain.DataTransferObjects.Advertisement;
+using Decenea.Domain.Constants;
+using Decenea.Domain.Helpers;
+using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.Advertisement;
 using Decenea.Shared.Extensions;
-using Decenea.WebAPI.Domain.Helpers;
 
 namespace Decenea.WebAPI.Features.Advertisement;
 
@@ -40,6 +40,6 @@ public class CreateMicroAd : Endpoint<CreateMicroAdRequestDto, ApiResponse<objec
         createMicroAdServiceRequestDto.CityId = cityId;
         
         var result = await _advertisementCommandService.CreateMicroAd(createMicroAdServiceRequestDto);
-        return new ApiResponse<object>(result.Value, result.IsSuccess, result.Message);
+        return new ApiResponse<object>(result.Value, result.IsSuccess, result.Messages);
     }
 }

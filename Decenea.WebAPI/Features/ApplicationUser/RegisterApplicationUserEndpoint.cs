@@ -1,6 +1,6 @@
-using Decenea.WebAPI.Services.CommandServices.ICommandServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.Domain.DataTransferObjects.ApplicationUser;
+using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.ApplicationUser;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.WebAPI.Features.ApplicationUser;
@@ -33,6 +33,6 @@ public class RegisterApplicationUser : Endpoint<RegisterApplicationUserRequestDt
             return new ApiResponse<IdentityResult>(result.Value,result.IsSuccess,errorMessages);
         }
         
-        return new ApiResponse<IdentityResult>(result.Value,result.IsSuccess,result.Message);
+        return new ApiResponse<IdentityResult>(result.Value,result.IsSuccess,result.Messages);
     }
 }

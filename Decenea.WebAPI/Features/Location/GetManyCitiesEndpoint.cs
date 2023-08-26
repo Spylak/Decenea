@@ -1,9 +1,8 @@
-using Decenea.WebAPI.Services.QueryServices.IQueryServices;
-using Decenea.WebAPI.Domain.Common;
-using Decenea.WebAPI.Domain.Constants;
-using Decenea.Domain.DataTransferObjects.Location;
+using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.Shared.Common;
+using Decenea.Shared.DataTransferObjects.Location;
 
-namespace Decenea.WebAPI.Features.LocationEndpoints;
+namespace Decenea.WebAPI.Features.Location;
 
 public class GetManyCities : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<CityDto>>>
 {
@@ -21,6 +20,6 @@ public class GetManyCities : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<
     public override async Task<ApiResponse<List<CityDto>>> ExecuteAsync(GetManyCitiesRequestDto req, CancellationToken ct)
     {
         var result = await _locationQueryService.GetManyCities(req);
-        return new ApiResponse<List<CityDto>>(result.Value, result.IsSuccess, result.Message);
+        return new ApiResponse<List<CityDto>>(result.Value, result.IsSuccess, result.Messages);
     }
 }

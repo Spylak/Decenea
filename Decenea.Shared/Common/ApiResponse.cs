@@ -1,4 +1,4 @@
-namespace Decenea.WebAPI.Domain.Common;
+namespace Decenea.Shared.Common;
 
 public class ApiResponse
 {
