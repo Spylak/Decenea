@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.ApplicationUserEntities;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 
 namespace Decenea.Domain.Extensions;
 
@@ -9,7 +9,7 @@ public static class ApplicationUserExtension
         var firstName = applicationUser.FirstName;
         var middleName = applicationUser.MiddleName;
         var lastName = applicationUser.LastName;
-        var city = applicationUser.City.Name;
-        return $"{firstName} {middleName} {lastName} of {city}";
+        // var city = applicationUser.City.Name;
+        return $"{firstName} {middleName} {lastName} of city";
     }
 }

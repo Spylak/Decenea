@@ -1,21 +1,18 @@
-using Decenea.Domain.Entities.ApplicationUserEntities;
-using Decenea.Domain.Entities.Common;
+using System.Text.Json;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
+using Decenea.Domain.Common;
 using Decenea.Infrastructure.DataSeed;
+using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance.Converters;
 using Decenea.Infrastructure.Persistance.EntityConfigurations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Decenea.Infrastructure.Persistance;
 
-public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, long,
-    ApplicationUserClaim,
-    ApplicationUserRole,
-    ApplicationUserLogin,
-    ApplicationRoleClaim,
-    ApplicationUserToken
->
+public class DeceneaDbContext : DbContext
 {
     public DeceneaDbContext(DbContextOptions<DeceneaDbContext> options) : base(options)
     {
@@ -30,13 +27,13 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
     {
         base.OnModelCreating(builder);
         ApplicationRoleSeed.Seed(builder);
+        ApplicationUserSeed.Seed(builder);
+        
         builder.ApplyConfiguration(new ApplicationUserConfiguration());
         builder.ApplyConfiguration(new ApplicationRoleConfiguration());
-        builder.ApplyConfiguration(new ApplicationUserLoginConfiguration());
         builder.ApplyConfiguration(new ApplicationUserClaimConfiguration());
-        builder.ApplyConfiguration(new ApplicationRoleClaimConfiguration());
-        builder.ApplyConfiguration(new ApplicationUserRoleConfiguration());
         builder.ApplyConfiguration(new ApplicationUserTokenConfiguration());
+        
         builder.ApplyConfiguration(new CityConfiguration());
         builder.ApplyConfiguration(new CountryConfiguration());
         builder.ApplyConfiguration(new RegionConfiguration());
@@ -49,61 +46,48 @@ public class DeceneaDbContext : IdentityDbContext<ApplicationUser, ApplicationRo
 
     public override int SaveChanges()
     {
-        return SaveChanges(null);
+        return 0;
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return SaveChangesAsync(null, cancellationToken);
-    }
-
-    public int SaveChanges(string userId)
-    {
-        var updatedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is IAuditableEntity && x.State == EntityState.Modified);
-
-        var addedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is IAuditableEntity && x.State == EntityState.Added);
-
-        foreach (var entity in updatedEntityList)
-        {
-            ((IAuditableEntity)entity.Entity).ModifiedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).ModifiedBy = userId;
-        }
-
-        foreach (var entity in addedEntityList)
-        {
-            ((IAuditableEntity)entity.Entity).ModifiedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).CreatedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).ModifiedBy = userId;
-            ((IAuditableEntity)entity.Entity).CreatedBy = userId;
-        }
-
-        return base.SaveChanges();
+        return 0;
     }
 
     public async Task<int> SaveChangesAsync(string userId, CancellationToken cancellationToken = default)
     {
-        var updatedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is IAuditableEntity && x.State == EntityState.Modified);
-
-        var addedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is IAuditableEntity && x.State == EntityState.Added);
-
-        foreach (var entity in updatedEntityList)
+        try
         {
-            ((IAuditableEntity)entity.Entity).ModifiedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).ModifiedBy = userId;
-        }
+            AddDomainEventsAsOutboxMessages(userId);
 
-        foreach (var entity in addedEntityList)
+            var result = await base.SaveChangesAsync(cancellationToken);
+            
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException ex)
         {
-            ((IAuditableEntity)entity.Entity).ModifiedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).CreatedAt = DateTime.UtcNow;
-            ((IAuditableEntity)entity.Entity).ModifiedBy = userId;
-            ((IAuditableEntity)entity.Entity).CreatedBy = userId;
+            throw new Exception("Concurrency exception occurred.", ex);
         }
+    }
+    
+    private void AddDomainEventsAsOutboxMessages(string userId)
+    {
+        var dateTime = DateTime.UtcNow;
+        var outboxMessages = ChangeTracker
+            .Entries<AggregateRoot>()
+            .Select(entry => entry.Entity)
+            .SelectMany(ar =>
+            {
+                return ar.PopDomainEvents();
+            })
+            .Select(domainEvent => new OutboxMessage(
+                Ulid.NewUlid(),
+                dateTime,
+                domainEvent.GetType().Name,
+                JsonSerializer.Serialize(domainEvent),
+                userId))
+            .ToList();
 
-        return await base.SaveChangesAsync();
+        AddRange(outboxMessages);
     }
 }

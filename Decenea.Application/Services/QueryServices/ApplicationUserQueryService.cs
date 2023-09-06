@@ -1,6 +1,6 @@
 using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 

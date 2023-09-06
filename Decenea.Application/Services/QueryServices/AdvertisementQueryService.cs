@@ -1,8 +1,7 @@
 using Decenea.Application.Services.QueryServices.IQueryServices;
+using Decenea.Domain.Aggregates.AdvertisementAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Entities.AdvertisementEntities;
 using Decenea.Domain.Extensions;
-using Decenea.Domain.Mappers;
 using Decenea.Infrastructure.Persistance;
 using Decenea.Shared.DataTransferObjects.Advertisement;
 using Microsoft.EntityFrameworkCore;

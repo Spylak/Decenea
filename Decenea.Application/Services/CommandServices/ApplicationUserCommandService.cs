@@ -1,7 +1,7 @@
 using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Domain.Common;
 using Decenea.Domain.Constants;
-using Decenea.Domain.Entities.ApplicationUserEntities;
 using Decenea.Domain.Helpers;
 using Decenea.Domain.Mappers;
 using Decenea.Infrastructure.Persistance;

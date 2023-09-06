@@ -1,6 +1,6 @@
 using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Domain.Aggregates.AdvertisementAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Entities.AdvertisementEntities;
 using Decenea.Infrastructure.Persistance;
 using Decenea.Shared.DataTransferObjects.Advertisement;
 using Serilog;

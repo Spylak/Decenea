@@ -1,5 +1,5 @@
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Domain.Constants;
-using Decenea.Domain.Entities.ApplicationUserEntities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Decenea.Infrastructure.DataSeed;
@@ -12,23 +12,19 @@ public static class ApplicationRoleSeed
             new ApplicationRole()
         {
             Id = 1,
-            Name = ApplicationRoles.SuperAdmin,
-            NormalizedName = ApplicationRoles.SuperAdmin.ToUpper()
+            Name = ApplicationRoles.SuperAdmin
         }, new ApplicationRole()
         {
             Id = 2,
-            Name = ApplicationRoles.Admin,
-            NormalizedName = ApplicationRoles.Admin.ToUpper()
+            Name = ApplicationRoles.Admin
         }, new ApplicationRole()
         {
             Id = 3,
-            Name = ApplicationRoles.Member,
-            NormalizedName = ApplicationRoles.Member.ToUpper()
+            Name = ApplicationRoles.Member
         }, new ApplicationRole()
         {
             Id = 4,
-            Name = ApplicationRoles.Guest,
-            NormalizedName = ApplicationRoles.Guest.ToUpper()
+            Name = ApplicationRoles.Guest
         });
     }
 }

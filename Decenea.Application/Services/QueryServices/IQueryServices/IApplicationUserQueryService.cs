@@ -1,5 +1,5 @@
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Entities.ApplicationUserEntities;
 
 namespace Decenea.Application.Services.QueryServices.IQueryServices;
 

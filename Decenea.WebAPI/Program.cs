@@ -1,6 +1,6 @@
 global using FastEndpoints;
 using Decenea.Application;
-using Decenea.Domain.Entities.ApplicationUserEntities;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Infrastructure;
 using Decenea.Infrastructure.DataSeed;
 using Decenea.Infrastructure.Persistance;
@@ -40,11 +40,5 @@ app.UseFastEndpoints(c => {
     c.Endpoints.RoutePrefix = "api";
 });
 app.UseSwaggerGen();
-
-using var scope = app.Services.CreateScope();
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-var db = scope.ServiceProvider.GetRequiredService<DeceneaDbContext>();
-db.Database.Migrate();
-await ApplicationUserSeed.Seed(db,userManager);
 
 app.Run();

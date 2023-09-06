@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.AdvertisementEntities;
+using Decenea.Domain.Aggregates.AdvertisementAggregate;
 using Decenea.Shared.DataTransferObjects.Advertisement;
 
 namespace Decenea.Domain.Mappers;
@@ -12,7 +12,7 @@ public static class MicroAdMapper
         microAdDto.Description = microAd.Description;
         microAdDto.ContactPhone = microAd.ContactPhone;
         microAdDto.ContactEmail = microAd.ContactEmail;
-        microAdDto.ApplicationUserName = microAd.ApplicationUser.FullName;
+        // microAdDto.ApplicationUserName = microAd.ApplicationUser.FullName;
         microAdDto.Location = microAd.Title;
         return microAdDto;
     }

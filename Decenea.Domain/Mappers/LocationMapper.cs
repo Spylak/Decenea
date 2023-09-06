@@ -1,5 +1,6 @@
 using System.Text;
-using Decenea.Domain.Entities.LocationEntities;
+using Decenea.Domain.Aggregates.CityAggregate;
+using Decenea.Domain.Aggregates.LocationAggregate;
 using Decenea.Shared.DataTransferObjects.Location;
 
 namespace Decenea.Domain.Mappers;
@@ -15,27 +16,5 @@ public static class LocationMapper
         cityDto.CommunityId ??= city.CommunityId;
         cityDto.RegionId ??= city.RegionId;
         return cityDto;
-    }
-
-    public static string GetLocation(City city)
-    {
-        StringBuilder strBldr = new();
-        strBldr.Append(city.Name);
-        
-        var regionalUnit = city.Community?.MunicipalUnit?.Municipality?.RegionalUnit.Region.Name;
-        if (regionalUnit is not null)
-        {
-            strBldr.Append(',' + regionalUnit);
-        }
-        
-        var region = city.Community?.MunicipalUnit?.Municipality?.RegionalUnit.Name;
-        if (region is not null)
-        {
-            strBldr.Append(',' + region);
-        }
-        
-        strBldr.Append(',' + city.Country.Name);
-        
-        return strBldr.ToString();
     }
 }

@@ -1,18 +1,14 @@
-using Decenea.Domain.Constants;
-using Decenea.Domain.Entities.ApplicationUserEntities;
-using Decenea.Infrastructure.Persistance;
-using Microsoft.AspNetCore.Identity;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Decenea.Infrastructure.DataSeed;
 
 public static class ApplicationUserSeed
 {
-    public static async Task Seed(DeceneaDbContext dbContext,UserManager<ApplicationUser> userManager)
+    public static void Seed(ModelBuilder builder)
     {
-        using var transaction = await dbContext.Database.BeginTransactionAsync();
-        try
-        {
-            var user = new ApplicationUser()
+        builder.Entity<ApplicationRole>().HasData(
+            new ApplicationUser()
             {
                 FirstName = "Admin",
                 Email = "admin@decenea.com",
@@ -22,35 +18,6 @@ public static class ApplicationUserSeed
                 PhoneNumber = "",
                 CreatedBy = "ApplicationUserSeed",
                 ResidenceOf = "Decenea"
-            };
-            if (await userManager.FindByEmailAsync(user.Email) is null)
-            {
-                await userManager.CreateAsync(user, "Admin123$!");
-                var registration = await userManager
-                    .CreateAsync(user, "Admin123!");
-            
-                if (!registration.Succeeded)
-                {
-                    await transaction.RollbackAsync();
-                }
-
-                var roleResult = await userManager
-                    .AddToRoleAsync(user, ApplicationRoles.SuperAdmin);
-            
-                if (!roleResult.Succeeded)
-                {
-                    await transaction.RollbackAsync();
-                }
-
-                await userManager.SetLockoutEnabledAsync(user, true);
-            }
-           
-            
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-        }
+            });
     }
 }

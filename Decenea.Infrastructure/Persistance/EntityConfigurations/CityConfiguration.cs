@@ -1,4 +1,5 @@
-using Decenea.Domain.Entities.LocationEntities;
+using Decenea.Domain.Aggregates.CityAggregate;
+using Decenea.Domain.Aggregates.LocationAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,28 +16,5 @@ public class CityConfiguration : IEntityTypeConfiguration<City>
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
-
-                builder.HasOne(i => i.Country)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.CountryId);
-                
-                builder.HasOne(i => i.Community)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.CommunityId)
-                        .IsRequired(false);
-                
-                builder.HasOne(i => i.Region)
-                        .WithMany(i => i.Cities)
-                        .HasForeignKey(i => i.RegionId)
-                        .IsRequired(false);
-                
-                builder.HasMany(i => i.MicroAds)
-                        .WithOne(i => i.City)
-                        .HasForeignKey(i => i.CityId);
-                
-                builder.HasMany(i => i.ApplicationUsers)
-                        .WithOne(i => i.City)
-                        .HasForeignKey(i => i.CityId)
-                        .OnDelete(DeleteBehavior.SetNull);
         }
 }

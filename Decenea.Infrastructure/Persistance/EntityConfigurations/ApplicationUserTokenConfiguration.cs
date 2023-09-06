@@ -1,4 +1,4 @@
-using Decenea.Domain.Entities.ApplicationUserEntities;
+using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,10 +9,5 @@ public class ApplicationUserTokenConfiguration : IEntityTypeConfiguration<Applic
         public void Configure(EntityTypeBuilder<ApplicationUserToken> builder)
         {
                 builder.ToTable(name: "UserTokens");
-                
-                // Setup relationship to ApplicationUser
-                builder.HasOne(ur => ur.User)
-                        .WithMany(u => u.UserTokens)
-                        .HasForeignKey(ur => ur.UserId);
         }
 }

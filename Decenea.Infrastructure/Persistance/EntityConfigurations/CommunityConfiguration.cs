@@ -1,4 +1,5 @@
-using Decenea.Domain.Entities.LocationEntities;
+using Decenea.Domain.Aggregates.CityAggregate;
+using Decenea.Domain.Aggregates.LocationAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,13 +16,5 @@ public class CommunityConfiguration : IEntityTypeConfiguration<Community>
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
-
-                builder.HasOne(i => i.MunicipalUnit)
-                        .WithMany(i => i.Communities)
-                        .HasForeignKey(i => i.MunicipalUnitId);
-                
-                builder.HasMany(i => i.Cities)
-                        .WithOne(i => i.Community)
-                        .HasForeignKey(i => i.CommunityId);
         }
 }

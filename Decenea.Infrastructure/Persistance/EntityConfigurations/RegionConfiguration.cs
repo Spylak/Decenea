@@ -1,4 +1,5 @@
-using Decenea.Domain.Entities.LocationEntities;
+using Decenea.Domain.Aggregates.CityAggregate;
+using Decenea.Domain.Aggregates.LocationAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,13 +16,5 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
-                
-                builder.HasOne(i => i.Country)
-                        .WithMany(i => i.Regions)
-                        .HasForeignKey(i => i.CountryId);
-                
-                builder.HasMany(i => i.RegionalUnits)
-                        .WithOne(i => i.Region)
-                        .HasForeignKey(i => i.RegionId);
         }
 }
