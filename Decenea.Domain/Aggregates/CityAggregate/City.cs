@@ -1,7 +1,3 @@
-using Decenea.Domain.Aggregates.AdvertisementAggregate;
-using Decenea.Domain.Aggregates.ApplicationUserAggregate;
-using Decenea.Domain.Aggregates.CountryAggregate;
-using Decenea.Domain.Aggregates.LocationAggregate;
 using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.CityAggregate;

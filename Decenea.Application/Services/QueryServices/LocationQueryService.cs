@@ -1,12 +1,7 @@
 using Decenea.Application.Services.QueryServices.IQueryServices;
 using Decenea.Domain.Aggregates.CityAggregate;
-using Decenea.Domain.Aggregates.LocationAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Extensions;
-using Decenea.Domain.Mappers;
-using Decenea.Infrastructure.Persistance;
 using Decenea.Shared.DataTransferObjects.Location;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Services.QueryServices;

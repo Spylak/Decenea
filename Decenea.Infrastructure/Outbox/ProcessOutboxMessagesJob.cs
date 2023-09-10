@@ -40,7 +40,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
             .ToListAsync();
         await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-        foreach (var outboxMessageGroup in outboxMessages.GroupBy(i => i.UserId))
+        foreach (var outboxMessageGroup in outboxMessages.GroupBy(i => i.CreatedBy))
         {
             var error = string.Empty;
             await transaction.CreateSavepointAsync("OuterLoop");
@@ -48,9 +48,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
             {
                 foreach (var outboxMessage in outboxMessageGroup)
                 {
-                    var domainEvent = JsonConvert.DeserializeObject<IDomainEvent>(
-                        outboxMessage.Content,
-                        JsonSerializerSettings)!;
+                    var domainEvent = (DomainEvent)outboxMessage.DomainEvent;
 
                     await _publisher.Publish(domainEvent, context.CancellationToken);
                 }

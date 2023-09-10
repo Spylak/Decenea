@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Decenea.Domain\Decenea.Domain.csproj" />
-      <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,5 +19,23 @@
     </ItemGroup>
 
 
+
+    <ItemGroup>
+      <Folder Include="Advertisements\Events\" />
+      <Folder Include="Advertisements\IntegrationEvents\" />
+      <Folder Include="Advertisements\Queries\" />
+      <Folder Include="ApplicationUsers\Commands\" />
+      <Folder Include="ApplicationUsers\Events\" />
+      <Folder Include="ApplicationUsers\IntegrationEvents\" />
+      <Folder Include="ApplicationUsers\Queries\" />
+      <Folder Include="Cities\Commands\" />
+      <Folder Include="Cities\Events\" />
+      <Folder Include="Cities\IntegrationEvents\" />
+      <Folder Include="Cities\Queries\" />
+      <Folder Include="Countries\Commands\" />
+      <Folder Include="Countries\Events\" />
+      <Folder Include="Countries\IntegrationEvents\" />
+      <Folder Include="Countries\Queries\" />
+    </ItemGroup>
 
 </Project>

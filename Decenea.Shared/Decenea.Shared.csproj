@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <Folder Include="DataTransferObjects\" />
+      <Folder Include="DataTransferObjects\ApplicationUser\" />
     </ItemGroup>
 
 </Project>

@@ -1,13 +1,8 @@
 global using FastEndpoints;
 using Decenea.Application;
-using Decenea.Domain.Aggregates.ApplicationUserAggregate;
 using Decenea.Infrastructure;
-using Decenea.Infrastructure.DataSeed;
-using Decenea.Infrastructure.Persistance;
-using Decenea.WebAPI.ServiceCollections;
+using Decenea.Infrastructure.Middleware;
 using FastEndpoints.Swagger;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder();
@@ -25,17 +20,15 @@ builder.Configuration
 
 builder.Services
     .AddFastEndpoints()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration)
+    .AddApplication();
 
-builder.Services.SwaggerDocument()
-    .AddApplication(); 
-
-builder.AddAuthServices();
+builder.Services.SwaggerDocument();
 
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<HttpContextMiddleware>();
 app.UseFastEndpoints(c => {
     c.Endpoints.RoutePrefix = "api";
 });

@@ -8,12 +8,13 @@ namespace Decenea.Application;
 
 public static class DependencyInjection
 {
-    public static void AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddTransient<IApplicationUserCommandService, ApplicationUserCommandService>();
         services.AddTransient<IApplicationUserQueryService, ApplicationUserQueryService>();
         services.AddTransient<ILocationQueryService, LocationQueryService>();
         services.AddTransient<IAdvertisementQueryService, AdvertisementQueryService>();
         services.AddTransient<IAdvertisementCommandService, AdvertisementCommandService>();
+        return services;
     }
 }

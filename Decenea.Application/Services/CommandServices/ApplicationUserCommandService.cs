@@ -1,9 +1,8 @@
+using Decenea.Application.Advertisements.Commands.LoginUser;
 using Decenea.Application.Services.CommandServices.ICommandServices;
-using Decenea.Domain.Aggregates.ApplicationUserAggregate;
+using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Constants;
 using Decenea.Domain.Helpers;
-using Decenea.Domain.Mappers;
 using Decenea.Infrastructure.Persistance;
 using Decenea.Shared.DataTransferObjects.ApplicationUser;
 using Decenea.Shared.DataTransferObjects.Auth;
@@ -17,125 +16,12 @@ namespace Decenea.Application.Services.CommandServices;
 
 public class ApplicationUserCommandService : IApplicationUserCommandService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly DeceneaDbContext _dbContext;
-    public ApplicationUserCommandService(UserManager<ApplicationUser> userManager, DeceneaDbContext dbContext)
+    public ApplicationUserCommandService(UserManager<User> userManager, DeceneaDbContext dbContext)
     {
         _userManager = userManager;
         _dbContext = dbContext;
-    }
-    public async Task<Result<IdentityResult, Exception>> RegisterUser(RegisterApplicationUserRequestDto requestDto)
-    {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        try
-        {
-            var user = new ApplicationUser()
-            {
-                FirstName = requestDto.FirstName,
-                Email = requestDto.Email,
-                UserName = requestDto.Email,
-                LastName = requestDto.LastName,
-                MiddleName = requestDto.MiddleName,
-                PhoneNumber = requestDto.PhoneNumber,
-                CreatedBy = "ApplicationUserCommandService",
-                ResidenceOf = requestDto.ResidenceOf
-            };
-            
-            var registration = await _userManager
-                .CreateAsync(user, requestDto.Password);
-
-            if (!registration.Succeeded)
-            {
-                await transaction.RollbackAsync();
-                return Result<IdentityResult, Exception>.Anticipated(registration);
-            }
-
-            var roleResult = await _userManager
-                .AddToRoleAsync(user, ApplicationRoles.Guest);
-            if (!roleResult.Succeeded)
-            {
-                await transaction.RollbackAsync();
-                return Result<IdentityResult, Exception>.Anticipated(roleResult);
-            }
-            
-            await transaction.CommitAsync();
-            return Result<IdentityResult, Exception>.Anticipated(roleResult);
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            return Result<IdentityResult, Exception>.Excepted(ex);
-        }
-    }
-
-    public async Task<Result<LoginApplicationUserResponseDto, Exception>> LoginUser(LoginApplicationUserRequestDto requestDto)
-    {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        try
-        {
-            var userDto = new LoginApplicationUserResponseDto();
-            
-            var user = await _userManager.Users
-                .Include(i =>i.UserRoles)
-                .ThenInclude(i => i.Role)
-                .FirstOrDefaultAsync(i=> i.Email == requestDto.Email);
-            
-            if (user is null)
-                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(null,"User not found.");
-            
-            if(user.LockoutEnabled)
-                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(null,"User is locked.");
-            
-            if (!await _userManager.CheckPasswordAsync(user, requestDto.Password))
-            {
-                return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(userDto,"Credentials don't match.");
-            }
-            
-            var userRoles = user.UserRoles
-                .Select(i => i.Role.Name)
-                .Where(i => i != null)
-                .Cast<string>() 
-                .ToList();
-
-            var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
-            var jwtToken = JWTBearer.CreateToken(
-                signingKey: "ApplicationTokenSigningKey",
-                expireAt: accessTokenExpiryTime,
-                priviledges: u =>
-                {
-                    u.Roles.AddRange(userRoles);
-                    
-                    u.Permissions.AddRange(new[] { "Browse" });
-                    
-                    u.Claims.Add(new("UserName", requestDto.Email));
-                    
-                    u["UserId"] = user.Id.ToString(); //indexer based claim setting
-                    u["CityId"] = user.CityId; 
-                });
-            
-            if (requestDto.RememberMe)
-            {
-                var refreshToken = AuthTokenHelper.GenerateRefreshToken();
-                userDto.RefreshToken = refreshToken.RefreshToken;
-                userDto.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
-                user.RefreshToken = refreshToken.RefreshToken;
-                user.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
-                await _userManager.UpdateAsync(user);
-            }
-            
-            userDto.AccessToken = jwtToken;
-            userDto.AccessTokenExpiryTime = accessTokenExpiryTime;
-            user.ApplicationUserToLoginApplicationUserDto(userDto);
-
-            await transaction.CommitAsync();
-            return Result<LoginApplicationUserResponseDto, Exception>.Anticipated(userDto);
-        }
-        catch (Exception ex)
-        {
-            await transaction.RollbackAsync();
-            return Result<LoginApplicationUserResponseDto, Exception>
-                .Excepted(ex,$"Didn't manage to login user{requestDto.Email}");
-        }
     }
 
     public async Task<Result<RegenerateAuthTokensResponseDto, Exception>> RegenerateAuthTokens(RegenerateAuthTokensRequestDto requestDto)

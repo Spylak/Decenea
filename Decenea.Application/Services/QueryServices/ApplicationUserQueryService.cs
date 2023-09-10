@@ -1,5 +1,5 @@
 using Decenea.Application.Services.QueryServices.IQueryServices;
-using Decenea.Domain.Aggregates.ApplicationUserAggregate;
+using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Common;
 using Decenea.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +15,9 @@ public class ApplicationUserQueryService : IApplicationUserQueryService
         _dbContext = dbContext;
     }
     
-    public async Task<Result<List<ApplicationUser>, Exception>> GetManyApplicationUsers()
+    public async Task<Result<List<User>, Exception>> GetManyApplicationUsers()
     {
         var users = await _dbContext.Users.ToListAsync();
-        return Result<List<ApplicationUser>, Exception>.Anticipated(users);
+        return Result<List<User>, Exception>.Anticipated(users);
     }
 }

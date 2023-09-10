@@ -5,12 +5,12 @@ public abstract class AggregateRoot<T> : Entity<T> where T : notnull
 
     protected readonly Queue<IDomainEvent> _domainEvents = new();
 
-    public List<IDomainEvent> PopDomainEvents()
+    public Queue<IDomainEvent> PopDomainEvents()
     {
         var copy = _domainEvents.ToList();
         _domainEvents.Clear();
 
-        return copy;
+        return new Queue<IDomainEvent>(copy);
     }
 }
 

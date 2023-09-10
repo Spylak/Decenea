@@ -1,6 +1,6 @@
-using Decenea.Domain.Constants;
 using Decenea.Domain.Helpers;
 using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Shared.Common;
 using Decenea.Shared.DataTransferObjects.Advertisement;
 using Decenea.Shared.Extensions;
@@ -18,7 +18,7 @@ public class CreateMicroAd : Endpoint<CreateMicroAdRequestDto, ApiResponse<objec
     public override void Configure()
     {
         Post("/MicroAd/Create");
-        Roles(ApplicationRoles.SuperAdmin,ApplicationRoles.Admin,ApplicationRoles.Member);
+        Roles(Role.SuperAdmin.ToString(),Role.Admin.ToString(),Role.Member.ToString());
     }
     
     public override async Task<ApiResponse<object>> ExecuteAsync(CreateMicroAdRequestDto req, CancellationToken ct)

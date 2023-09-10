@@ -1,4 +1,3 @@
-using Decenea.Domain.Aggregates.LocationAggregate;
 using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.CityAggregate;
