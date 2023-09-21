@@ -2,7 +2,7 @@
 
 namespace Decenea.Domain.Aggregates.UserAggregate;
 
-public class UserClaim : Entity
+public class UserClaim : AuditableEntity
 {
     public string UserId { get; set; }
     public string ClaimType { get; set; }

@@ -1,5 +1,5 @@
-using Decenea.Application.Advertisements.Commands.RegisterUser;
-using Decenea.Shared.Common;
+using Decenea.Application.Users.Commands.RegisterUser;
+using Decenea.Common.Common;
 using Mediator;
 using Microsoft.AspNetCore.Identity;
 

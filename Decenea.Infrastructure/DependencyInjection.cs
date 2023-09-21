@@ -2,9 +2,11 @@ using System.Text;
 using Dapper;
 using Decenea.Application.Abstractions.DataAccess;
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Abstractions.Persistance.IRepositories;
 using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance;
 using Decenea.Infrastructure.Persistance.DataAccess;
+using Decenea.Infrastructure.Persistance.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +47,9 @@ public static class DependencyInjection
             new SqlConnectionFactory(connectionString));
 
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
+        
+        services.AddTransient<IMicroAdRepository, MicroAdRepository>();
+
     }
 
     private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)

@@ -27,6 +27,6 @@
       <ProjectReference Include="..\Decenea.Application\Decenea.Application.csproj" />
       <ProjectReference Include="..\Decenea.Domain\Decenea.Domain.csproj" />
       <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
-      <ProjectReference Include="..\Decenea.Shared\Decenea.Shared.csproj" />
+      <ProjectReference Include="..\Decenea.Common\Decenea.Common.csproj" />
     </ItemGroup>
 </Project>

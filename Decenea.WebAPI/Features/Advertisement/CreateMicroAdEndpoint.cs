@@ -1,29 +1,31 @@
-using Decenea.Domain.Helpers;
-using Decenea.Application.Services.CommandServices.ICommandServices;
+using Decenea.Application.Advertisements.Commands.CreateMicroAd;
+using Decenea.Common.Common;
+using Decenea.Common.Extensions;
+using Decenea.Common.Requests.MicroAds;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Decenea.Shared.Common;
-using Decenea.Shared.DataTransferObjects.Advertisement;
-using Decenea.Shared.Extensions;
+using Decenea.Domain.Helpers;
+using Mediator;
 
 namespace Decenea.WebAPI.Features.Advertisement;
 
-public class CreateMicroAd : Endpoint<CreateMicroAdRequestDto, ApiResponse<object>>
+public class CreateMicroAd : Endpoint<CreateMicroAdRequest, ApiResponse<object>>
 {
-    private readonly IAdvertisementCommandService _advertisementCommandService;
-    public CreateMicroAd(IAdvertisementCommandService advertisementCommandService)
+    private readonly IMediator _mediator;
+    public CreateMicroAd(IMediator mediator)
     {
-        _advertisementCommandService = advertisementCommandService;
+        _mediator = mediator;
     }
     
     public override void Configure()
     {
         Post("/MicroAd/Create");
-        Roles(Role.SuperAdmin.ToString(),Role.Admin.ToString(),Role.Member.ToString());
+        Roles(Role.RoleName(Role.SuperAdmin),
+            Role.RoleName(Role.Admin),
+            Role.RoleName(Role.Member));
     }
     
-    public override async Task<ApiResponse<object>> ExecuteAsync(CreateMicroAdRequestDto req, CancellationToken ct)
+    public override async Task<ApiResponse<object>> ExecuteAsync(CreateMicroAdRequest req, CancellationToken ct)
     {
-        var createMicroAdServiceRequestDto = new CreateMicroAdServiceRequestDto(req);
 
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
 
@@ -36,10 +38,17 @@ public class CreateMicroAd : Endpoint<CreateMicroAdRequestDto, ApiResponse<objec
         if(userId is null || cityId is null)
             return new ApiResponse<object>(null, false, "Invalid JWT.");
         
-        createMicroAdServiceRequestDto.ApplicationUserId = long.Parse(userId);
-        createMicroAdServiceRequestDto.CityId = cityId;
+        var createMicroAdCommand = new CreateMicroAdCommand()
+        {
+            UserId = userId,
+            CityId = cityId,
+            Title = req.Title,
+            ContactPhone = req.ContactPhone,
+            ContactEmail = req.ContactEmail,
+            Description = req.Description
+        };
         
-        var result = await _advertisementCommandService.CreateMicroAd(createMicroAdServiceRequestDto);
-        return new ApiResponse<object>(result.Value, result.IsSuccess, result.Messages);
+        var result = await _mediator.Send(createMicroAdCommand, ct);
+        return new ApiResponse<object>(result, result.IsSuccess, result.Messages);
     }
 }

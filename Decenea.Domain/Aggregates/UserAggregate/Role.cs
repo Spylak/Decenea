@@ -28,7 +28,7 @@ public class Role
         };
     }
 
-    public static string[] AllowVerified(Role role)
+    public static string[] AllowVerified()
     {
         return typeof(Role)
             .GetProperties()

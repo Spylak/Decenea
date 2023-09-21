@@ -1,15 +1,17 @@
-using Decenea.Application.Services.QueryServices.IQueryServices;
-using Decenea.Shared.Common;
-using Decenea.Shared.DataTransferObjects.Advertisement;
+using Decenea.Application.Advertisements.Queries.GetManyMicroAds;
+using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Advertisement;
+using Decenea.Common.Requests.MicroAds;
+using Mediator;
 
 namespace Decenea.WebAPI.Features.Advertisement;
 
-public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequestDto, ApiResponse<List<MicroAdDto>>>
+public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequest, ApiResponse<IEnumerable<MicroAdDto>>>
 {
-    private readonly IAdvertisementQueryService _advertisementQueryService;
-    public GetManyMicroAds(IAdvertisementQueryService advertisementQueryService)
+    private readonly IMediator _mediator;
+    public GetManyMicroAds(IMediator mediator)
     {
-        _advertisementQueryService = advertisementQueryService;
+        _mediator = mediator;
     }
     
     public override void Configure()
@@ -18,9 +20,21 @@ public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequestDto, ApiResponse<L
         AllowAnonymous();
     }
     
-    public override async Task<ApiResponse<List<MicroAdDto>>> ExecuteAsync(GetManyMicroAdsRequestDto req, CancellationToken ct)
+    public override async Task<ApiResponse<IEnumerable<MicroAdDto>>> ExecuteAsync(GetManyMicroAdsRequest req, CancellationToken ct)
     {
-        var result = await _advertisementQueryService.GetManyMicroAds(req);
-        return new ApiResponse<List<MicroAdDto>>(result.Value, result.IsSuccess, result.Messages);
+        var query = new GetManyMicroAdsQuery
+        {
+            Skip = req.Skip,
+            Take = req.Take,
+            CityId = req.CityId,
+            CommunityId = req.CommunityId,
+            MunicipalUnitId = req.MunicipalUnitId,
+            MunicipalityId = req.MunicipalityId,
+            RegionalUnitId = req.RegionalUnitId,
+            RegionId = req.RegionId,
+            CountryId = req.CountryId,
+        };
+        var result = await _mediator.Send(query);
+        return new ApiResponse<IEnumerable<MicroAdDto>>(result.Value, result.IsSuccess, result.Messages);
     }
 }

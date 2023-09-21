@@ -1,7 +1,6 @@
-using Decenea.Application.Advertisements.Commands.LoginUser;
-using Decenea.Application.Services.CommandServices.ICommandServices;
-using Decenea.Shared.Common;
-using Decenea.Shared.DataTransferObjects.ApplicationUser;
+using Decenea.Application.Users.Commands.LoginUser;
+using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.ApplicationUser;
 using Mediator;
 
 namespace Decenea.WebAPI.Features.User.LoginUser;

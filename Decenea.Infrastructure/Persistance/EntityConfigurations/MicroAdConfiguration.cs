@@ -9,5 +9,8 @@ public class MicroAdConfiguration : IEntityTypeConfiguration<MicroAd>
         public void Configure(EntityTypeBuilder<MicroAd> builder)
         {
                 builder.ToTable(name: "MicroAds");
+                
+                builder.Property(p => p.Id)
+                        .HasMaxLength(26);
         }
 }

@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decenea.WebApp", "Decenea.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decenea.WebAppAdmin", "Decenea.WebAppAdmin\Decenea.WebAppAdmin.csproj", "{7369BF21-92B0-4FD3-AF22-671CECF617AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decenea.Shared", "Decenea.Shared\Decenea.Shared.csproj", "{2E552E36-7DBB-4474-8DD5-6C761E53B826}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decenea.Common", "Decenea.Common\Decenea.Common.csproj", "{2E552E36-7DBB-4474-8DD5-6C761E53B826}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decenea.Domain", "Decenea.Domain\Decenea.Domain.csproj", "{AA098CAD-9BDD-481E-9F6F-4D4FA65CADAB}"
 EndProject

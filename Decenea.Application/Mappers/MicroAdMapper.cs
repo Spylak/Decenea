@@ -1,5 +1,5 @@
 using Decenea.Domain.Aggregates.AdvertisementAggregate;
-using Decenea.Shared.DataTransferObjects.Advertisement;
+using Decenea.Common.DataTransferObjects.Advertisement;
 
 namespace Decenea.Application.Mappers;
 

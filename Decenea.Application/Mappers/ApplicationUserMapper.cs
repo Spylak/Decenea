@@ -1,4 +1,4 @@
-using Decenea.Application.Advertisements.Commands.LoginUser;
+using Decenea.Application.Users.Commands.LoginUser;
 using Decenea.Domain.Aggregates.UserAggregate;
 
 namespace Decenea.Application.Mappers;

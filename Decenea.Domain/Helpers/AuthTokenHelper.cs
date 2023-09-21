@@ -1,7 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using Decenea.Domain.Common;
-using Decenea.Shared.DataTransferObjects.Auth;
+using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Auth;
 
 namespace Decenea.Domain.Helpers;
 

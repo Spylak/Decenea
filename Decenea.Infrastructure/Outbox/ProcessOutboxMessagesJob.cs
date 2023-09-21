@@ -16,7 +16,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
     {
         TypeNameHandling = TypeNameHandling.All
     };
-    
+
     private readonly IPublisher _publisher;
     private readonly OutboxOptions _outboxOptions;
     private readonly DeceneaDbContext _dbContext;
@@ -33,12 +33,15 @@ internal sealed class ProcessOutboxMessagesJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
         Log.Information("Beginning to process outbox messages");
-
-
-        var outboxMessages = await _dbContext.Set<OutboxMessage>()
+        
+        var outboxMessages = await _dbContext
+            .Set<OutboxMessage>()
             .Where(i => i.ProcessedOnUtc == null)
             .ToListAsync();
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        
+        await using var transaction = await _dbContext
+            .Database
+            .BeginTransactionAsync();
 
         foreach (var outboxMessageGroup in outboxMessages.GroupBy(i => i.CreatedBy))
         {
@@ -62,12 +65,14 @@ internal sealed class ProcessOutboxMessagesJob : IJob
                     outboxMessageGroup.Key);
                 error = ex.Message;
             }
+
             foreach (var outboxMessage in outboxMessageGroup)
             {
                 outboxMessage.ProcessedOnUtc = DateTime.UtcNow;
                 outboxMessage.Error = error;
             }
         }
+
         _dbContext.Set<OutboxMessage>().UpdateRange(outboxMessages);
         await transaction.CommitAsync();
         Log.Information("Completed processing outbox messages");

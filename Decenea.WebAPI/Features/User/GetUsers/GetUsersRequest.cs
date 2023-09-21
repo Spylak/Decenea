@@ -1,4 +1,4 @@
-namespace Decenea.Shared.DataTransferObjects.ApplicationUser;
+namespace Decenea.Common.DataTransferObjects.ApplicationUser;
 
 public class GetUsersRequest
 {

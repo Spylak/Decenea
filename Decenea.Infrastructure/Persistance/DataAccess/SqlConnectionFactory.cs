@@ -13,6 +13,13 @@ internal sealed class SqlConnectionFactory : ISqlConnectionFactory
         _connectionString = connectionString;
     }
 
+    public async Task<IDbConnection> CreateConnectionAsync()
+    {
+        var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync();
+
+        return connection;
+    }
     public IDbConnection CreateConnection()
     {
         var connection = new NpgsqlConnection(_connectionString);

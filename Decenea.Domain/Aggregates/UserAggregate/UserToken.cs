@@ -2,7 +2,7 @@
 
 namespace Decenea.Domain.Aggregates.UserAggregate;
 
-public class UserToken : Entity
+public class UserToken : AuditableEntity
 {
     public string UserId { get; set; }
     public string LoginProvider { get; set; }

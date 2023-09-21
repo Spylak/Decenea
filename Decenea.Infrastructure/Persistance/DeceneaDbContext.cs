@@ -4,7 +4,6 @@ using Decenea.Infrastructure.DataSeed;
 using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance.Converters;
 using Decenea.Infrastructure.Persistance.EntityConfigurations;
-using Decenea.Infrastructure.Persistance.EntityConfigurations.User;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -35,19 +34,7 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
     {
         base.OnModelCreating(builder);
         ApplicationUserSeed.Seed(builder);
-
-        builder.ApplyConfiguration(new UserSourceEventConfiguration());
-        builder.ApplyConfiguration(new ApplicationUserClaimConfiguration());
-        builder.ApplyConfiguration(new ApplicationUserTokenConfiguration());
-
-        builder.ApplyConfiguration(new CityConfiguration());
-        builder.ApplyConfiguration(new CountryConfiguration());
-        builder.ApplyConfiguration(new RegionConfiguration());
-        builder.ApplyConfiguration(new MunicipalityConfiguration());
-        builder.ApplyConfiguration(new MunicipalUnitConfiguration());
-        builder.ApplyConfiguration(new RegionalUnitConfiguration());
-        builder.ApplyConfiguration(new CommunityConfiguration());
-        builder.ApplyConfiguration(new MicroAdConfiguration());
+        builder.ApplyConfigurations();
     }
 
     public new DbSet<T> Set<T>() where T : class
@@ -68,7 +55,10 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
         DomainEvents ??= GetDomainEvents();
 
         if (DomainEvents.Count == 0)
+        {
+            ProcessAuditableEntities(CreatedBy);
             return await base.SaveChangesAsync(cancellationToken);
+        }
 
         return await HandleDomainEvents(DomainEvents, CreatedBy, cancellationToken);
     }
@@ -84,19 +74,18 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
                 await _publisher.Publish(nextEvent, cancellationToken);
             }
 
-            await base.SaveChangesAsync(cancellationToken);
+            await SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
+            return 1;
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-            AddDomainEventsAsOutboxMessages(domainEvents, userId, ex);
-            await base.SaveChangesAsync(cancellationToken);
+            await AddDomainEventsAsOutboxMessages(domainEvents, userId, ex);
             Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",ex.Message);
+            return await SaveChangesAsync(cancellationToken);
         }
-
-        return 1;
     }
 
     private Queue<IDomainEvent> GetDomainEvents()
@@ -107,7 +96,7 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
             .SelectMany(ar => { return ar.PopDomainEvents(); }));
     }
 
-    private void AddDomainEventsAsOutboxMessages(Queue<IDomainEvent> domainEvents, string userId, Exception exception)
+    private async Task AddDomainEventsAsOutboxMessages(Queue<IDomainEvent> domainEvents, string userId, Exception exception)
     {
         var dateTime = DateTime.UtcNow;
         var outboxMessages = domainEvents
@@ -120,6 +109,29 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
                 exception.Message))
             .ToList();
 
-        AddRange(outboxMessages);
+        await AddRangeAsync(outboxMessages);
+    }
+
+    private void ProcessAuditableEntities(string createdBy)
+    {
+        var updatedEntityList = ChangeTracker.Entries()
+            .Where(x => x.Entity is AuditableEntity && x.State == EntityState.Modified);
+
+        var addedEntityList = ChangeTracker.Entries()
+            .Where(x => x.Entity is AuditableEntity && x.State == EntityState.Added);
+
+        foreach (var entity in updatedEntityList)
+        {
+
+            ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = DateTime.UtcNow;
+            ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
+        }
+        foreach (var entity in addedEntityList)
+        {
+            ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = DateTime.UtcNow;
+            ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = DateTime.UtcNow;
+            ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
+            ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
+        }
     }
 }

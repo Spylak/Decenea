@@ -1,5 +1,5 @@
-using Decenea.Domain.Aggregates.CityAggregate;
-using Decenea.Shared.DataTransferObjects.Location;
+using Decenea.Domain.Aggregates.LocationAggregate;
+using Decenea.Common.DataTransferObjects.Location;
 
 namespace Decenea.Application.Mappers;
 
