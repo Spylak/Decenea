@@ -1,16 +1,18 @@
+using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.RegisterUser;
 using Decenea.Common.Common;
 using Mediator;
-using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.WebAPI.Features.User.RegisterUser;
 
 public class RegisterApplicationUser : Endpoint<RegisterUserRequest,ApiResponse<object>>
 {
     private readonly IMediator _mediator;
-    public RegisterApplicationUser(IMediator mediator)
+    private readonly IDeceneaDbContext _dbContext;
+    public RegisterApplicationUser(IMediator mediator, IDeceneaDbContext dbContext)
     {
         _mediator = mediator;
+        _dbContext = dbContext;
     }
 
     public override void Configure()
@@ -21,6 +23,7 @@ public class RegisterApplicationUser : Endpoint<RegisterUserRequest,ApiResponse<
 
     public override async Task<ApiResponse<object>> ExecuteAsync(RegisterUserRequest req, CancellationToken ct)
     {
+        _dbContext.CreatedBy = "Anonymous";
         var command = new RegisterUserCommand(req.Email,
             req.UserName,
             req.FirstName,

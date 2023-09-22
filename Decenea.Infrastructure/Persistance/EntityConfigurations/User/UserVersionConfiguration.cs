@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistance.EntityConfigurations.User;
 
-public class UserTokenConfiguration : AuditableEntityTypeConfiguration<UserToken>
+public class UserVersionConfiguration : EntityVersionTypeConfiguration<UserVersion>
 {
-    public override void Configure(EntityTypeBuilder<UserToken> builder)
+    public override void Configure(EntityTypeBuilder<UserVersion> builder)
     {
         base.Configure(builder);
-
-        builder.ToTable(name: "UserTokens");
+        
+        builder.ToTable(name: "UserVersions");
     }
 }

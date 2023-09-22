@@ -35,13 +35,12 @@ public static class DependencyInjection
             configuration.GetConnectionString("DeceneaDbConnectionString") ??
             throw new ArgumentNullException(nameof(configuration));
         
-        //DbContext needs to be stateless to use ContextPool
-        services.AddDbContextPool<DeceneaDbContext>(options =>
+        services.AddDbContext<DeceneaDbContext>(options =>
         {
             options.UseNpgsql(connectionString);
         });
         
-        services.AddScoped<IDeceneaDbContext>(provider => provider.GetService<DeceneaDbContext>());
+        services.AddScoped<IDeceneaDbContext, DeceneaDbContext>();
         
         services.AddSingleton<ISqlConnectionFactory>(_ =>
             new SqlConnectionFactory(connectionString));

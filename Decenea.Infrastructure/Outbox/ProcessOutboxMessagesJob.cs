@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
 using Serilog;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Decenea.Infrastructure.Outbox;
 
@@ -51,7 +52,7 @@ internal sealed class ProcessOutboxMessagesJob : IJob
             {
                 foreach (var outboxMessage in outboxMessageGroup)
                 {
-                    var domainEvent = (DomainEvent)outboxMessage.DomainEvent;
+                    var domainEvent = JsonSerializer.Deserialize<IDomainEvent>(outboxMessage.DomainEvent)!;
 
                     await _publisher.Publish(domainEvent, context.CancellationToken);
                 }

@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Decenea.Domain.Common;
 using Decenea.Common.Common;
+using Decenea.Domain.Aggregates.UserAggregate;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.Domain.Helpers;
@@ -66,7 +67,7 @@ public class PassowordHelper
             if (_passwordOptions.RequireNonAlphanumeric && password.All(char.IsLetterOrDigit))
                 return Result<object,Exception>.Anticipated(null,"Password must contain at least one non-alphanumeric character.");
 
-            return Result<object,Exception>.Anticipated(true);
+            return Result<object,Exception>.Anticipated(true,"Password is valid.");
     }
 
     public string GenerateRandomPassword()

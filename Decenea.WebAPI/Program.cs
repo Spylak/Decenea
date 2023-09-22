@@ -19,6 +19,10 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json");
 
 builder.Services
+    .AddMediator(i =>
+    {
+        i.ServiceLifetime = ServiceLifetime.Scoped;
+    })
     .AddFastEndpoints()
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
@@ -28,10 +32,10 @@ builder.Services.SwaggerDocument();
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<HttpContextMiddleware>();
 app.UseFastEndpoints(c => {
     c.Endpoints.RoutePrefix = "api";
 });
 app.UseSwaggerGen();
+app.UseMiddleware<HttpContextMiddleware>();
 
 app.Run();

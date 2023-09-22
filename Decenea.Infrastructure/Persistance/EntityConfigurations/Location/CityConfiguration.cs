@@ -1,18 +1,17 @@
-using Decenea.Domain.Aggregates.AdvertisementAggregate;
 using Decenea.Domain.Aggregates.LocationAggregate;
+using Decenea.Infrastructure.Persistance.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistance.EntityConfigurations.Location;
 
-public class CityConfiguration : IEntityTypeConfiguration<City>
+public class CityConfiguration : AuditableEntityTypeConfiguration<City>
 {
-        public void Configure(EntityTypeBuilder<City> builder)
+        public override void Configure(EntityTypeBuilder<City> builder)
         {
-                builder.ToTable(name: "Cities");
+                base.Configure(builder);
                 
-                builder.Property(p => p.Id)
-                        .HasMaxLength(26);
+                builder.ToTable(name: "Cities");
                 
                 builder.Property(i => i.AsciiName)
                         .IsRequired(false);

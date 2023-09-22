@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Common.Common;
 using Decenea.Domain.Common;
+using Decenea.Domain.Common.Enums;
 using Decenea.Infrastructure.DataSeed;
 using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance.Converters;
@@ -11,7 +14,7 @@ using Serilog;
 
 namespace Decenea.Infrastructure.Persistance;
 
-public class DeceneaDbContext : DbContext, IDeceneaDbContext
+internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 {
     private readonly IPublisher _publisher;
     public string? CreatedBy { get; set; }
@@ -41,29 +44,38 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
     {
         return base.Set<T>();
     }
-    
-    public override int SaveChanges()
+
+    public new async Task<Result<object, Exception>> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return 0;
+        return await SaveChangesAsync(null, cancellationToken);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public async Task<Result<object,Exception>> SaveChangesAsync(string? createdBy = null, CancellationToken cancellationToken = default)
     {
+        CreatedBy ??= createdBy;
         if (CreatedBy is null)
-            return 1;
+            return Result<object,Exception>.Anticipated(null,"Unable to save changes.");
 
         DomainEvents ??= GetDomainEvents();
 
         if (DomainEvents.Count == 0)
         {
-            ProcessAuditableEntities(CreatedBy);
-            return await base.SaveChangesAsync(cancellationToken);
+            await ProcessAuditableEntities(CreatedBy);
+            try
+            {
+                await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                //Handle concurrency exception
+                return Result<object,Exception>.Anticipated(null,"Unable to save changes due to invalid data.");
+            }
         }
 
         return await HandleDomainEvents(DomainEvents, CreatedBy, cancellationToken);
     }
 
-    private async Task<int> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
+    private async Task<Result<object,Exception>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
         CancellationToken cancellationToken = default)
     {
         await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
@@ -77,14 +89,16 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
             await SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
-            return 1;
+            return Result<object,Exception>.Anticipated(null,"Unable to Handle DomainEvents in DbContext.");
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
             await AddDomainEventsAsOutboxMessages(domainEvents, userId, ex);
-            Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",ex.Message);
-            return await SaveChangesAsync(cancellationToken);
+            Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",
+                ex.Message);
+            await SaveChangesAsync(cancellationToken);
+            return Result<object,Exception>.Excepted(null,"Unable to Handle DomainEvents in DbContext.");
         }
     }
 
@@ -96,42 +110,70 @@ public class DeceneaDbContext : DbContext, IDeceneaDbContext
             .SelectMany(ar => { return ar.PopDomainEvents(); }));
     }
 
-    private async Task AddDomainEventsAsOutboxMessages(Queue<IDomainEvent> domainEvents, string userId, Exception exception)
+    private async Task AddDomainEventsAsOutboxMessages(Queue<IDomainEvent> domainEvents, string userId,
+        Exception exception)
     {
-        var dateTime = DateTime.UtcNow;
-        var outboxMessages = domainEvents
-            .Select(domainEvent => new OutboxMessage(
-                Ulid.NewUlid(),
-                dateTime,
-                domainEvent.GetType().Name,
-                domainEvent,
-                userId,
-                exception.Message))
-            .ToList();
+        try
+        {
+            var dateTime = DateTime.UtcNow;
+            var outboxMessages = domainEvents
+                .Select(domainEvent => new OutboxMessage()
+                {
+                    Id = Ulid.NewUlid().ToString()!,
+                    OccurredOnUtc = dateTime,
+                    Type = domainEvent.GetType().Name,
+                    DomainEvent = JsonSerializer.Serialize(domainEvent),
+                    CreatedBy = userId,
+                    Error = exception.Message
+                })
+                .ToList();
 
-        await AddRangeAsync(outboxMessages);
+            await AddRangeAsync(outboxMessages);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("There was something wrong while AddDomainEventsAsOutboxMessages : {ex}",ex);
+        }
     }
 
-    private void ProcessAuditableEntities(string createdBy)
+    private async Task ProcessAuditableEntities(string createdBy)
     {
-        var updatedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is AuditableEntity && x.State == EntityState.Modified);
-
-        var addedEntityList = ChangeTracker.Entries()
-            .Where(x => x.Entity is AuditableEntity && x.State == EntityState.Added);
-
-        foreach (var entity in updatedEntityList)
+        try
         {
+            var entityList = ChangeTracker.Entries()
+                .Where(x => x.Entity is AuditableEntity
+                            || x.State == EntityState.Modified
+                            || x.State == EntityState.Added
+                            || x.State == EntityState.Deleted);
 
-            ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = DateTime.UtcNow;
-            ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
+            var dateTimeUtcNow = DateTime.UtcNow;
+
+            foreach (var entity in entityList)
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
+                    ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
+                }
+
+                ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
+                ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = dateTimeUtcNow;
+
+                var auditLog = new AuditLog()
+                {
+                    EntityId = (string)entity.OriginalValues["Id"]!,
+                    EntityType = nameof(entity.OriginalValues.EntityType),
+                    ExecutedOperation = (ExecutedOperation)entity.State,
+                    OperationExecutedAt = dateTimeUtcNow,
+                    DataAfterExecutedOperation = JsonSerializer.Serialize(entity.Entity)
+                };
+
+                await AddAsync(auditLog);
+            }
         }
-        foreach (var entity in addedEntityList)
+        catch (Exception ex)
         {
-            ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = DateTime.UtcNow;
-            ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = DateTime.UtcNow;
-            ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
-            ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
+            Log.Error("There was something wrong while ProcessAuditableEntities : {ex}",ex);
         }
     }
 }

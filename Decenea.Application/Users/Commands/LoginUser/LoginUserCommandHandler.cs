@@ -43,7 +43,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
             var jwtToken = JWTBearer.CreateToken(
                 signingKey: "ApplicationTokenSigningKey",
                 expireAt: accessTokenExpiryTime,
-                priviledges: u =>
+                privileges: u =>
                 {
                     u.Roles.Add(Role.RoleName(user.RoleId));
                     
@@ -73,8 +73,8 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             
-            if (result == 0)
-                return Result<LoginUserResponse, Exception>.Anticipated(null,"Something went wrong.");
+            if (!result.IsSuccess)
+                return Result<LoginUserResponse, Exception>.Anticipated(null, result.Messages);
             
             return Result<LoginUserResponse, Exception>.Anticipated(loginUserResponse);
         }

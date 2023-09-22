@@ -1,16 +1,16 @@
 using Decenea.Domain.Aggregates.UserAggregate;
+using Decenea.Infrastructure.Persistance.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistance.EntityConfigurations.User;
 
-public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
+public class UserClaimConfiguration : AuditableEntityTypeConfiguration<UserClaim>
 {
-    public void Configure(EntityTypeBuilder<UserClaim> builder)
+    public override void Configure(EntityTypeBuilder<UserClaim> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable(name: "UserClaims");
-                
-        builder.Property(p => p.Id)
-            .HasMaxLength(26);
     }
 }

@@ -1,11 +1,8 @@
 namespace Decenea.Domain.Common;
 
-public abstract class AuditableAggregateRoot : AuditableEntity<string>
+public abstract class AuditableAggregateRoot : AuditableEntity
 {
-}
-
-public abstract class AuditableAggregateRoot<T> :  AuditableEntity<T> where T : notnull
-{
+    
     protected AuditableAggregateRoot() { }
 
     protected readonly Queue<IDomainEvent> _domainEvents = new();

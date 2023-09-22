@@ -1,6 +1,5 @@
 using Decenea.Application.Users.Commands.RegenerateAuthTokens;
 using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Mediator;
 

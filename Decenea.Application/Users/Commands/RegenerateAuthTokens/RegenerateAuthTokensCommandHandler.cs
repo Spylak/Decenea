@@ -68,7 +68,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
             var jwtToken = JWTBearer.CreateToken(
                 signingKey: "ApplicationTokenSigningKey",
                 expireAt: accessTokenExpiryTime,
-                priviledges: u =>
+                privileges: u =>
                 {
                     u.Roles.Add(userRole);
 
@@ -87,8 +87,8 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             
-            if (result == 0)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null,"Something went wrong.");
+            if (!result.IsSuccess)
+                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, result.Messages);
 
             return Result<RegenerateAuthTokensResponse, Exception>
                 .Anticipated(new RegenerateAuthTokensResponse(jwtToken, refreshToken.RefreshToken,

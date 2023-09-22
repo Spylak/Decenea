@@ -1,16 +1,8 @@
 namespace Decenea.Domain.Common;
 
-public abstract class Entity: Entity<string>
+public abstract class Entity
 {
-    public Entity(string? id = null)
-    {
-        Id = id ?? Ulid.NewUlid().ToString();
-    }
-}
-
-public abstract class Entity<T> where T : notnull
-{
-    public T Id { get; init; } = default!;
+    public string Id { get; set; } =  Ulid.NewUlid().ToString()!;
 
     public override bool Equals(object? other)
     {
@@ -19,15 +11,12 @@ public abstract class Entity<T> where T : notnull
             return false;
         }
 
-        return ((Entity<T>)other).Id.Equals(Id);
+        return ((Entity)other).Id.Equals(Id);
     }
 
     public override int GetHashCode()
     {
         return Id.GetHashCode();
     }
-
-    protected Entity(T id) => Id = id;
-
     protected Entity() { }
 }

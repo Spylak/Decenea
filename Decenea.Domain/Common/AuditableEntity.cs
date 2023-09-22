@@ -1,12 +1,8 @@
 namespace Decenea.Domain.Common;
 
-public class AuditableEntity : AuditableEntity<string>
+public abstract class AuditableEntity : Entity
 {
-    
-}
-
-public class AuditableEntity<T> : Entity<T> where T : notnull
-{
+    public string Version { get; set; }
     public string CreatedBy { get; set; }
     public string LastModifiedBy { get; set; }
     public DateTime LastModifiedByTimestampUtc { get; set; }

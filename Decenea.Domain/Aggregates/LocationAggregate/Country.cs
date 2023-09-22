@@ -2,7 +2,7 @@ using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.LocationAggregate;
 
-public class Country : AuditableAggregateRoot<int>
+public class Country : AuditableAggregateRoot
 {
     public string Name { get; set; }
     public string? AsciiName { get; set; }

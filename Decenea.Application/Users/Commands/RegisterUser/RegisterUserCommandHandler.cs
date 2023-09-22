@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -36,16 +35,19 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, R
                 command.PhoneNumber,
                 command.CityId,
                 command.Password);
+
+            if (!user.IsSuccess)
+                return Result<object, Exception>.Anticipated(null, user.Messages);;
             
             await _dbContext.Set<User>()
-                .AddAsync(user, cancellationToken);
+                .AddAsync(user.Value, cancellationToken);
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             
-            if (result == 0)
-                return Result<object, Exception>.Anticipated(null,"Something went wrong.");
+            if (!result.IsSuccess)
+                return Result<object, Exception>.Anticipated(null, result.Messages);
             
-            return Result<object, Exception>.Anticipated(1,"Successfully registered user.");
+            return Result<object, Exception>.Anticipated(user.Value,"Successfully registered user.");
         }
         catch (Exception ex)
         {

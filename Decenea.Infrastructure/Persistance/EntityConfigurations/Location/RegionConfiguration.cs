@@ -1,17 +1,17 @@
 using Decenea.Domain.Aggregates.LocationAggregate;
+using Decenea.Infrastructure.Persistance.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistance.EntityConfigurations.Location;
 
-public class RegionConfiguration : IEntityTypeConfiguration<Region>
+public class RegionConfiguration : AuditableEntityTypeConfiguration<Region>
 {
-        public void Configure(EntityTypeBuilder<Region> builder)
+        public override void Configure(EntityTypeBuilder<Region> builder)
         {
+                base.Configure(builder);
+
                 builder.ToTable(name: "Regions");
-                
-                builder.Property(p => p.Id)
-                        .HasMaxLength(26);
 
                 builder.Property(i => i.AsciiName)
                         .IsRequired(false);

@@ -1,5 +1,5 @@
 namespace Decenea.Domain.Common;
-public abstract class AggregateRoot<T> : Entity<T> where T : notnull
+public abstract class AggregateRoot : Entity
 {
     protected AggregateRoot() { }
 
@@ -12,8 +12,4 @@ public abstract class AggregateRoot<T> : Entity<T> where T : notnull
 
         return new Queue<IDomainEvent>(copy);
     }
-}
-
-public abstract class AggregateRoot : AggregateRoot<string>
-{
 }

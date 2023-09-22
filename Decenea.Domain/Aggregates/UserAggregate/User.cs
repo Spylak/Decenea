@@ -1,9 +1,10 @@
+using Decenea.Common.Common;
 using Decenea.Domain.Common;
 using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Aggregates.UserAggregate;
 
-public class User : AggregateRoot
+public class User : AuditableAggregateRoot
 {
 
     private readonly List<string> _microAdIds = new();
@@ -36,7 +37,7 @@ public class User : AggregateRoot
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public DateTime? DateVerified { get; set; }
 
-    public static User Create(string firstName,
+    public static Result<User,Exception> Create(string firstName,
         string email,
         string userName,
         string lastName,
@@ -46,6 +47,11 @@ public class User : AggregateRoot
         string password)
     {
         var passwordHelper = new PassowordHelper();
+        var validatePassword = passwordHelper.ValidatePassword(password);
+        
+        if (!validatePassword.IsSuccess)
+            return Result<User,Exception>.Anticipated(null,validatePassword.Messages);
+        
         var passHash = passwordHelper.HashPasword(password, out var salt);
         
         var user = new User()
@@ -61,6 +67,7 @@ public class User : AggregateRoot
             PasswordHash = passHash,
             PasswordSalt = salt
         };
-        return user;
+        
+        return Result<User,Exception>.Anticipated(user);
     }
 }   
