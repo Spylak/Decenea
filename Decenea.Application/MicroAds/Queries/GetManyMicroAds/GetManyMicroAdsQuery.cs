@@ -2,7 +2,7 @@ using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Advertisement;
 using Mediator;
 
-namespace Decenea.Application.Advertisements.Queries.GetManyMicroAds;
+namespace Decenea.Application.MicroAds.Queries.GetManyMicroAds;
 
 public class GetManyMicroAdsQuery : IQuery<Result<IEnumerable<MicroAdDto>,Exception>>
 {

@@ -1,4 +1,4 @@
-using Decenea.Domain.Aggregates.AdvertisementAggregate;
+using Decenea.Domain.Aggregates.MicroAdAggregate;
 using Decenea.Infrastructure.Persistance.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

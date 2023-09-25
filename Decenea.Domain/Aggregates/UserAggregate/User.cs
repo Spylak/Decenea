@@ -37,6 +37,18 @@ public class User : AuditableAggregateRoot
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public DateTime? DateVerified { get; set; }
 
+    public static Result<object, Exception> CheckPassword(string password,
+        string passwordHash, byte[] passwordSalt)
+    {
+        var passHelper = new PassowordHelper();
+            
+        if (!passHelper.VerifyPassword(password, passwordHash, passwordSalt))
+        {
+            return Result<object, Exception>.Anticipated(null,"Credentials don't match.");
+        }
+        return Result<object, Exception>.Anticipated(null,"Credentials don't match.");
+    }
+    
     public static Result<User,Exception> Create(string firstName,
         string email,
         string userName,
@@ -50,7 +62,7 @@ public class User : AuditableAggregateRoot
         var validatePassword = passwordHelper.ValidatePassword(password);
         
         if (!validatePassword.IsSuccess)
-            return Result<User,Exception>.Anticipated(null,validatePassword.Messages);
+            return Result<User,Exception>.Anticipated(null, validatePassword.Messages);
         
         var passHash = passwordHelper.HashPasword(password, out var salt);
         

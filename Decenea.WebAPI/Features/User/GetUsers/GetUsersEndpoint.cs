@@ -1,7 +1,7 @@
 using Decenea.Application.Users.Queries.GetManyUsers;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.ApplicationUser;
+using Decenea.Common.Requests.Users;
 using Mediator;
 
 namespace Decenea.WebAPI.Features.User.GetUsers;

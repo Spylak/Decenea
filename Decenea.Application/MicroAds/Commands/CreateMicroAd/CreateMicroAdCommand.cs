@@ -1,8 +1,9 @@
-using Decenea.Domain.Common;
+using Decenea.Common.Common;
+using Mediator;
 
-namespace Decenea.Domain.Aggregates.AdvertisementAggregate;
+namespace Decenea.Application.MicroAds.Commands.CreateMicroAd;
 
-public class MicroAd : AuditableAggregateRoot
+public class CreateMicroAdCommand : ICommand<Result<object,Exception>>
 {
     public string Title { get; set; }
     public string Description { get; set; }

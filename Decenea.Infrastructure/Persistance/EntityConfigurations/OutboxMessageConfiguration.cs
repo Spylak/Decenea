@@ -1,4 +1,3 @@
-using Decenea.Domain.Common;
 using Decenea.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,5 +12,9 @@ public class OutboxMessageConfiguration : IEntityTypeConfiguration<OutboxMessage
                 
         builder.Property(p => p.Id)
             .HasMaxLength(26);
+        
+        builder.Property(p => p.Version)
+            .HasMaxLength(8)
+            .IsRowVersion();
     }
 }

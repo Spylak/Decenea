@@ -1,11 +1,9 @@
-﻿using System.Text.Json;
-using Decenea.Domain.Common;
+﻿using Decenea.Domain.Common;
 
 namespace Decenea.Infrastructure.Outbox;
 
-public sealed class OutboxMessage
+public sealed class OutboxMessage : Entity
 {
-    public string Id { get; init; }
     public string CreatedBy { get; init; }
 
     public DateTime OccurredOnUtc { get; init; }

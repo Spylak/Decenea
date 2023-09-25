@@ -1,10 +1,10 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
-using Decenea.Domain.Aggregates.AdvertisementAggregate;
+using Decenea.Domain.Aggregates.MicroAdAggregate;
 using Mediator;
 using Serilog;
 
-namespace Decenea.Application.Advertisements.Commands.CreateMicroAd;
+namespace Decenea.Application.MicroAds.Commands.CreateMicroAd;
 
 public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,Result<object,Exception>>
 {    
@@ -19,19 +19,19 @@ public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,
     {
         try
         {
-            var newMicroAd = new MicroAd()
-            {
-                Title = command.Title,
-                Description = command.Description,
-                CityId = command.CityId,
-                UserId = command.UserId,
-                ContactEmail = command.ContactEmail,
-                ContactPhone = command.ContactPhone
-            };
+            var createResult = MicroAd.Create(command.Title,
+                command.Description,
+                command.CityId,
+                command.UserId,
+                command.ContactEmail,
+                command.ContactPhone);
             
-            await _dbContext.Set<MicroAd>().AddAsync(newMicroAd, cancellationToken);
+            if(!createResult.IsSuccess)
+                return Result<object, Exception>.Anticipated(null, createResult.Messages);
+
+            await _dbContext.Set<MicroAd>().AddAsync(createResult.Value!, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result<object, Exception>.Anticipated(null,"Successfully created!");
+            return Result<object, Exception>.Anticipated(null,"Successfully created!", true);
         }
         catch (Exception ex)
         {

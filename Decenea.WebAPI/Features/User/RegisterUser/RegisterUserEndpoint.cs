@@ -1,6 +1,7 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.RegisterUser;
 using Decenea.Common.Common;
+using Decenea.Common.Requests.Users;
 using Mediator;
 
 namespace Decenea.WebAPI.Features.User.RegisterUser;

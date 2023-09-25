@@ -1,4 +1,4 @@
-namespace Decenea.WebAPI.Features.User.RegisterUser;
+namespace Decenea.Common.Requests.Users;
 
 public class RegisterUserRequest
 {

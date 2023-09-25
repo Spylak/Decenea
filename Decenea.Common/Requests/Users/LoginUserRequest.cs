@@ -1,4 +1,4 @@
-namespace Decenea.Common.DataTransferObjects.ApplicationUser;
+namespace Decenea.Common.Requests.Users;
 
 public class LoginUserRequest
 {

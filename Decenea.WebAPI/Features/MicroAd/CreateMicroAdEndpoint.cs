@@ -1,4 +1,4 @@
-using Decenea.Application.Advertisements.Commands.CreateMicroAd;
+using Decenea.Application.MicroAds.Commands.CreateMicroAd;
 using Decenea.Common.Common;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.MicroAds;
@@ -6,7 +6,7 @@ using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
 using Mediator;
 
-namespace Decenea.WebAPI.Features.Advertisement;
+namespace Decenea.WebAPI.Features.MicroAd;
 
 public class CreateMicroAd : Endpoint<CreateMicroAdRequest, ApiResponse<object>>
 {

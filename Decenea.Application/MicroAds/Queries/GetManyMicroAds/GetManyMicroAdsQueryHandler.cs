@@ -1,10 +1,9 @@
 using Decenea.Application.Abstractions.Persistance.IRepositories;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Advertisement;
-using Decenea.Domain.Aggregates.AdvertisementAggregate;
 using Mediator;
 
-namespace Decenea.Application.Advertisements.Queries.GetManyMicroAds;
+namespace Decenea.Application.MicroAds.Queries.GetManyMicroAds;
 
 public class GetManyMicroAdsQueryHandler : IQueryHandler<GetManyMicroAdsQuery, Result<IEnumerable<MicroAdDto>, Exception>>
 {

@@ -10,10 +10,6 @@ public class AuditableEntityTypeConfiguration<TEntity> : BaseEntityTypeConfigura
     {
         base.Configure(builder);
         
-        builder.Property(p => p.Version)
-            .HasMaxLength(26)
-            .IsConcurrencyToken();
-        
         builder.Property(p => p.CreatedBy)
             .HasMaxLength(50);
         

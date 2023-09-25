@@ -3,6 +3,7 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
 using Decenea.Domain.Common;
 using Decenea.Domain.Common.Enums;
+using Decenea.Domain.Helpers;
 using Decenea.Infrastructure.DataSeed;
 using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance.Converters;
@@ -40,7 +41,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         builder.ApplyConfigurations();
     }
 
-    public new DbSet<T> Set<T>() where T : class
+    public new DbSet<T> Set<T>() where T : Entity
     {
         return base.Set<T>();
     }
@@ -152,6 +153,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             {
                 if (entity.State == EntityState.Added)
                 {
+                    ((Entity)entity.Entity).Version = RandomStringGenerator.RandomString(8);
                     ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
                     ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
                 }
@@ -162,7 +164,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                 var auditLog = new AuditLog()
                 {
                     EntityId = (string)entity.OriginalValues["Id"]!,
-                    EntityType = nameof(entity.OriginalValues.EntityType),
+                    EntityType = entity.Entity.GetType().ToString(),
                     ExecutedOperation = (ExecutedOperation)entity.State,
                     OperationExecutedAt = dateTimeUtcNow,
                     DataAfterExecutedOperation = JsonSerializer.Serialize(entity.Entity)

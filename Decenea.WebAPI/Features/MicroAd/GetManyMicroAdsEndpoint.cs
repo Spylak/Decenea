@@ -1,10 +1,10 @@
-using Decenea.Application.Advertisements.Queries.GetManyMicroAds;
+using Decenea.Application.MicroAds.Queries.GetManyMicroAds;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Advertisement;
 using Decenea.Common.Requests.MicroAds;
 using Mediator;
 
-namespace Decenea.WebAPI.Features.Advertisement;
+namespace Decenea.WebAPI.Features.MicroAd;
 
 public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequest, ApiResponse<IEnumerable<MicroAdDto>>>
 {

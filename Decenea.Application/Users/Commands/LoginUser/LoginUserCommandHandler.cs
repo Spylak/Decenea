@@ -32,11 +32,11 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
             if(user.LockoutEnabled)
                 return Result<LoginUserResponse, Exception>.Anticipated(null,"User is locked.");
 
-            var passHelper = new PassowordHelper();
+            var passCheck = User.CheckPassword(command.Password,user.PasswordHash, user.PasswordSalt);
             
-            if (!passHelper.VerifyPassword(command.Password,user.PasswordHash, user.PasswordSalt))
+            if (!passCheck.IsSuccess)
             {
-                return Result<LoginUserResponse, Exception>.Anticipated(null,"Credentials don't match.");
+                return Result<LoginUserResponse, Exception>.Anticipated(null, passCheck.Messages);
             }
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);

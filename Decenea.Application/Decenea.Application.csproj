@@ -21,8 +21,8 @@
 
 
     <ItemGroup>
-      <Folder Include="Advertisements\Events\" />
-      <Folder Include="Advertisements\IntegrationEvents\" />
+      <Folder Include="MicroAds\Events\" />
+      <Folder Include="MicroAds\IntegrationEvents\" />
       <Folder Include="Users\Commands\" />
       <Folder Include="Users\Events\" />
       <Folder Include="Users\IntegrationEvents\" />
