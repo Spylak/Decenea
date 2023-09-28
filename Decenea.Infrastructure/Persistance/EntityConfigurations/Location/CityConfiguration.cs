@@ -18,5 +18,23 @@ public class CityConfiguration : AuditableEntityTypeConfiguration<City>
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
+                
+                builder.Property(i => i.CommunityId)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.MunicipalUnitId)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.MunicipalityId)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.RegionalUnitId)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.RegionId)
+                        .IsRequired(false);
+                
+                builder.Property(i => i.CountryId)
+                        .IsRequired();
         }
 }

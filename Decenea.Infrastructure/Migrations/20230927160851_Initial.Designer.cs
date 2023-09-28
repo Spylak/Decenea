@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    [Migration("20230922144236_Initial2")]
-    partial class Initial2
+    [Migration("20230927160851_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,63 +24,6 @@ namespace Decenea.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.AdvertisementAggregate.MicroAd", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("CityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContactPhone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Version")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MicroAds", (string)null);
-                });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.City", b =>
                 {
@@ -140,9 +83,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -187,9 +129,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -238,9 +179,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -288,9 +228,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -335,9 +274,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -382,9 +320,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -429,13 +366,68 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
                     b.ToTable("RegionalUnits", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.MicroAdAggregate.MicroAd", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("CityId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MicroAds", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.UserAggregate.User", b =>
@@ -541,9 +533,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -586,9 +577,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -638,9 +628,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -669,6 +658,9 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<DateTime>("OperationExecutedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -701,6 +693,12 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 

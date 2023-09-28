@@ -18,5 +18,13 @@ public class RegionalUnitConfiguration : AuditableEntityTypeConfiguration<Region
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
+                
+                builder.Property(i => i.RegionId)
+                        .IsRequired();
+                
+                builder.HasMany(i => i.Municipalities)
+                        .WithOne()
+                        .HasForeignKey(i => i.RegionalUnitId)
+                        .OnDelete(DeleteBehavior.Restrict);
         }
 }

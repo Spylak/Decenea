@@ -18,5 +18,13 @@ public class MunicipalUnitConfiguration : AuditableEntityTypeConfiguration<Munic
                 
                 builder.Property(i => i.AlternativeName)
                         .IsRequired(false);
+                
+                builder.Property(i => i.MunicipalityId)
+                        .IsRequired();
+                
+                builder.HasMany(i => i.Communities)
+                        .WithOne()
+                        .HasForeignKey(i => i.MunicipalUnitId)
+                        .OnDelete(DeleteBehavior.Restrict);
         }
 }

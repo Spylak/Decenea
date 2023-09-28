@@ -18,5 +18,13 @@ public class CommunityConfiguration : AuditableEntityTypeConfiguration<Community
 
         builder.Property(i => i.AlternativeName)
             .IsRequired(false);
+        
+        builder.Property(i => i.MunicipalUnitId)
+            .IsRequired();
+                
+        builder.HasMany(i => i.Cities)
+            .WithOne()
+            .HasForeignKey(i => i.CommunityId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

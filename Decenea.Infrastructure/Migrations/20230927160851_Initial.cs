@@ -17,6 +17,7 @@ namespace Decenea.Infrastructure.Migrations
                 {
                     Id = table.Column<string>(type: "character varying(26)", maxLength: 26, nullable: false),
                     EntityType = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "text", nullable: true),
                     EntityId = table.Column<string>(type: "text", nullable: false),
                     ExecutedOperation = table.Column<int>(type: "integer", nullable: false),
                     DataAfterExecutedOperation = table.Column<string>(type: "text", nullable: true),
@@ -43,6 +44,7 @@ namespace Decenea.Infrastructure.Migrations
                     MunicipalityId = table.Column<string>(type: "text", nullable: true),
                     MunicipalUnitId = table.Column<string>(type: "text", nullable: true),
                     CommunityId = table.Column<string>(type: "text", nullable: true),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -62,6 +64,7 @@ namespace Decenea.Infrastructure.Migrations
                     AsciiName = table.Column<string>(type: "text", nullable: true),
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     MunicipalUnitId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -82,6 +85,7 @@ namespace Decenea.Infrastructure.Migrations
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     CountryCode = table.Column<string>(type: "text", nullable: false),
                     Timezone = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -103,6 +107,7 @@ namespace Decenea.Infrastructure.Migrations
                     ContactEmail = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     CityId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -122,6 +127,7 @@ namespace Decenea.Infrastructure.Migrations
                     AsciiName = table.Column<string>(type: "text", nullable: true),
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     RegionalUnitId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -141,6 +147,7 @@ namespace Decenea.Infrastructure.Migrations
                     AsciiName = table.Column<string>(type: "text", nullable: true),
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     MunicipalityId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -152,6 +159,24 @@ namespace Decenea.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OutboxMessage",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "character varying(26)", maxLength: 26, nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: false),
+                    OccurredOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    DomainEvent = table.Column<string>(type: "text", nullable: false),
+                    ProcessedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Error = table.Column<string>(type: "text", nullable: true),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutboxMessage", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RegionalUnits",
                 columns: table => new
                 {
@@ -160,6 +185,7 @@ namespace Decenea.Infrastructure.Migrations
                     AsciiName = table.Column<string>(type: "text", nullable: true),
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     RegionId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -179,6 +205,7 @@ namespace Decenea.Infrastructure.Migrations
                     AsciiName = table.Column<string>(type: "text", nullable: true),
                     AlternativeName = table.Column<string>(type: "text", nullable: true),
                     CountryId = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -197,6 +224,7 @@ namespace Decenea.Infrastructure.Migrations
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: false),
                     ClaimValue = table.Column<string>(type: "text", nullable: false),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -236,6 +264,7 @@ namespace Decenea.Infrastructure.Migrations
                     RefreshToken = table.Column<string>(type: "text", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DateVerified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -256,6 +285,7 @@ namespace Decenea.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: false),
                     ExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Version = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: true),
                     CreatedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedBy = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastModifiedByTimestampUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -296,6 +326,9 @@ namespace Decenea.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "MunicipalUnits");
+
+            migrationBuilder.DropTable(
+                name: "OutboxMessage");
 
             migrationBuilder.DropTable(
                 name: "RegionalUnits");

@@ -21,5 +21,10 @@ public class CountryConfiguration : AuditableAggregateTypeConfiguration<Country>
 
         builder.Property(i => i.AlternativeName)
             .IsRequired(false);
+
+        builder.HasMany(i => i.Regions)
+            .WithOne()
+            .HasForeignKey(i => i.CountryId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

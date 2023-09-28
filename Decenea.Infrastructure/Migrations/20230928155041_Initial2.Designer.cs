@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    [Migration("20230922135315_Initial")]
-    partial class Initial
+    [Migration("20230928155041_Initial2")]
+    partial class Initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,368 @@ namespace Decenea.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Decenea.Domain.Aggregates.AdvertisementAggregate.MicroAd", b =>
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.City", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommunityId")
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("Lat")
+                        .HasColumnType("double precision");
+
+                    b.Property<double?>("Long")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("MunicipalUnitId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MunicipalityId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegionId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegionalUnitId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.ToTable("Cities", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Community", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MunicipalUnitId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MunicipalUnitId");
+
+                    b.ToTable("Communities", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Country", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Timezone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Countries", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.MunicipalUnit", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("MunicipalityId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MunicipalityId");
+
+                    b.ToTable("MunicipalUnits", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Municipality", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegionalUnitId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegionalUnitId");
+
+                    b.ToTable("Municipalities", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Region", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CountryId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Regions", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.RegionalUnit", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("AlternativeName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AsciiName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RegionId");
+
+                    b.ToTable("RegionalUnits", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.MicroAdAggregate.MicroAd", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(26)
@@ -71,323 +432,14 @@ namespace Decenea.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
                     b.HasKey("Id");
 
                     b.ToTable("MicroAds", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.City", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CommunityId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<double?>("Lat")
-                        .HasColumnType("double precision");
-
-                    b.Property<double?>("Long")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("MunicipalUnitId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MunicipalityId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RegionId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RegionalUnitId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Community", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("MunicipalUnitId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Communities", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Country", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CountryCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Timezone")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Countries", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.MunicipalUnit", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("MunicipalityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MunicipalUnits", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Municipality", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RegionalUnitId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Municipalities", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Region", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CountryId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Regions", (string)null);
-                });
-
-            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.RegionalUnit", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("AsciiName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("LastModifiedByTimestampUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("RegionId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RegionalUnits", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.UserAggregate.User", b =>
@@ -491,6 +543,11 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("text");
 
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
@@ -529,6 +586,11 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 
@@ -576,6 +638,11 @@ namespace Decenea.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
                     b.HasKey("Id");
 
                     b.ToTable("UserTokens", (string)null);
@@ -604,9 +671,133 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<DateTime>("OperationExecutedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Version")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("AuditLogs", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Infrastructure.Outbox.OutboxMessage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DomainEvent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OccurredOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxMessage");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.City", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.Community", null)
+                        .WithMany("Cities")
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Community", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.MunicipalUnit", null)
+                        .WithMany("Communities")
+                        .HasForeignKey("MunicipalUnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.MunicipalUnit", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.Municipality", null)
+                        .WithMany("MunicipalUnits")
+                        .HasForeignKey("MunicipalityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Municipality", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.RegionalUnit", null)
+                        .WithMany("Municipalities")
+                        .HasForeignKey("RegionalUnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Region", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.Country", null)
+                        .WithMany("Regions")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.RegionalUnit", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.LocationAggregate.Region", null)
+                        .WithMany("RegionalUnits")
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Community", b =>
+                {
+                    b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Country", b =>
+                {
+                    b.Navigation("Regions");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.MunicipalUnit", b =>
+                {
+                    b.Navigation("Communities");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Municipality", b =>
+                {
+                    b.Navigation("MunicipalUnits");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.Region", b =>
+                {
+                    b.Navigation("RegionalUnits");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.LocationAggregate.RegionalUnit", b =>
+                {
+                    b.Navigation("Municipalities");
                 });
 #pragma warning restore 612, 618
         }
