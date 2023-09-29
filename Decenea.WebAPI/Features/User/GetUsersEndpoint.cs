@@ -1,10 +1,10 @@
 using Decenea.Application.Users.Queries.GetManyUsers;
-using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Common.Common;
 using Decenea.Common.Requests.Users;
+using Decenea.Domain.Aggregates.UserAggregate;
 using Mediator;
 
-namespace Decenea.WebAPI.Features.User.GetUsers;
+namespace Decenea.WebAPI.Features.User;
 
 public class GetUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<object>>>
 {
@@ -16,7 +16,7 @@ public class GetUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<objec
     
     public override void Configure()
     {
-        Get("/ApplicationUser/GetMany");
+        Get("/User/GetMany");
         Roles(Role.AllowAny());
     }
 

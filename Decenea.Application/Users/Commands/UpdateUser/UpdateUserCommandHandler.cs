@@ -7,36 +7,36 @@ using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace Decenea.Application.Users.Commands.RegisterUser;
+namespace Decenea.Application.Users.Commands.UpdateUser;
 
-public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Result<UserDto,Exception>>
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Result<UserDto,Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
-    public RegisterUserCommandHandler(IDeceneaDbContext dbContext)
+    public UpdateUserCommandHandler(IDeceneaDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public async ValueTask<Result<UserDto, Exception>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Result<UserDto, Exception>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
             var existingUser = await _dbContext
                 .Set<User>()
-                .FirstOrDefaultAsync(i => i.Email == command.Email, cancellationToken);
+                .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
 
-            if (existingUser is not null)
+            if (existingUser is null)
             {
-                return Result<UserDto, Exception>.Anticipated(null,"Email already in use.");
+                return Result<UserDto, Exception>.Anticipated(null,"User not found.");
             }
             
-            var user = User.Create(command.FirstName,
+            var user = User.Update(existingUser,
+                command.FirstName,
                 command.Email,
                 command.UserName,
                 command.LastName,
                 command.MiddleName,
                 command.PhoneNumber,
-                command.CityId,
-                command.Password);
+                command.CityId);
 
             if (!user.IsSuccess || user.Value is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;
@@ -48,12 +48,14 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, R
             
             if (!result.IsSuccess)
                 return Result<UserDto, Exception>.Anticipated(null, result.Messages);
+            
             var userDto = user.Value.UserToUserDto();
-            return Result<UserDto, Exception>.Anticipated(userDto,"Successfully registered user.");
+            
+            return Result<UserDto, Exception>.Anticipated(userDto,"Successfully updated user info.");
         }
         catch (Exception ex)
         {
-            Log.Error("Something went wrong registering user {email} : {ex}",command.Email,ex);
+            Log.Error("Something went wrong updating user {email} : {ex}",command.Email,ex);
             return Result<UserDto, Exception>.Excepted(ex);
         }
     }

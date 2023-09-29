@@ -6,8 +6,8 @@ namespace Decenea.Application.MicroAds.Queries.GetManyMicroAds;
 
 public class GetManyMicroAdsQuery : IQuery<Result<IEnumerable<MicroAdDto>,Exception>>
 {
-    public int Skip { get; set; } = 0;
-    public int Take { get; set; } = 20;    
+    public int? Skip { get; set; } = 0;
+    public int? Take { get; set; } = 20;    
     public string? CityId { get; set; }
     public int CountryId { get; set; }
     public string? RegionId { get; set; }

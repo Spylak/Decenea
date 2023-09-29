@@ -46,7 +46,7 @@ public class User : AuditableAggregateRoot
         {
             return Result<object, Exception>.Anticipated(null,"Credentials don't match.");
         }
-        return Result<object, Exception>.Anticipated(null,"Credentials don't match.");
+        return Result<object, Exception>.Anticipated(null,"Credentials match.", true);
     }
     
     public static Result<User,Exception> Create(string firstName,
@@ -79,6 +79,25 @@ public class User : AuditableAggregateRoot
             PasswordHash = passHash,
             PasswordSalt = salt
         };
+        
+        return Result<User,Exception>.Anticipated(user);
+    }
+    
+    public static Result<User,Exception> Update(User user, string firstName,
+        string email,
+        string userName,
+        string lastName,
+        string middleName,
+        string phoneNumber,
+        string cityId)
+    {
+        user.FirstName = firstName;
+        user.Email = email;
+        user.UserName = userName;
+        user.LastName = lastName;
+        user.MiddleName = middleName;
+        user.PhoneNumber = phoneNumber;
+        user.CityId = cityId;
         
         return Result<User,Exception>.Anticipated(user);
     }

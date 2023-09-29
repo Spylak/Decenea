@@ -1,7 +1,11 @@
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Location;
+using Decenea.Domain.Aggregates.LocationAggregate;
+using Decenea.Domain.Extensions;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Location.Queries.GetManyCities;
@@ -17,8 +21,16 @@ public class GetManyCitiesQueryHandler : IQueryHandler<GetManyCitiesQuery,Result
     {
         try
         {
-
-            return Result<List<CityDto>, Exception>.Anticipated(new List<CityDto>());
+            var cities = await _dbContext.Set<City>()
+                .Take(query.Take)
+                .Skip(query.Skip)
+                .WhereIf(query.CountryId is not null,i => i.CountryId == query.CountryId)
+                .WhereIf(query.CommunityId is not null,i => i.CommunityId == query.CommunityId)
+                .WhereIf(query.RegionId is not null,i => i.RegionId == query.RegionId)
+                .Select(i => i.CityToCityDto(null))
+                .ToListAsync(cancellationToken);
+            
+            return Result<List<CityDto>, Exception>.Anticipated(cities);
         }
         catch (Exception ex)
         {

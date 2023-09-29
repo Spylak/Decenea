@@ -5,10 +5,10 @@ using Mediator;
 
 namespace Decenea.WebAPI.Features.Location;
 
-public class GetManyCities : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<CityDto>>>
+public class GetManyCitiesEndpoint : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<CityDto>>>
 {
     private readonly IMediator _mediator;
-    public GetManyCities(IMediator mediator)
+    public GetManyCitiesEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }

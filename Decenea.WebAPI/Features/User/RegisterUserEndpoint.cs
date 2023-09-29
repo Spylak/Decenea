@@ -4,13 +4,13 @@ using Decenea.Common.Common;
 using Decenea.Common.Requests.Users;
 using Mediator;
 
-namespace Decenea.WebAPI.Features.User.RegisterUser;
+namespace Decenea.WebAPI.Features.User;
 
-public class RegisterApplicationUser : Endpoint<RegisterUserRequest,ApiResponse<object>>
+public class RegisterUserEndpoint : Endpoint<RegisterUserRequest,ApiResponse<object>>
 {
     private readonly IMediator _mediator;
     private readonly IDeceneaDbContext _dbContext;
-    public RegisterApplicationUser(IMediator mediator, IDeceneaDbContext dbContext)
+    public RegisterUserEndpoint(IMediator mediator, IDeceneaDbContext dbContext)
     {
         _mediator = mediator;
         _dbContext = dbContext;
@@ -18,7 +18,7 @@ public class RegisterApplicationUser : Endpoint<RegisterUserRequest,ApiResponse<
 
     public override void Configure()
     {
-        Post("/ApplicationUser/Register");
+        Post("/User/Register");
         AllowAnonymous();
     }
 

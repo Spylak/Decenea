@@ -3,19 +3,19 @@ using Decenea.Common.Common;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Mediator;
 
-namespace Decenea.WebAPI.Features.User.RegenerateAuthTokens;
+namespace Decenea.WebAPI.Features.User;
 
-public class RegenerateAuthTokens : Endpoint<EmptyRequest, ApiResponse<RegenerateAuthTokensResponse>>
+public class RegenerateAuthTokensEndpoint : Endpoint<EmptyRequest, ApiResponse<RegenerateAuthTokensResponse>>
 {
     private readonly IMediator _mediator;
-    public RegenerateAuthTokens(IMediator mediator)
+    public RegenerateAuthTokensEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
 
     public override void Configure()
     {
-        Put("/ApplicationUser/RegenerateAuthTokens");
+        Put("/User/RegenerateAuthTokens");
         Roles(Role.AllowAny());
     }
 

@@ -6,10 +6,10 @@ using Mediator;
 
 namespace Decenea.WebAPI.Features.MicroAd;
 
-public class GetManyMicroAds : Endpoint<GetManyMicroAdsRequest, ApiResponse<IEnumerable<MicroAdDto>>>
+public class GetManyMicroAdsEndpoint : Endpoint<GetManyMicroAdsRequest, ApiResponse<IEnumerable<MicroAdDto>>>
 {
     private readonly IMediator _mediator;
-    public GetManyMicroAds(IMediator mediator)
+    public GetManyMicroAdsEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }

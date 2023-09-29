@@ -87,10 +87,10 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                 await _publisher.Publish(nextEvent, cancellationToken);
             }
 
-            await SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
-            return Result<object,Exception>.Anticipated(null,"Unable to Handle DomainEvents in DbContext.");
+            return Result<object,Exception>.Anticipated(null,"Successful process.", true);
         }
         catch (Exception ex)
         {
@@ -98,7 +98,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             await AddDomainEventsAsOutboxMessages(domainEvents, userId, ex);
             Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",
                 ex.Message);
-            await SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
             return Result<object,Exception>.Excepted(null,"Unable to Handle DomainEvents in DbContext.");
         }
     }

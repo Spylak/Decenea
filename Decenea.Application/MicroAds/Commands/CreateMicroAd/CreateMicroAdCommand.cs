@@ -1,9 +1,10 @@
 using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Advertisement;
 using Mediator;
 
 namespace Decenea.Application.MicroAds.Commands.CreateMicroAd;
 
-public class CreateMicroAdCommand : ICommand<Result<object,Exception>>
+public class CreateMicroAdCommand : ICommand<Result<MicroAdDto,Exception>>
 {
     public string Title { get; set; }
     public string Description { get; set; }

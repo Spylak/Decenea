@@ -1,6 +1,5 @@
 using Decenea.Application.MicroAds.Commands.CreateMicroAd;
 using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.Advertisement;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.MicroAds;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -9,23 +8,23 @@ using Mediator;
 
 namespace Decenea.WebAPI.Features.MicroAd;
 
-public class CreateMicroAdEndpoint : Endpoint<CreateMicroAdRequest, ApiResponse<MicroAdDto>>
+public class UpdateMicroAdEndpoint : Endpoint<UpdateMicroAdRequest, ApiResponse<object>>
 {
     private readonly IMediator _mediator;
-    public CreateMicroAdEndpoint(IMediator mediator)
+    public UpdateMicroAdEndpoint(IMediator mediator)
     {
         _mediator = mediator;
     }
     
     public override void Configure()
     {
-        Post("/MicroAd/Create");
+        Post("/MicroAd/Update");
         Roles(Role.RoleName(Role.SuperAdmin),
             Role.RoleName(Role.Admin),
             Role.RoleName(Role.Member));
     }
     
-    public override async Task<ApiResponse<MicroAdDto>> ExecuteAsync(CreateMicroAdRequest req, CancellationToken ct)
+    public override async Task<ApiResponse<object>> ExecuteAsync(UpdateMicroAdRequest req, CancellationToken ct)
     {
 
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
@@ -33,11 +32,11 @@ public class CreateMicroAdEndpoint : Endpoint<CreateMicroAdRequest, ApiResponse<
         var claims = AuthTokenHelper
             .GetTokenClaims(accessToken);
 
-        var userId = claims.Value?.GetClaimValueByKey("userId");   
-        var cityId = claims.Value?.GetClaimValueByKey("cityId");
+        var userId = claims.Value?.GetClaimValueByKey("UserId");   
+        var cityId = claims.Value?.GetClaimValueByKey("CityId");
         
         if(userId is null || cityId is null)
-            return new ApiResponse<MicroAdDto>(null, false, "Invalid JWT.");
+            return new ApiResponse<object>(null, false, "Invalid JWT.");
         
         var createMicroAdCommand = new CreateMicroAdCommand()
         {
@@ -50,6 +49,6 @@ public class CreateMicroAdEndpoint : Endpoint<CreateMicroAdRequest, ApiResponse<
         };
         
         var result = await _mediator.Send(createMicroAdCommand, ct);
-        return new ApiResponse<MicroAdDto>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<object>(result.Value, result.IsSuccess, result.Messages);
     }
 }

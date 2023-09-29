@@ -12,8 +12,8 @@ public static class MicroAdMapper
         microAdDto.Description = microAd.Description;
         microAdDto.ContactPhone = microAd.ContactPhone;
         microAdDto.ContactEmail = microAd.ContactEmail;
+        microAdDto.UserId = microAd.UserId;
         // microAdDto.ApplicationUserName = microAd.ApplicationUser.FullName;
-        microAdDto.Location = microAd.Title;
         return microAdDto;
     }
 }

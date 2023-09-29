@@ -6,6 +6,7 @@ using Decenea.Domain.Helpers;
 using FastEndpoints.Security;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.LoginUser;
@@ -13,9 +14,11 @@ namespace Decenea.Application.Users.Commands.LoginUser;
 public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<LoginUserResponse,Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
-    public LoginUserCommandHandler(IDeceneaDbContext dbContext)
+    private readonly IConfiguration _configuration;
+    public LoginUserCommandHandler(IDeceneaDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
+        _configuration = configuration;
     }
     public async ValueTask<Result<LoginUserResponse, Exception>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
@@ -41,7 +44,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
-                signingKey: "ApplicationTokenSigningKey",
+                signingKey: _configuration["JWTSigningKey"],
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
@@ -69,7 +72,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
             loginUserResponse.CityId = user.CityId;
             loginUserResponse.AccessToken = jwtToken;
             loginUserResponse.AccessTokenExpiryTime = accessTokenExpiryTime;
-            user.ApplicationUserToLoginApplicationUserDto(loginUserResponse);
+            user.UserToLoginUserDto(loginUserResponse);
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             

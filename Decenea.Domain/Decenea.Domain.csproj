@@ -20,7 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Constants\" />
       <Folder Include="Services\IServices\" />
     </ItemGroup>
 

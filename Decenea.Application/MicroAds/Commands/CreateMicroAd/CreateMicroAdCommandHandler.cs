@@ -1,12 +1,14 @@
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Mappers;
 using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Advertisement;
 using Decenea.Domain.Aggregates.MicroAdAggregate;
 using Mediator;
 using Serilog;
 
 namespace Decenea.Application.MicroAds.Commands.CreateMicroAd;
 
-public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,Result<object,Exception>>
+public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,Result<MicroAdDto,Exception>>
 {    
     private readonly IDeceneaDbContext _dbContext;
 
@@ -15,7 +17,7 @@ public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,
         _dbContext = dbContext;
     }
 
-    public async ValueTask<Result<object, Exception>> Handle(CreateMicroAdCommand command, CancellationToken cancellationToken)
+    public async ValueTask<Result<MicroAdDto, Exception>> Handle(CreateMicroAdCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -26,17 +28,17 @@ public class CreateMicroAdCommandHandler : ICommandHandler<CreateMicroAdCommand,
                 command.ContactEmail,
                 command.ContactPhone);
             
-            if(!createResult.IsSuccess)
-                return Result<object, Exception>.Anticipated(null, createResult.Messages);
+            if(!createResult.IsSuccess || createResult.Value is null)
+                return Result<MicroAdDto, Exception>.Anticipated(null, createResult.Messages);
 
-            await _dbContext.Set<MicroAd>().AddAsync(createResult.Value!, cancellationToken);
+            await _dbContext.Set<MicroAd>().AddAsync(createResult.Value, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result<object, Exception>.Anticipated(null,"Successfully created!", true);
+            return Result<MicroAdDto, Exception>.Anticipated(createResult.Value.MicroAdToMicroAdDto(),"Successfully created!", true);
         }
         catch (Exception ex)
         {
             Log.Error("Failed to CreateMicroAd from request: {command} with error: {ex}", command,ex);
-            return Result<object, Exception>.Excepted(ex);
+            return Result<MicroAdDto, Exception>.Excepted(ex);
         }
     }
 }

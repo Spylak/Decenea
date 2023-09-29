@@ -7,8 +7,4 @@
         <RootNamespace>Decenea.Common</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Folder Include="DataTransferObjects\" />
-    </ItemGroup>
-
 </Project>

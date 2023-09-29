@@ -8,7 +8,7 @@ public class GetManyCitiesQuery : IQuery<Result<List<CityDto>, Exception>>
 {
     public int Skip { get; set; } = 0;
     public int Take { get; set; } = 20;
-    public string? CountryId { get; set; }
+    public int? CountryId { get; set; }
     public string? CountryName { get; set; }
     public string? CommunityId { get; set; }
     public string? CommunityName { get; set; }

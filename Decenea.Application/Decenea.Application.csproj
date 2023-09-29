@@ -23,7 +23,6 @@
     <ItemGroup>
       <Folder Include="MicroAds\Events\" />
       <Folder Include="MicroAds\IntegrationEvents\" />
-      <Folder Include="Users\Commands\" />
       <Folder Include="Users\Events\" />
       <Folder Include="Users\IntegrationEvents\" />
       <Folder Include="Location\Commands\" />

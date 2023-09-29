@@ -19,38 +19,43 @@ public class MicroAdRepository : IMicroAdRepository
     {
         using var connection = _sqlConnectionFactory.CreateConnection();
         var strBuilder = new StringBuilder();
+        var parameters = new DynamicParameters();
+        parameters.Add("microAdId", microAdId);
         if (userId is null)
         {
-            strBuilder.Append($"""
+            strBuilder.Append("""
                               SELECT
                                   ma."Title",
                                   ma."Description",
                                   ma."ContactPhone",
                                   ma."ContactEmail",
                                   u."UserName",
-                                  ma."Location"
-                              FROM "MicroAds" ma, "Users u
-                              JOIN Users u ON ma.UserId = u.Id
-                              WHERE ma.Id = {microAdId}
+                                  ma."CityId",
+                                  ma."UserId"
+                              FROM "MicroAds" ma
+                              JOIN "Users" u ON ma."UserId" = u."Id"
+                              WHERE ma."Id" = @microAdId
                               """);
         }
         else
         {
-            strBuilder.Append($"""
+            parameters.Add("userId", userId);
+            strBuilder.Append("""
                               SELECT
                                   ma."Title",
                                   ma."Description",
                                   ma."ContactPhone",
                                   ma."ContactEmail",
                                   u."UserName",
-                                  ma."Location"
-                              FROM "MicroAds" ma, "Users u
-                              WHERE ma."Id" = {microAdId} AND u.Id = {userId}
+                                  ma."CityId",
+                                  ma."UserId"
+                              FROM "MicroAds" ma, "Users" u
+                              WHERE ma."Id" = @microAdId AND u."Id" = @userId
                               """);
         }
 
         var microAdDto = await connection
-            .QueryFirstOrDefaultAsync<MicroAdDto>(strBuilder.ToString());
+            .QueryFirstOrDefaultAsync<MicroAdDto>(strBuilder.ToString(), parameters);
 
         if (microAdDto == null)
         {
@@ -70,64 +75,80 @@ public class MicroAdRepository : IMicroAdRepository
     {
         using var connection = await _sqlConnectionFactory.CreateConnectionAsync();
         var strBuilder = new StringBuilder();
+        var parameters = new DynamicParameters();
+        parameters.Add("countryId", countryId);
         
         strBuilder.Append($"""
                           SELECT 
-                              ma."Title", 
-                              ma."Description", 
-                              ma."ContactPhone", 
-                              ma."ContactEmail", 
+                              ma."Title",
+                              ma."Description",
+                              ma."ContactPhone",
+                              ma."ContactEmail",
                               u."UserName",
-                              ma."Location" 
+                              ma."CityId",
+                              ma."UserId"
                           FROM "MicroAds" ma
                           JOIN "Users" u ON ma."UserId" = u."Id"
-                          JOIN "Cities" c ON ma."CityId" = c."CityId"
-                          WHERE c."CountryId" = {countryId}
+                          JOIN "Cities" c ON ma."CityId" = c."Id"
+                          WHERE c."CountryId" = @countryId
                           """);
+        
         if (cityId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("cityId", cityId);
+
+            strBuilder.Append("""
                                
-                               AND ma."CityId" = {cityId}
+                               AND ma."CityId" = @cityId
                                """);
         }
         if (communityId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("communityId", communityId);
 
-                               AND c."CommunityId" = {communityId}
+            strBuilder.Append("""
+
+                               AND c."CommunityId" = @communityId
                                """);
         }
         if (municipalUnitId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("municipalUnitId", municipalUnitId);
 
-                               AND c."MunicipalUnitId" = {municipalUnitId}
+            strBuilder.Append("""
+
+                               AND c."MunicipalUnitId" = @municipalUnitId
                                """);
         }
         if (municipalityId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("municipalityId", municipalityId);
 
-                               AND c."MunicipalityId" = {municipalityId}
+            strBuilder.Append("""
+
+                               AND c."MunicipalityId" = @municipalityId
                                """);
         }
         if (regionalUnitId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("regionalUnitId", regionalUnitId);
 
-                               AND c."RegionalUnitId" = {regionalUnitId}
+            strBuilder.Append("""
+
+                               AND c."RegionalUnitId" = @regionalUnitId
                                """);
         }
         if (regionId is not null)
         {
-            strBuilder.Append($"""
+            parameters.Add("regionId", regionId);
 
-                               AND c."RegionId" = {regionId}
+            strBuilder.Append("""
+
+                               AND c."RegionId" = @regionId
                                """);
         }
 
-        var microAdDtos = await connection.QueryAsync<MicroAdDto>(strBuilder.ToString());
+        var microAdDtos = await connection.QueryAsync<MicroAdDto>(strBuilder.ToString(), parameters);
 
         return microAdDtos;
     }

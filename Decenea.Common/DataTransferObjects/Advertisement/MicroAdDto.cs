@@ -6,6 +6,7 @@ public class MicroAdDto
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
-    public string ApplicationUserName { get; set; }
-    public string Location { get; set; }
+    public string UserName { get; set; }
+    public string UserId { get; set; }
+    public string CityId { get; set; }
 }

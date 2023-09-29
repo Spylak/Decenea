@@ -6,6 +6,7 @@ using Decenea.Domain.Helpers;
 using FastEndpoints.Security;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
@@ -14,9 +15,11 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
     Result<RegenerateAuthTokensResponse, Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
-    public RegenerateAuthTokensCommandHandler(IDeceneaDbContext dbContext)
+    private readonly IConfiguration _configuration;
+    public RegenerateAuthTokensCommandHandler(IDeceneaDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
+        _configuration = configuration;
     }
 
     public async ValueTask<Result<RegenerateAuthTokensResponse, Exception>> Handle(RegenerateAuthTokensCommand command,
@@ -65,7 +68,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
-                signingKey: "ApplicationTokenSigningKey",
+                signingKey: _configuration["JWTSigningKey"],
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
