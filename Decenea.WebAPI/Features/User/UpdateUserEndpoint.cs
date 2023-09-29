@@ -1,5 +1,4 @@
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Application.Users.Commands.RegisterUser;
 using Decenea.Application.Users.Commands.UpdateUser;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;

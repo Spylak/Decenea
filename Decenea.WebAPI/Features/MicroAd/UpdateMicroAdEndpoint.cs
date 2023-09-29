@@ -1,4 +1,4 @@
-using Decenea.Application.MicroAds.Commands.CreateMicroAd;
+using Decenea.Application.MicroAds.Commands.UpdateMicroAd;
 using Decenea.Common.Common;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.MicroAds;
@@ -18,7 +18,7 @@ public class UpdateMicroAdEndpoint : Endpoint<UpdateMicroAdRequest, ApiResponse<
     
     public override void Configure()
     {
-        Post("/MicroAd/Update");
+        Put("/MicroAd/Update");
         Roles(Role.RoleName(Role.SuperAdmin),
             Role.RoleName(Role.Admin),
             Role.RoleName(Role.Member));
@@ -32,23 +32,24 @@ public class UpdateMicroAdEndpoint : Endpoint<UpdateMicroAdRequest, ApiResponse<
         var claims = AuthTokenHelper
             .GetTokenClaims(accessToken);
 
-        var userId = claims.Value?.GetClaimValueByKey("UserId");   
-        var cityId = claims.Value?.GetClaimValueByKey("CityId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");   
+        var cityId = claims.Value?.GetClaimValueByKey("cityId");
         
         if(userId is null || cityId is null)
             return new ApiResponse<object>(null, false, "Invalid JWT.");
         
-        var createMicroAdCommand = new CreateMicroAdCommand()
+        var updateMicroAdCommand = new UpdateMicroAdCommand()
         {
-            UserId = userId,
+            Id = req.Id,
             CityId = cityId,
             Title = req.Title,
             ContactPhone = req.ContactPhone,
             ContactEmail = req.ContactEmail,
-            Description = req.Description
+            Description = req.Description,
+            Version = req.Version
         };
         
-        var result = await _mediator.Send(createMicroAdCommand, ct);
+        var result = await _mediator.Send(updateMicroAdCommand, ct);
         return new ApiResponse<object>(result.Value, result.IsSuccess, result.Messages);
     }
 }

@@ -151,11 +151,15 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 
             foreach (var entity in entityList)
             {
-                ((Entity)entity.Entity).Version = RandomStringGenerator.RandomString(8);
                 if (entity.State == EntityState.Added)
                 {
                     ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
                     ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
+                }
+
+                if (entity.State == EntityState.Added || entity.State == EntityState.Modified)
+                {
+                    ((Entity)entity.Entity).Version = RandomStringGenerator.RandomString(8);
                 }
 
                 ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;

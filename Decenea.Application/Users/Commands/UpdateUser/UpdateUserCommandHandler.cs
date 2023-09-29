@@ -22,13 +22,16 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Resul
         {
             var existingUser = await _dbContext
                 .Set<User>()
-                .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
+                .FirstOrDefaultAsync(i => i.Id == command.Id && i.Version == command.Version, cancellationToken);
 
             if (existingUser is null)
             {
                 return Result<UserDto, Exception>.Anticipated(null,"User not found.");
             }
-            
+
+            if (existingUser.Version != command.Version)
+                return Result<UserDto, Exception>.Anticipated(existingUser.UserToUserDto(), "Concurrency issue.",false);
+
             var user = User.Update(existingUser,
                 command.FirstName,
                 command.Email,

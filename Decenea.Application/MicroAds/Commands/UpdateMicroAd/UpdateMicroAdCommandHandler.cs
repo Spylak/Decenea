@@ -23,7 +23,7 @@ public class UpdateMicroAdCommandHandler : ICommandHandler<UpdateMicroAdCommand,
         {
             var existingMicroAd = await _dbContext
                 .Set<MicroAd>()
-                .FirstOrDefaultAsync(i => i.Id == command.Id);
+                .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
 
             if (existingMicroAd is null)
                 return Result<object, Exception>.Anticipated(null, "MicroAd not found.");
@@ -41,8 +41,10 @@ public class UpdateMicroAdCommandHandler : ICommandHandler<UpdateMicroAdCommand,
                 return Result<object, Exception>.Anticipated(null, updateResult.Messages);
 
             _dbContext.Set<MicroAd>().Update(existingMicroAd);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
+            if(!result.IsSuccess)
+                return Result<object, Exception>.Anticipated(null, result.Messages);
+                
             return Result<object, Exception>.Anticipated(null, "Successfully updated entity.", true);
         }
         catch (Exception ex)
