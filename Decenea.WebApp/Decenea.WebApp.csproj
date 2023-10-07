@@ -7,8 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.11" PrivateAssets="all" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\Cookie.js">
+        <Link>wwwroot\JavaScript\Cookie.js</Link>
+      </Content>
+      <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\GlobalFunctions.js">
+        <Link>wwwroot\JavaScript\GlobalFunctions.js</Link>
+      </Content>
+    </ItemGroup>
 </Project>

@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Decenea CMS</PageTitle>
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+<MudLayout>
+    <MudAppBar Elevation="1" Style="background-color: rgba(181,38,157)">
+        @if (AppState.IsLoggedIn)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => AppState.ToggleLeftDrawer())"/>
+        }
+        <div style="display: flex;cursor: pointer" @onclick="@(() => NavigationManager!.NavigateTo("/"))">
+            <MudText Color="Color.Inherit" Typo="Typo.h4">Decenea</MudText>
+        </div>
+        <MudSpacer/>
+    </MudAppBar>
+    @if (AppState.IsLoggedIn)
+    {
+        <MudDrawer @bind-Open="AppState.IsLeftDrawerOpen" Width="100%" ClipMode="DrawerClipMode.Always" Elevation="2">
+            <NavMenu Visible="AppState.IsLeftDrawerOpen"/>
+        </MudDrawer>
+    }
+    <MudDrawer @bind-Open="AppState.IsRightDrawerOpen" Variant="@DrawerVariant.Temporary" DisableOverlay="false" Anchor="Anchor.End" Elevation="2">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
+        </MudDrawerHeader>
+        <NavMenu2/>
+    </MudDrawer>
+    <MudMainContent>
+        @if (AppState.IsLoading)
+        {
+            <MudProgressCircular Style="margin-top: 40vh;margin-left:45%" Color="Color.Primary" Size="Size.Large" Indeterminate="true"/>
+        }
+        else
+        {
+            @Body
+        }
+    </MudMainContent>
+</MudLayout>

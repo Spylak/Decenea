@@ -4,7 +4,7 @@ using Mediator;
 
 namespace Decenea.Application.MicroAds.Commands.UpdateMicroAd;
 
-public class UpdateMicroAdCommand : BaseCommand, ICommand<Result<object,Exception>>
+public class UpdateMicroAdCommand : UpdateCommand, ICommand<Result<object,Exception>>
 {
     public string Id { get; set; }
     public string Title { get; set; }
