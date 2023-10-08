@@ -1,5 +1,5 @@
 using Decenea.Common.Common;
-using Decenea.WebAppShared.Services.IServices;
+using Decenea.WebAppShared.Abstractions;
 using Microsoft.JSInterop;
 
 namespace Decenea.WebAppShared.Services;

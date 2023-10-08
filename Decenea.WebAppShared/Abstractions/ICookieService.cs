@@ -1,6 +1,6 @@
 using Decenea.Common.Common;
 
-namespace Decenea.WebAppShared.Services.IServices;
+namespace Decenea.WebAppShared.Abstractions;
 
 public interface ICookieService
 {

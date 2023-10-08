@@ -1,5 +1,5 @@
+using Decenea.WebAppShared.Abstractions;
 using Decenea.WebAppShared.Services;
-using Decenea.WebAppShared.Services.IServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

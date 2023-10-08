@@ -30,8 +30,7 @@ public class CreateMicroAdEndpoint : Endpoint<CreateMicroAdRequest, ApiResponse<
 
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
 
-        var claims = AuthTokenHelper
-            .GetTokenClaims(accessToken);
+        var claims = accessToken.GetTokenClaimJwts();
 
         var userId = claims.Value?.GetClaimValueByKey("userId");   
         var cityId = claims.Value?.GetClaimValueByKey("cityId");

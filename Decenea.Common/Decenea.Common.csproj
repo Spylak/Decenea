@@ -7,4 +7,8 @@
         <RootNamespace>Decenea.Common</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.2" />
+    </ItemGroup>
+
 </Project>

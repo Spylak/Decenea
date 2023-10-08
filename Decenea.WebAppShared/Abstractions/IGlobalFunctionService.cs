@@ -1,4 +1,4 @@
-namespace Decenea.WebAppShared.Services.IServices;
+namespace Decenea.WebAppShared.Abstractions;
 
 public interface IGlobalFunctionService
 {

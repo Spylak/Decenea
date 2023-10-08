@@ -26,8 +26,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
         CancellationToken cancellationToken)
     {
         
-        var claims = AuthTokenHelper
-            .GetTokenClaims(command.AccessToken);
+        var claims = command.AccessToken.GetTokenClaimJwts();
 
         if (claims.Value is null)
         {
