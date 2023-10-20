@@ -23,6 +23,7 @@ builder.Services
     {
         i.ServiceLifetime = ServiceLifetime.Scoped;
     })
+    .AddAuthorization()
     .AddFastEndpoints()
     .AddInfrastructure(builder.Configuration)
     .AddApplication();
