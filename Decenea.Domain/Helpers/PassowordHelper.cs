@@ -1,8 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
-using Decenea.Domain.Common;
 using Decenea.Common.Common;
-using Decenea.Domain.Aggregates.UserAggregate;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.Domain.Helpers;
