@@ -12,21 +12,16 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.12" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.12" PrivateAssets="all" />
         <PackageReference Include="MudBlazor" Version="6.11.0" />
+        <PackageReference Include="Decenea.WebAppShared" Version="1.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\Cookie.js">
-            <Link>wwwroot\JavaScript\Cookie.js</Link>
-        </Content>
-        <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\GlobalFunctions.js">
-            <Link>wwwroot\JavaScript\GlobalFunctions.js</Link>
-        </Content>
         <Content Update="wwwroot\appsettings.Development.json">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Decenea.WebAppShared\Decenea.WebAppShared.csproj" />
+      <ProjectReference Include="..\Decenea.Common\Decenea.Common.csproj" />
     </ItemGroup>
 </Project>

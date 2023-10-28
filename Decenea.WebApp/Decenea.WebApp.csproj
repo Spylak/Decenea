@@ -13,12 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\Cookie.js">
-        <Link>wwwroot\JavaScript\Cookie.js</Link>
-      </Content>
-      <Content Include="..\Decenea.WebAppShared\wwwroot\JavaScript\GlobalFunctions.js">
-        <Link>wwwroot\JavaScript\GlobalFunctions.js</Link>
-      </Content>
       <Content Update="wwwroot\appsettings.Development.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>

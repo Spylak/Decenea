@@ -18,6 +18,8 @@ builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddState(builder.Configuration);
 builder.Services.AddWebAppShared(builder.Configuration);
 var scope = builder.Services.BuildServiceProvider().CreateAsyncScope();
+
 var service = scope.ServiceProvider.GetService<IJSRuntime>();
+await service.InvokeAsync<IJSObjectReference>("import", "./_content/Decenea.WebAppShared/JavaScript/GlobalFunctions.js");
 
 await builder.Build().RunAsync();

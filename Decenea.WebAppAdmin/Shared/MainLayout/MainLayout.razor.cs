@@ -26,9 +26,7 @@ public partial class MainLayout : IBrowserViewportObserver, IAsyncDisposable
             AppState.StateHasChanged += StateHasChanged;
             await BrowserViewportService.SubscribeAsync(this, fireImmediately: true);
         }   
-
-        await JsRuntime.InvokeAsync<IJSObjectReference>("import", "../Decenea.WebAppShared/wwwroot/JavaScript/GlobalFunctions.js");
-        await GlobalFunctionService.ConsoleLogAsync("Hello");
+        
         await base.OnAfterRenderAsync(firstRender);
     }
 
