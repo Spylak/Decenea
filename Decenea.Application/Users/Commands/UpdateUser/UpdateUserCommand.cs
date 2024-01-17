@@ -1,11 +1,9 @@
 using Decenea.Application.Abstractions.Messaging;
-using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.User;
-using Mediator;
+
 
 namespace Decenea.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommand: UpdateCommand, ICommand<Result<UserDto, Exception>>
+public class UpdateUserCommand: UpdateCommand
 {
     public string Id { get; init; }
     public string Email { get; init; }

@@ -1,16 +1,16 @@
 using Decenea.Application.Location.Queries.GetManyCities;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Location;
-using Mediator;
+
 
 namespace Decenea.WebAPI.Features.Location;
 
 public class GetManyCitiesEndpoint : Endpoint<GetManyCitiesRequestDto, ApiResponse<List<CityDto>>>
 {
-    private readonly IMediator _mediator;
-    public GetManyCitiesEndpoint(IMediator mediator)
+    private readonly GetManyCitiesQueryHandler _getManyCitiesQueryHandler;
+    public GetManyCitiesEndpoint(GetManyCitiesQueryHandler getManyCitiesQueryHandler)
     {
-        _mediator = mediator;
+        _getManyCitiesQueryHandler = getManyCitiesQueryHandler;
     }
     public override void Configure()
     {
@@ -20,7 +20,7 @@ public class GetManyCitiesEndpoint : Endpoint<GetManyCitiesRequestDto, ApiRespon
 
     public override async Task<ApiResponse<List<CityDto>>> ExecuteAsync(GetManyCitiesRequestDto req, CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetManyCitiesQuery());
+        var result = await _getManyCitiesQueryHandler.Handle(new GetManyCitiesQuery(), ct);
         return new ApiResponse<List<CityDto>>(result.Value, result.IsSuccess, result.Messages);
     }
 }

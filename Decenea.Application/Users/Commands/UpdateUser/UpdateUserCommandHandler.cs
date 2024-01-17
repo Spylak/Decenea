@@ -3,13 +3,12 @@ using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Result<UserDto,Exception>>
+public class UpdateUserCommandHandler
 {
     private readonly IDeceneaDbContext _dbContext;
     public UpdateUserCommandHandler(IDeceneaDbContext dbContext)
@@ -44,6 +43,8 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Resul
             if (!user.IsSuccess || user.Value is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;
             
+            _dbContext.CreatedBy = user.Value.Id;
+
             await _dbContext.Set<User>()
                 .AddAsync(user.Value, cancellationToken);
             

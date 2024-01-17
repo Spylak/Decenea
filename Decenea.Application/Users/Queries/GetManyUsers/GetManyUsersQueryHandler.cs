@@ -1,12 +1,12 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Mediator;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Decenea.Application.Users.Queries.GetManyUsers;
 
-public class GetManyUsersQueryHandler : IQueryHandler<GetManyUsersQuery,Result<List<User>, Exception>>
+public class GetManyUsersQueryHandler
 {
     private readonly IDeceneaDbContext _dbContext;
 

@@ -4,15 +4,13 @@ using Decenea.Common.Extensions;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
 using FastEndpoints.Security;
-using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
 
-public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand,
-    Result<RegenerateAuthTokensResponse, Exception>>
+public class RegenerateAuthTokensCommandHandler
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;

@@ -4,14 +4,13 @@ using Decenea.Common.Common;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
 using FastEndpoints.Security;
-using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.LoginUser;
 
-public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<LoginUserResponse,Exception>>
+public class LoginUserCommandHandler
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -34,6 +33,8 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand,Result<L
 
             if(user.LockoutEnabled)
                 return Result<LoginUserResponse, Exception>.Anticipated(null,"User is locked.");
+            
+            _dbContext.CreatedBy = user.Id;
 
             var passCheck = User.CheckPassword(command.Password,user.PasswordHash, user.PasswordSalt);
             

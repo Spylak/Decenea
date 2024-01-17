@@ -1,0 +1,42 @@
+@attribute [Route($"/{Routes.OnGoingTest}/{{testId}}")]
+<PageTitle>OnGoingTestPage</PageTitle>
+<h3>OnGoingTestPage</h3>
+@if (TestContainer.OngoingTest.StartingTime > DateTime.Now)
+{
+    <h4>The test is starting in @((TestContainer.OngoingTest.StartingTime - DateTime.Now).ToString("mm:ss")))</h4>
+    <h4>Or you can start now</h4>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="StartTest">Start Test!</MudButton>
+
+}else if (TestContainer.OngoingTest.StartingTime == DateTime.MinValue)
+{
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="StartTest">Start Test!</MudButton>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12">
+            <MudProgressLinear Value="@TimeRemaining" 
+                               Color="Color.Info"
+                               Size="Size.Large"
+                               Max="@(TestContainer.OngoingTest.MinutesToComplete*60)">@FormattedTimeRemaining</MudProgressLinear>
+        </MudItem>
+        @if (QuestionBaseModels.Any())
+        {
+            <MudItem xs="12">
+                <QuestionTypesComponent Test="TestContainer.OngoingTest"
+                                        PresentationOnly="true"
+                                        Question="QuestionBaseModels[ActiveQuestion]"/>
+            </MudItem>
+            <MudItem >
+                @if (ActiveQuestion + 1 < QuestionBaseModels.Count)
+                {
+                    <MudButton OnClick="NextQuestion">Next</MudButton>
+                }
+                @if (ActiveQuestion - 1 >= 0)
+                {
+                    <MudButton OnClick="PreviousQuestion">Previous</MudButton>
+                }
+            </MudItem>
+        }
+    </MudGrid>
+}

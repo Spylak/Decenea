@@ -2,19 +2,17 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.UpdateUser;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
-using Decenea.Common.Requests.Users;
-using Mediator;
+using Decenea.Common.Requests.User;
+
 
 namespace Decenea.WebAPI.Features.User;
 
 public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto>>
 {
-    private readonly IMediator _mediator;
-    private readonly IDeceneaDbContext _dbContext;
-    public UpdateUserEndpoint(IMediator mediator, IDeceneaDbContext dbContext)
+    private readonly UpdateUserCommandHandler _updateUserCommandHandler;
+    public UpdateUserEndpoint(UpdateUserCommandHandler updateUserCommandHandler)
     {
-        _mediator = mediator;
-        _dbContext = dbContext;
+        _updateUserCommandHandler = updateUserCommandHandler;
     }
 
     public override void Configure()
@@ -25,7 +23,6 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
 
     public override async Task<ApiResponse<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)
     {
-        _dbContext.CreatedBy = "Anonymous";
         var command = new UpdateUserCommand()
         {
             Id = req.Id,
@@ -39,7 +36,7 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
             Version = req.Version
         };
         
-        var result = await _mediator.Send(command);
+        var result = await _updateUserCommandHandler.Handle(command, ct);
         
         return new ApiResponse<UserDto>(result.Value,result.IsSuccess,result.Messages);
     }

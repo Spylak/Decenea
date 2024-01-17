@@ -1,17 +1,17 @@
 using Decenea.Application.Users.Queries.GetManyUsers;
 using Decenea.Common.Common;
-using Decenea.Common.Requests.Users;
+using Decenea.Common.Requests.User;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Mediator;
+
 
 namespace Decenea.WebAPI.Features.User;
 
-public class GetUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<object>>>
+public class GetManyUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<object>>>
 {
-    private readonly IMediator _mediator;
-    public GetUsersEndpoint(IMediator mediator)
+    private readonly GetManyUsersQueryHandler _getManyUsersQueryHandler;
+    public GetManyUsersEndpoint(GetManyUsersQueryHandler getManyUsersQueryHandler)
     {
-        _mediator = mediator;
+        _getManyUsersQueryHandler = getManyUsersQueryHandler;
     }
     
     public override void Configure()
@@ -22,7 +22,7 @@ public class GetUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<objec
 
     public override async Task<ApiResponse<List<object>>> ExecuteAsync(GetUsersRequest req, CancellationToken ct)
     {
-        var result = await _mediator.Send(new GetManyUsersQuery());
+        var result = await _getManyUsersQueryHandler.Handle(new GetManyUsersQuery(), ct);
         return new ApiResponse<List<object>>(null, result.IsSuccess, result.Messages);
     }
 }

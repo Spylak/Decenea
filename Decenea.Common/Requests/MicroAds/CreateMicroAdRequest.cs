@@ -1,9 +1,0 @@
-namespace Decenea.Common.Requests.MicroAds;
-
-public class CreateMicroAdRequest
-{
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string ContactPhone { get; set; }
-    public string ContactEmail { get; set; }
-}

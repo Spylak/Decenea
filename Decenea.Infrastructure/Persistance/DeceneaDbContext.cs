@@ -8,7 +8,7 @@ using Decenea.Infrastructure.DataSeed;
 using Decenea.Infrastructure.Outbox;
 using Decenea.Infrastructure.Persistance.Converters;
 using Decenea.Infrastructure.Persistance.EntityConfigurations;
-using Mediator;
+using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -17,14 +17,11 @@ namespace Decenea.Infrastructure.Persistance;
 
 internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 {
-    private readonly IPublisher _publisher;
     public string? CreatedBy { get; set; }
     public Queue<IDomainEvent>? DomainEvents { get; set; }
 
-    public DeceneaDbContext(DbContextOptions<DeceneaDbContext> options,
-        IPublisher publisher) : base(options)
+    public DeceneaDbContext(DbContextOptions<DeceneaDbContext> options) : base(options)
     {
-        _publisher = publisher;
     }
 
     protected sealed override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -84,7 +81,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         {
             while (domainEvents.TryDequeue(out var nextEvent))
             {
-                await _publisher.Publish(nextEvent, cancellationToken);
+                await nextEvent.PublishAsync(Mode.WaitForAll,cancellationToken);
             }
 
             await base.SaveChangesAsync(cancellationToken);

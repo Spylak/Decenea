@@ -1,0 +1,63 @@
+@attribute [Route($"/{Routes.Contact}")]
+
+@inject IJSRuntime JsRuntime
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager _navigationManager
+<div style="margin-top: 15vh"></div>
+<div class="row">
+    <div style="max-width:400px;margin:auto;">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h4">Personal Information</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.h6"><strong style="color: #8900ab">Email: </strong>spylak@@hotmail.com</MudText>
+                <MudText Typo="Typo.h6"><strong style="color: #8900ab">Address: </strong>Greece</MudText>
+                <MudText Typo="Typo.h6"><strong style="color: #8900ab">LinkedIn: </strong><a style="color: dodgerblue" target="_blank" href="https://gr.linkedin.com/in/spyridon-karakoulak-4267201b9?trk=public_profile_browsemap">Karakoulak Spyridon</a> </MudText>
+                <MudText Typo="Typo.h6"><strong style="color: #8900ab">Website: </strong><a style="color: dodgerblue" target="_blank" href="https://www.karakoulak.com">Karakoulak Spyridon</a> </MudText>
+                <MudText Typo="Typo.h6"><strong style="color: #8900ab">GitHub: </strong><a style="color: dodgerblue" target="_blank"  href="https://github.com/Spylak">Spylak</a> </MudText>
+            </MudCardContent>
+        </MudCard>
+    </div>
+        <div style="max-width:400px;margin:auto;">
+        <EditForm Model="Model" OnValidSubmit="SendLocalEmail">
+            <DataAnnotationsValidator/>
+            <MudCard Style="height: 300px;">
+                <MudCardContent>    
+                    <MudTextField Variant="Variant.Outlined" @bind-Value="Model.Subject" Label="Subject..."/>
+                    <ValidationMessage For="(() => Model.Subject)"/>
+                            
+                    <MudTextField Lines="6" Variant="Variant.Outlined" @bind-Value="Model.Body" Label="Message..."/>
+                    <ValidationMessage For="(() => Model.Body)"/>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Success" Class="ml-auto">Submit</MudButton>
+                        </MudCardActions>
+                </MudCardContent>
+            </MudCard>
+
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private EmailModel Model = new EmailModel();
+    protected void SendLocalEmail()
+    {
+        _navigationManager.NavigateTo($"mailto:spylak@hotmail.com?subject={Model.Subject}&body={Model.Body}");
+        JsRuntime.InvokeAsync<object>("blazorExtensions.SendLocalEmail",
+            new object[] { "spylak@hotmail.com", Model.Subject, Model.Body });
+    }
+    public class EmailModel
+    {
+
+        [Required(ErrorMessage = "Message is required")]
+        public string Body { get; set; }
+
+        [Required(ErrorMessage = "Subject is required")]
+        public string Subject { get; set; }
+    }
+
+
+}

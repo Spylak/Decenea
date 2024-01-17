@@ -1,0 +1,57 @@
+@page "/mytests"
+@using Decenea.WebApp.Models
+<PageTitle>MyTests</PageTitle>
+
+<h3 style="text-align: center">MyTests</h3>
+<MudGrid Style="margin: auto;max-width: 90%">
+    <MudItem xs="12">
+        <MudDataGrid T="Test" Items="@Tests" EditMode="DataGridEditMode.Cell"
+                     Bordered="true"
+                     Dense="true"
+                     ReadOnly="true"
+                     Hover="true"
+                     FilterMode="DataGridFilterMode.ColumnFilterRow"
+                     Filterable="true"
+                     FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                     Striped="true"
+                     RowClick="@((itm) => NavigationManager.NavigateTo($"{Routes.UpsertTest}/{itm.Item.Id}"))"
+                     ColumnResizeMode="ResizeMode.Column">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">My Tests</MudText>
+                <MudSpacer/>
+                <MudIconButton Color="Color.Warning" OnClick="@(() => GlobalFunctionService.ConsoleLog(""))"></MudIconButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => NavigationManager.NavigateTo(NavigationHelper.Test()))">Create Test</MudButton>
+            </ToolBarContent>
+            <Columns>
+                <TemplateColumn Filterable="false"
+                                Sortable="false"
+                                IsEditable="false">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       OnClick="async () => { if (context.Item.Id is not null) {await RemoveTest(context.Item.Id);} }"/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Description"
+                                       Color="Color.Primary"
+                                       OnClick="() => { if (context.Item.Id is not null) { TakeTest(context.Item.Id);} }"/>
+                    </CellTemplate>
+                </TemplateColumn>
+                <PropertyColumn
+                    Property="i => i.Id"
+                    IsEditable="false">
+                </PropertyColumn>
+                <PropertyColumn
+                    Property="i => i.Name"
+                    IsEditable="false">
+                </PropertyColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="Test"/>
+            </PagerContent>
+        </MudDataGrid>
+
+    </MudItem>
+</MudGrid>
+
+@code {
+
+}

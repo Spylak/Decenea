@@ -1,10 +1,10 @@
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Location;
-using Mediator;
+
 
 namespace Decenea.Application.Location.Queries.GetManyCities;
 
-public class GetManyCitiesQuery : IQuery<Result<List<CityDto>, Exception>>
+public class GetManyCitiesQuery
 {
     public int Skip { get; set; } = 0;
     public int Take { get; set; } = 20;

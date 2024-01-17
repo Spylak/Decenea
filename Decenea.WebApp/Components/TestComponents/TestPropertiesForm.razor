@@ -1,0 +1,24 @@
+@if (Test is not null)
+{
+    <MudForm>
+        <MudGrid>
+            <MudItem xs="6">
+                <MudTextField T="string" @bind-Value="Test.Name"
+                              Variant="Variant.Outlined"
+                              ReadOnly="@ReadOnly"
+                              Label="Test Name"/>
+            </MudItem>
+            <MudItem xs="6">
+                <MudTextField T="int" @bind-Value="Test.MinutesToComplete"
+                              Variant="Variant.Outlined"
+                              Label="Minutes To Complete"/>
+            </MudItem>
+            <MudItem xs="6" sm="12">
+                <MudTextField T="string" Lines="6"
+                              @bind-Value="Test.Description"
+                              Variant="Variant.Outlined"
+                              Label="Description"/>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+}

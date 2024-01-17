@@ -19,10 +19,6 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json");
 
 builder.Services
-    .AddMediator(i =>
-    {
-        i.ServiceLifetime = ServiceLifetime.Scoped;
-    })
     .AddAuthorization()
     .AddFastEndpoints()
     .AddInfrastructure(builder.Configuration)

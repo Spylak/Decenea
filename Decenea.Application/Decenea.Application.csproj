@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -11,18 +11,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FastEndpoints.Security" Version="5.18.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.12" />
-      <PackageReference Include="Serilog" Version="3.0.1" />
+      <PackageReference Include="FastEndpoints.Security" Version="5.21.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.1" />
+      <PackageReference Include="Serilog" Version="3.1.1" />
     </ItemGroup>
 
 
 
     <ItemGroup>
-      <Folder Include="MicroAds\Events\" />
-      <Folder Include="MicroAds\IntegrationEvents\" />
+      <Folder Include="Tests\Events\" />
+      <Folder Include="Tests\IntegrationEvents\" />
       <Folder Include="Users\Events\" />
       <Folder Include="Users\IntegrationEvents\" />
       <Folder Include="Location\Commands\" />

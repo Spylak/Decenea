@@ -3,13 +3,12 @@ using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegisterUser;
 
-public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Result<UserDto,Exception>>
+public class RegisterUserCommandHandler
 {
     private readonly IDeceneaDbContext _dbContext;
     public RegisterUserCommandHandler(IDeceneaDbContext dbContext)
@@ -41,6 +40,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, R
             if (!user.IsSuccess || user.Value is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;
             
+            _dbContext.CreatedBy = user.Value.Id;
+
             await _dbContext.Set<User>()
                 .AddAsync(user.Value, cancellationToken);
             

@@ -1,0 +1,93 @@
+@using MudBlazor.Utilities
+@using Decenea.WebApp.Models.QuestionTypes
+@inherits QuestionBaseComponent
+
+<MudGrid>
+    @if (!ReadOnly)
+    {
+        <MudItem xs="12">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%"
+                          @bind-Value="OrderingDnDQuestionModel.Question"
+                          Variant="Variant.Outlined"
+                          Label="Question"/>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="AddNewField">Add Choice</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2">
+            
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save()">Save</MudButton>
+        </MudItem>
+        foreach (var item in OrderingDnDQuestionModel.Choices)
+        {
+            <MudItem xs="12" sm="6">
+                <MudTextField
+                    Value="item.Name"
+                    T="string"
+                    ValueChanged="async (s) => { item.Name = s; await ValueChanged(); }"
+                    Variant="Variant.Outlined"
+                    Label="@($"Choice No.{OrderingDnDQuestionModel.Choices.IndexOf(item) + 1}")"
+                    Adornment="@(!ReadOnly ? Adornment.End : Adornment.None)"
+                    AdornmentIcon="@Icons.Material.Filled.Close"
+                    OnAdornmentClick="() => RemoveItem(item)"/>
+            </MudItem>
+        }
+    }
+    else
+    {
+        <MudField Variant="Variant.Outlined" Label="Question">
+            @OrderingDnDQuestionModel.Question
+        </MudField>
+    }
+</MudGrid>
+@if (Rerender)
+{
+    <MudDropContainer T="OrderingDnDQuestionModel.DropItem" Items="OrderingDnDQuestionModel.Choices.OrderBy(i => i.Order)" ItemsSelector="@((item, dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+        <ChildContent>
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudPaper Class="ma-4 flex-grow-1">
+                        <MudList Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
+                            <MudListSubheader>@OrderingDnDQuestionModel.OptionZone.Name</MudListSubheader>
+                            <MudDropZone T="OrderingDnDQuestionModel.DropItem" Identifier="@($"{OrderingDnDQuestionModel.OptionZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
+                        </MudList>
+                    </MudPaper>
+                </MudItem>
+                <MudItem xs="6">
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudPaper Class="ma-4 flex-grow-1">
+                                <MudList Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
+                                    <MudListSubheader>@OrderingDnDQuestionModel.AnswerZone.Name</MudListSubheader>
+                                    <MudDropZone T="OrderingDnDQuestionModel.DropItem" Identifier="@($"{OrderingDnDQuestionModel.AnswerZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
+                                </MudList>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+
+            </MudGrid>
+        </ChildContent>
+        <ItemRenderer>
+            <MudListItem Text="@context.Name"/>
+        </ItemRenderer>
+    </MudDropContainer>
+}
+else
+{
+    <MudSkeleton Height="50vh" Width="100%"></MudSkeleton>
+}
+
+@code {
+
+
+}

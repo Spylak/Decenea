@@ -4,13 +4,13 @@ using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Location;
 using Decenea.Domain.Aggregates.LocationAggregate;
 using Decenea.Domain.Extensions;
-using Mediator;
+
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Location.Queries.GetManyCities;
 
-public class GetManyCitiesQueryHandler : IQueryHandler<GetManyCitiesQuery,Result<List<CityDto>, Exception>>
+public class GetManyCitiesQueryHandler
 {
     private readonly IDeceneaDbContext _dbContext;
     public GetManyCitiesQueryHandler(IDeceneaDbContext dbContext)

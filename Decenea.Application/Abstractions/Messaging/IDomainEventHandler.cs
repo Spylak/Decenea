@@ -1,9 +1,9 @@
 ﻿using Decenea.Domain.Common;
-using Mediator;
+using FastEndpoints;
 
 namespace Decenea.Application.Abstractions.Messaging;
 
-public interface IDomainEventHandler<TEvent> : INotificationHandler<TEvent>
+public interface IDomainEventHandler<TEvent> : IEventHandler<TEvent>
     where TEvent : IDomainEvent
 {
 }

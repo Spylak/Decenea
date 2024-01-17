@@ -1,0 +1,38 @@
+﻿@using Decenea.WebApp.Services.IService
+@inherits LayoutComponentBase
+@inject NavigationManager _navMan
+@inject IUserService _userService
+
+<MudThemeProvider Theme="currentTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerLeftToggle())"/>
+        <MudFab Icon="@Icons.Filled.Home" Color="Color.Info" Style="color: whitesmoke" Size="Size.Small" OnClick="@(e => OnClick("/"))"></MudFab>
+        <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
+            <div style="margin-left:40vw"></div>
+        </MudHidden>
+        <MudSpacer/>
+        <MudFab OnClick="@((e) => DarkMode())" Icon="@Icons.Material.Filled.WbSunny" Style="color:whitesmoke;margin: 2px;" Color="Color.Info" Size="Size.Small"></MudFab>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerLeftOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenuLeft/>    
+    </MudDrawer>
+    <MudDrawer  @bind-Open="_drawerRightOpen" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Temporary" DisableOverlay="false" Anchor="Anchor.End" Elevation="2">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
+        </MudDrawerHeader>
+        <NavMenuRight RightDrawerOpen="drawerRightOpen"/>
+    </MudDrawer>
+    <MudMainContent>
+        <CascadingValue Value="drawerRightOpen">
+                    @Body
+        </CascadingValue>
+    </MudMainContent>
+</MudLayout>
+
+
+@code {
+   
+}

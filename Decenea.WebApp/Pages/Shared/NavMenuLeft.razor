@@ -1,0 +1,26 @@
+@inject NavigationManager navMan
+
+<MudNavMenu>
+    <MudNavLink Href="/mytests" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountBalanceWallet" IconColor="Color.Default">
+        My Tests
+    </MudNavLink>
+    <MudNavLink Href="/questiontypes" Icon="@Icons.Material.Filled.ListAlt" IconColor="Color.Default">
+        Question Types
+    </MudNavLink>
+    <MudNavLink Href="/contact" Icon="@Icons.Material.Filled.PermPhoneMsg" IconColor="Color.Default">
+        Contact
+    </MudNavLink>
+</MudNavMenu>
+<div style="flex-grow: 1"></div>
+<MudNavLink Href="/Copyright" Style="color: dodgerblue"> @copy</MudNavLink>
+
+@code {
+
+    private string copy = $"Copyright @{DateTime.Now.Year}";
+
+    private async Task Click(string name)
+    {
+        navMan.NavigateTo($"/{name}");
+    }
+
+}

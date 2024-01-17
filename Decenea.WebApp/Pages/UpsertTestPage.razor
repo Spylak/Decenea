@@ -1,0 +1,68 @@
+@attribute [Route($"/{Routes.UpsertTest}")]
+@attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
+
+@using Decenea.WebApp.Models.QuestionTypes
+@using Decenea.WebApp.Components.TestComponents
+<PageTitle>@(string.IsNullOrWhiteSpace(TestId) ? "Test Creation" : "Modify test")</PageTitle>
+
+<h3 style="text-align: center">@(string.IsNullOrWhiteSpace(TestId) ? "Test Creation" : "Modify test")</h3>
+<MudGrid Style="margin: auto;max-width: 90%">
+
+        <MudItem xs="4">
+            <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="async () => await TestContainer.UpsertTestToIndexedDb(TestContainer.UpsertTest)">Save Test</MudButton>
+        </MudItem>
+        <MudItem xs="4">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await NewTest()">New Test</MudButton>
+        </MudItem>
+        <MudItem xs="4">
+
+        </MudItem>
+        <MudItem xs="12">
+            <TestPropertiesForm Test="TestContainer.UpsertTest"></TestPropertiesForm>
+        </MudItem>
+        <MudItem xs="12">
+            <MudDataGrid T="QuestionBaseModel" Items="@TestContainer.UpsertTest.GetBaseQuestions()"
+                         Bordered="true"
+                         Dense="true"
+                         ReadOnly="true"
+                         Hover="true"
+                         FilterMode="DataGridFilterMode.ColumnFilterRow"
+                         Filterable="true"
+                         FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                         Striped="true"
+                         RowClick="async (itm) => await QuestionDialog(itm.Item.QuestionType, itm.Item.Id)"
+                         ColumnResizeMode="ResizeMode.Column">
+                <ToolBarContent>
+                    <MudSpacer/>
+                    <MudIconButton Color="Color.Warning" OnClick="@(() => GlobalFunctionService.ConsoleLog(""))"></MudIconButton>
+                    <MudIconButton
+                        OnClick="async () => await QuestionDialog()"
+                        Icon="@Icons.Material.Filled.Add"
+                        Style="margin:-2px 5px 0"
+                        Color="Color.Tertiary"
+                        Variant="Variant.Filled"/>
+                </ToolBarContent>
+                <Columns>
+                    <TemplateColumn
+                        Filterable="false" 
+                        Sortable="false" 
+                        IsEditable="false">
+                        <CellTemplate>
+                                     <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                                       Color="Color.Error"
+                                                                       OnClick="() => TestContainer.UpsertTest.RemoveQuestionById(context.Item.QuestionType, context.Item.Id)"/>
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <PropertyColumn Property="x => x.Id"
+                                    IsEditable="false"></PropertyColumn>
+                    <PropertyColumn Property="x => x.Question"
+                                    IsEditable="false"></PropertyColumn>
+                    <PropertyColumn Property="x => x.QuestionType"
+                                    IsEditable="false"></PropertyColumn>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="QuestionBaseModel"/>
+                </PagerContent>
+            </MudDataGrid>
+        </MudItem>
+</MudGrid>

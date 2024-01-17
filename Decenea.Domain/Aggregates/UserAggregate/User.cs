@@ -7,7 +7,7 @@ namespace Decenea.Domain.Aggregates.UserAggregate;
 public class User : AuditableAggregateRoot
 {
 
-    private readonly List<string> _microAdIds = new();
+    private readonly List<string> _testIds = new();
     private readonly List<string> _userClaimIds = new();
     private readonly List<string> _userTokenIds = new();
     public required string CityId { get; set; }

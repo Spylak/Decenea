@@ -1,19 +1,17 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.RegisterUser;
 using Decenea.Common.Common;
-using Decenea.Common.Requests.Users;
-using Mediator;
+using Decenea.Common.Requests.User;
+
 
 namespace Decenea.WebAPI.Features.User;
 
 public class RegisterUserEndpoint : Endpoint<RegisterUserRequest,ApiResponse<object>>
 {
-    private readonly IMediator _mediator;
-    private readonly IDeceneaDbContext _dbContext;
-    public RegisterUserEndpoint(IMediator mediator, IDeceneaDbContext dbContext)
+    private readonly RegisterUserCommandHandler _registerUserCommandHandler;
+    public RegisterUserEndpoint(RegisterUserCommandHandler registerUserCommandHandler)
     {
-        _mediator = mediator;
-        _dbContext = dbContext;
+        _registerUserCommandHandler = registerUserCommandHandler;
     }
 
     public override void Configure()
@@ -24,7 +22,6 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest,ApiResponse<obj
 
     public override async Task<ApiResponse<object>> ExecuteAsync(RegisterUserRequest req, CancellationToken ct)
     {
-        _dbContext.CreatedBy = "Anonymous";
         var command = new RegisterUserCommand(req.Email,
             req.UserName,
             req.FirstName,
@@ -34,7 +31,7 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest,ApiResponse<obj
             req.CityId,
             req.Password);
         
-        var result = await _mediator.Send(command);
+        var result = await _registerUserCommandHandler.Handle(command, ct);
         
         return new ApiResponse<object>(result.Value,result.IsSuccess,result.Messages);
     }

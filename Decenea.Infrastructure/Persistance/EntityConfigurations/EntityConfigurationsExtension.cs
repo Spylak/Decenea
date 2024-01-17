@@ -24,6 +24,6 @@ public static class EntityConfigurationsExtension
         builder.ApplyConfiguration(new RegionalUnitConfiguration());
         builder.ApplyConfiguration(new CommunityConfiguration());
         
-        builder.ApplyConfiguration(new MicroAdConfiguration());
+        builder.ApplyConfiguration(new TestConfiguration());
     }
 }

@@ -47,7 +47,7 @@ public static class DependencyInjection
 
         SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
         
-        services.AddTransient<IMicroAdRepository, MicroAdRepository>();
+        services.AddTransient<ITestRepository, TestRepository>();
 
     }
 
