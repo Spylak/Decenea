@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Components\QuestionTypes\FillBlankDropdown.razor.cs">
+    <Compile Update="Components\QuestionTypes\FillBlankDropdownQuestion.razor.cs">
       <DependentUpon>FillblankDropdown.razor</DependentUpon>
     </Compile>
     <Compile Update="Components\QuestionTypes\FillBlankDropdown.razor.cs">

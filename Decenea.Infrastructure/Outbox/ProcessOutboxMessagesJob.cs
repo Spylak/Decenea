@@ -13,7 +13,7 @@ namespace Decenea.Infrastructure.Outbox;
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxMessagesJob : IJob
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new()
+    private static readonly JsonSerializerSettings JsonSerializerSettings = new ()
     {
         TypeNameHandling = TypeNameHandling.All
     };

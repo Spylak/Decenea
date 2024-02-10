@@ -3,7 +3,7 @@ public abstract class AggregateRoot : Entity
 {
     protected AggregateRoot() { }
 
-    protected readonly Queue<IDomainEvent> _domainEvents = new();
+    protected readonly Queue<IDomainEvent> _domainEvents = new ();
 
     public Queue<IDomainEvent> PopDomainEvents()
     {

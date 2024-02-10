@@ -9,8 +9,8 @@
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.DragAndDrop))" Text="Drag and drop" ID='"pn_one"'></MudTabPanel>
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.OrderingDragAndDrop))" Text="Ordering DragAndDrop" ID='"pn_one"'></MudTabPanel>
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.Dropdown))" Text="Dropdown" ID='"pn_two"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.Fillblank))" Text="Fill Blank" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.FillblankDropdown))" Text="Space In Text" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.FillBlank))" Text="Fill Blank" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.FillBlankDropdown))" Text="Space In Text" ID='"pn_three"'></MudTabPanel>
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleChoice))" Text="Multiple Choice" ID='"pn_three"'></MudTabPanel>
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleChoiceSingle))" Text="Multiple Choice Single" ID='"pn_three"'></MudTabPanel>
                 <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleYesOrNo))" Text="Yes or No" ID='"pn_three"'></MudTabPanel>
@@ -27,41 +27,41 @@
         </MudHidden>
     </MudItem>
     <MudItem xs="12" sm="9">
-        @if (Visibility[QuestionTypeValues.Fillblank])
+        @if (Visibility[QuestionTypeValues.FillBlank])
         {
-            <FillBlank ReadOnly="true" FillBlankQuestionModel="FillBlank"></FillBlank>
+            <FillBlankQuestion ReadOnly="true" FillBlankQuestionModel="FillBlank"></FillBlankQuestion>
         }
-        else if (Visibility[QuestionTypeValues.FillblankDropdown])
+        else if (Visibility[QuestionTypeValues.FillBlankDropdown])
         {
-            <FillBlankDropdown ReadOnly="true" FillBlankDropdownQuestionModel="FillBlankDropdownQuestion"></FillBlankDropdown>
+            <FillBlankDropdownQuestion ReadOnly="true" FillBlankDropdownQuestionModel="FillBlankDropdownQuestion"></FillBlankDropdownQuestion>
         }
         else if (Visibility[QuestionTypeValues.DragAndDrop])
         {
-            <DragAndDrop ReadOnly="true" DragAndDropQuestionModel="DragAndDrop"></DragAndDrop>
+            <DragAndDropQuestion ReadOnly="true" DragAndDropQuestionModel="DragAndDrop"></DragAndDropQuestion>
         }
         else if (Visibility[QuestionTypeValues.Dropdown])
         {
-            <Dropdown ReadOnly="true" DropdownQuestionModel="Dropdown"></Dropdown>
+            <DropdownQuestion ReadOnly="true" DropdownQuestionModel="Dropdown"></DropdownQuestion>
         }
         else if (Visibility[QuestionTypeValues.MultipleChoice])
         {
-            <MultipleChoice ReadOnly="true" MultipleChoiceQuestionModel="MultipleChoice"></MultipleChoice>
+            <MultipleChoiceQuestion ReadOnly="true" MultipleChoiceQuestionModel="MultipleChoice"></MultipleChoiceQuestion>
         }
         else if (Visibility[QuestionTypeValues.MultipleYesOrNo])
         {
-            <MultipleYesOrNo ReadOnly="true" MultipleYesOrNoQuestionModel="MultipleYesOrNo"></MultipleYesOrNo>
+            <MultipleYesOrNoQuestion ReadOnly="true" MultipleYesOrNoQuestionModel="MultipleYesOrNo"></MultipleYesOrNoQuestion>
         }
         else if (Visibility[QuestionTypeValues.Ordering])
         {
-            <Ordering ReadOnly="true" OrderingQuestionModel="OrderingQuestionModel"></Ordering>
+            <OrderingQuestion ReadOnly="true" OrderingQuestionModel="OrderingQuestionModel"></OrderingQuestion>
         }
         else if (Visibility[QuestionTypeValues.MultipleChoiceSingle])
         {
-            <MultipleChoiceSingle ReadOnly="true" MultipleChoiceSingleQuestionModel="MultipleChoiceSingle"></MultipleChoiceSingle>
+            <MultipleChoiceSingleQuestion ReadOnly="true" MultipleChoiceSingleQuestionModel="MultipleChoiceSingle"></MultipleChoiceSingleQuestion>
         }
         else if (Visibility[QuestionTypeValues.OrderingDragAndDrop])
         {
-            <OrderingDnD ReadOnly="true" OrderingDnDQuestionModel="OrderingDnDQuestionModel"></OrderingDnD>
+            <OrderingDnDQuestion ReadOnly="true" OrderingDnDQuestionModel="OrderingDnDQuestionModel"></OrderingDnDQuestion>
         }
 
     </MudItem>

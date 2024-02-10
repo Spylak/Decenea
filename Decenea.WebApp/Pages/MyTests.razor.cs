@@ -11,7 +11,6 @@ namespace Decenea.WebApp.Pages;
 public partial class MyTests
 {
     [Inject] private TestContainer TestContainer { get; set; }
-    [Inject] private ISampleService SampleService { get; set; }
     [Inject] private IndexedDb IndexedDb { get; set; }
     [Inject] private ILocalStorageService LocalStorageService { get; set; }
     [Inject] private IDialogService DialogService { get; set; }

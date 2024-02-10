@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Models;
+using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Components;
 
@@ -10,7 +11,7 @@ public partial class QuestionTypesDialog
 
     [Parameter] public string? ContentText { get; set; }
     [Parameter] public Test Test { get; set; }
-    [Parameter] public object? Question { get; set; }
+    [Parameter] public QuestionBaseModel Question { get; set; }
 
     [Parameter] public string? ButtonText { get; set; }
 

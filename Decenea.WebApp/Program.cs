@@ -18,7 +18,6 @@ builder.Services.AddSingleton<IndexedDb>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
-builder.Services.AddTransient<ISampleService,SampleService>();
 builder.Services.AddSingleton<TestContainer>();
 builder.Services.AddMudServices(config =>
 {

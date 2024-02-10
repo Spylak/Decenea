@@ -25,9 +25,6 @@
       <Folder Include="Tests\IntegrationEvents\" />
       <Folder Include="Users\Events\" />
       <Folder Include="Users\IntegrationEvents\" />
-      <Folder Include="Location\Commands\" />
-      <Folder Include="Location\Events\" />
-      <Folder Include="Location\IntegrationEvents\" />
     </ItemGroup>
 
 </Project>

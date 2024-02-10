@@ -7,50 +7,20 @@ namespace Decenea.WebApp.Extensions;
 
 public static class TestExtension
 {
-    public static List<QuestionBaseModel> GetBaseQuestions(this Test test)
+    public static ResponseAPI<dynamic?> RemoveQuestionById(this Test test, string questionId)
     {
-        var questionBaseList = new List<QuestionBaseModel>();
-        
-        foreach (var question in test.DropdownQuestions)
+        try
         {
-            questionBaseList.Add(question);
+            var question = test.QuestionBaseModels.FirstOrDefault(i => i.Id == questionId);
+            if(question is null)
+                return new ResponseAPI<dynamic?>(null, false, "No question found.");
+
+            test.QuestionBaseModels.Remove(question);
+            return new ResponseAPI<dynamic?>(question, true, "Successfully deleted question.");
         }
-        foreach (var question in test.OrderingQuestions)
+        catch (Exception ex)
         {
-            questionBaseList.Add(question);
+            return new ResponseAPI<dynamic?>(null, false, "No question found.");
         }
-        foreach (var question in test.FillBlankQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.MultipleChoiceQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.DragAndDropQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.FillblankDropdownQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.MultipleChoiceSingleQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.OrderingDnDQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        foreach (var question in test.MultipleYesOrNoQuestions)
-        {
-            questionBaseList.Add(question);
-        }
-        return questionBaseList;
-    }
-    public static ResponseAPI<dynamic?> RemoveQuestionById(this Test test, string questionType, string questionId)
-    {
-        return QuestionHelper.RemoveQuestionById(test, questionType, questionId);
     }
 }

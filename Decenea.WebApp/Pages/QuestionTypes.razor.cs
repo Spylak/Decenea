@@ -1,39 +1,40 @@
 using Microsoft.AspNetCore.Components;
 using Decenea.Common.Constants;
+using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models.QuestionTypes;
+using Decenea.WebApp.Services;
 using Decenea.WebApp.Services.IService;
 
 namespace Decenea.WebApp.Pages;
 
 public partial class QuestionTypes
 {
-    [Inject] private  ISampleService SampleService { get; set; }
     int activeIndex = 0;
 
-    private DragAndDropQuestionModel DragAndDrop;
+    private QuestionBaseModel<DragAndDrop> DragAndDrop;
     
-    private OrderingDnDQuestionModel OrderingDnDQuestionModel;
+    private QuestionBaseModel<OrderingDragAndDrop> OrderingDnDQuestionModel;
     
-    private FillBlankQuestionModel FillBlank;
+    private QuestionBaseModel<FillBlank> FillBlank;
 
-    private OrderingQuestionModel OrderingQuestionModel;
+    private QuestionBaseModel<Ordering> OrderingQuestionModel;
 
-    private MultipleYesOrNoQuestionModel MultipleYesOrNo;
+    private QuestionBaseModel<MultipleYesOrNo> MultipleYesOrNo;
 
-    private MultipleChoiceQuestionModel MultipleChoice;
+    private QuestionBaseModel<MultipleChoice> MultipleChoice;
 
-    private DropdownQuestionModel Dropdown;
+    private QuestionBaseModel<Dropdown> Dropdown;
 
-    private MultipleChoiceSingleQuestionModel MultipleChoiceSingle;
-    private FillBlankDropdownQuestionModel FillBlankDropdownQuestion;
+    private QuestionBaseModel<MultipleChoiceSingle> MultipleChoiceSingle;
+    private QuestionBaseModel<FillBlankDropdown> FillBlankDropdownQuestion;
 
     private Dictionary<string, bool> Visibility = new Dictionary<string, bool>()
     {
         { QuestionTypeValues.DragAndDrop, false },
         { QuestionTypeValues.OrderingDragAndDrop, false },
         { QuestionTypeValues.Dropdown, false },
-        { QuestionTypeValues.Fillblank, false },
-        { QuestionTypeValues.FillblankDropdown, false },
+        { QuestionTypeValues.FillBlank, false },
+        { QuestionTypeValues.FillBlankDropdown, false },
         { QuestionTypeValues.MultipleChoice, false },
         { QuestionTypeValues.MultipleChoiceSingle, false },
         { QuestionTypeValues.MultipleYesOrNo, false },
@@ -43,15 +44,15 @@ public partial class QuestionTypes
     protected override void OnInitialized()
     {
         Visibility["DragAndDrop"] = true;
-        FillBlankDropdownQuestion = SampleService.GetFillBlankDropdownQuestionSample();
-        FillBlank = SampleService.GetFillBlankQuestionSample();
-        MultipleChoiceSingle = SampleService.GetMultipleChoiceSingleQuestionSample();
-        Dropdown = SampleService.GetDropdownQuestionSample();
-        MultipleChoice = SampleService.GetMultipleChoiceQuestionSample();
-        MultipleYesOrNo = SampleService.GetMultipleYesOrNoQuestionSample();
-        OrderingQuestionModel = SampleService.GetOrderingQuestionSample();
-        OrderingDnDQuestionModel = SampleService.GetOrderingDnDQuestionSample();
-        DragAndDrop = SampleService.GetDragAndDropQuestionSample();
+        FillBlankDropdownQuestion = SampleHelper.GetFillBlankDropdownQuestionSample();
+        FillBlank = SampleHelper.GetFillBlankQuestionSample();
+        MultipleChoiceSingle = SampleHelper.GetMultipleChoiceSingleQuestionSample();
+        Dropdown = SampleHelper.GetDropdownQuestionSample();
+        MultipleChoice = SampleHelper.GetMultipleChoiceQuestionSample();
+        MultipleYesOrNo = SampleHelper.GetMultipleYesOrNoQuestionSample();
+        OrderingQuestionModel = SampleHelper.GetOrderingQuestionSample();
+        OrderingDnDQuestionModel = SampleHelper.GetOrderingDnDQuestionSample();
+        DragAndDrop = SampleHelper.GetDragAndDropQuestionSample();
     }
 
     private void OpenOverlay(string type)

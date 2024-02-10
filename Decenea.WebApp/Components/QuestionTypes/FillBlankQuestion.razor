@@ -1,0 +1,54 @@
+@inherits QuestionBaseComponent
+<MudGrid>
+    @if (!ReadOnly)
+    {
+        <MudItem xs="12">
+            <MudText>You need to add @SpecialChars to create a blank space option.</MudText>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%"
+                          Value="FillBlankQuestionModel.Description"
+                          ValueChanged="(val) => UpdateOptions(val)"
+                          Variant="Variant.Outlined"
+                          Label="Question"/>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="AddNewField">Add Space Option</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2">
+            
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(FillBlankQuestionModel)">Save</MudButton>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12">
+            <MudField Variant="Variant.Outlined" Label="Question">
+                @DynamicQuestion
+            </MudField>
+        </MudItem>
+    }
+    @foreach (var field in Fields)
+    {
+        <MudItem xs="12" sm="4">
+            <MudTextField
+                Value="field.Text"
+                ValueChanged="e => OnValueChange(e, field.SpaceNo)" T="string"
+                Variant="Variant.Outlined"
+                Label="@($"Space No.{Fields.IndexOf(field) + 1}")"
+                Adornment="@(!ReadOnly ? Adornment.End : Adornment.None)"
+                AdornmentIcon="@Icons.Material.Filled.Close"
+                AdornmentColor="@(Fields.IndexOf(field) >= QuestionText.Count() - 1 ? Color.Error : Color.Default)"
+                OnAdornmentClick="() => RemoveField(field)"/>
+        </MudItem>
+    }
+</MudGrid>

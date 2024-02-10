@@ -30,16 +30,16 @@
     private List<LeftNavMenuItem> NavMenuItems { get; set; } 
     protected override void OnInitialized()
     {
-        NavMenuItems = new ()
+        NavMenuItems = new List<LeftNavMenuItem>()
         {
-            new ()
+            new LeftNavMenuItem()
             {
                 Text = "Profile",
                 Section = "",
                 Classes = "navMenuActive",
                 Icon = Icons.Material.Filled.AssignmentInd
             },
-            new ()
+            new LeftNavMenuItem()
             {
                 Text = $"Copyright @{DateTime.Now.Year}",
                 Section = "Copyright",

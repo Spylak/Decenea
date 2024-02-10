@@ -27,5 +27,9 @@
       <ProjectReference Include="..\Decenea.Application\Decenea.Application.csproj" />
       <ProjectReference Include="..\Decenea.Domain\Decenea.Domain.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Persistance\EntityConfigurations\Question\" />
+    </ItemGroup>
 
 </Project>

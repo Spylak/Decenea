@@ -15,7 +15,6 @@ namespace Decenea.WebApp.Pages;
 public partial class UpsertTestPage
 {
     [Inject] private TestContainer TestContainer { get; set; }
-    [Inject] private ISampleService SampleService { get; set; }
     [Inject] private IndexedDb IndexedDb { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
     [Inject] private ILocalStorageService LocalStorageService { get; set; }
@@ -119,7 +118,7 @@ public partial class UpsertTestPage
             CloseOnEscapeKey = true
         };
         if (questionType is not null && questionId is not null)
-            parameters.Add("Question", QuestionHelper.GetQuestion(TestContainer.UpsertTest, questionType, questionId));
+            parameters.Add("Question",TestContainer.UpsertTest.QuestionBaseModels.FirstOrDefault(i => i.Id == questionId));
         var dialog = DialogService.Show<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
         await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTest);

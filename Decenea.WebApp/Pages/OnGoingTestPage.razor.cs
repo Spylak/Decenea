@@ -99,7 +99,7 @@ public partial class OnGoingTestPage : IDisposable
                 }
             }
 
-            QuestionBaseModels = TestContainer.OngoingTest.GetBaseQuestions();
+            QuestionBaseModels = TestContainer.OngoingTest.QuestionBaseModels;
             StateHasChanged();
         }
     }

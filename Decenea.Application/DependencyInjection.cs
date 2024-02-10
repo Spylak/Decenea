@@ -1,4 +1,3 @@
-using Decenea.Application.Location.Queries.GetManyCities;
 using Decenea.Application.Tests.Commands.CreateTest;
 using Decenea.Application.Tests.Commands.UpdateTest;
 using Decenea.Application.Tests.Queries.GetManyTests;
@@ -27,7 +26,6 @@ public static class DependencyInjection
         services.AddTransient<UpdateUserCommandHandler>();
         services.AddTransient<GetManyUsersQueryHandler>();
         
-        services.AddTransient<GetManyCitiesQueryHandler>();
         return services;
     }
 }

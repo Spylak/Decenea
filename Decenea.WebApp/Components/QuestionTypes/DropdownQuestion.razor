@@ -1,0 +1,87 @@
+
+@inherits QuestionBaseComponent
+
+<MudGrid>
+    @if (!ReadOnly)
+    {
+        <MudItem xs="12">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%"
+                          @bind-Value="DropdownQuestionModel.Description"
+                          Variant="Variant.Outlined"
+                          Label="Question"/>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="AddNewField">Add Sub Question</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2">
+            
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(DropdownQuestionModel)">Save</MudButton>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12">
+            <MudField Variant="Variant.Outlined" Label="Question">
+                @DropdownQuestionModel.Description
+            </MudField>
+        </MudItem>
+    }
+
+    @foreach (var item in Fields)
+    {
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%;height: 100%"
+                          @bind-Value="item.SubQuestion.Text"
+                          Variant="Variant.Outlined"
+                          Label="Question"
+                          ReadOnly="ReadOnly"/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudStack Spacing="1">
+                @if (!ReadOnly)
+                {
+                    <MudButton FullWidth="true"
+                               Color="Color.Error"
+                               Variant="Variant.Filled"
+                               OnClick="() => RemoveField(item)">
+                        Remove Field
+                    </MudButton>
+
+                    <MudTextField T="string"
+                                  @bind-Value="item.Input"
+                                  Style="width: 100%"
+                                  Label="Sub Question Choice"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Add"
+                                  AdornmentColor="Color.Success"
+                                  OnAdornmentClick="() => AddChoice(item, item.Input)"/>
+                }
+                <MudSelect T="string"
+                           Value="@(item.SubQuestion.Choices.FirstOrDefault(i => i.Checked)?.Text ?? "Choose One")"
+                           Label="SubQuestion"
+                           Variant="Variant.Outlined"
+                           AnchorOrigin="Origin.BottomCenter"
+                           ValueChanged="@(e => OnValueChanged(e, item.SubQuestion.Text))">
+                    @foreach (var itm in item.SubQuestion.Choices)
+                    {
+                        <MudSelectItem T="string" Value="@(itm.Text)"/>
+                    }
+                </MudSelect>
+            </MudStack>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+}

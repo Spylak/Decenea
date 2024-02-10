@@ -5,7 +5,7 @@ public abstract class AuditableAggregateRoot : AuditableEntity
     
     protected AuditableAggregateRoot() { }
 
-    protected readonly Queue<IDomainEvent> _domainEvents = new();
+    protected readonly Queue<IDomainEvent> _domainEvents = new ();
 
     public Queue<IDomainEvent> PopDomainEvents()
     {

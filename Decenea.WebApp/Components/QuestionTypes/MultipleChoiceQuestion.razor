@@ -1,0 +1,96 @@
+@inherits QuestionBaseComponent
+<MudGrid>
+    @if (!ReadOnly)
+    {
+        <MudItem xs="12">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%"
+                          @bind-Value="MultipleChoiceQuestionModel.Description"
+                          Variant="Variant.Outlined"
+                          Label="Question"/>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="AddNewField">Add Sub Question</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2">
+            
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+        </MudItem>
+        <MudItem xs="12" sm="2" Style="text-align: end">
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(MultipleChoiceQuestionModel)">Save</MudButton>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12">
+            <MudField Variant="Variant.Outlined" Label="Question">
+                @MultipleChoiceQuestionModel.Description
+            </MudField>
+        </MudItem>
+    }
+
+    @foreach (var item in Fields)
+    {
+        <MudItem xs="12" sm="6">
+            <MudTextField T="string" Lines="6"
+                          Style="width: 100%;height: 100%"
+                          @bind-Value="item.SubQuestion.Text"
+                          Variant="Variant.Outlined"
+                          Label="Question"
+                          ReadOnly="ReadOnly"/>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudStack Spacing="1">
+                @if (!ReadOnly)
+                {
+                    <MudButton FullWidth="true"
+                               Color="Color.Error"
+                               Variant="Variant.Filled"
+                               OnClick="() => RemoveField(item)">
+                        Remove Field
+                    </MudButton>
+
+                    <MudTextField T="string"
+                                  @bind-Value="item.Input"
+                                  Style="width: 100%"
+                                  Label="Sub Question Choice"
+                                  Variant="Variant.Outlined"
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Add"
+                                  AdornmentColor="Color.Success"
+                                  OnAdornmentClick="() => AddChoice(item, item.Input)"/>
+                    <MudSelect T="string" 
+                               OnAdornmentClick="@(() => RemoveChoices(item))" 
+                               Variant="Variant.Outlined"
+                               Placeholder="Remove Choices"
+                               AdornmentIcon="@Icons.Material.Filled.Delete" 
+                               AdornmentColor="Color.Error"
+                               AnchorOrigin="Origin.BottomCenter"
+                               MultiSelection="true" 
+                               @bind-SelectedValues="item.SelectedChoices">
+                        @foreach (var choice in item.SubQuestion.Choices.Select(i => i.Text))
+                        {
+                            <MudSelectItem Value="@(choice)"/>
+                        }
+                    </MudSelect>
+                }
+                @foreach (var itm in item.SubQuestion.Choices)
+                {
+                    <MudItem xs="12">
+                        <MudCheckBox @bind-Checked="@(itm.Checked)" Label="@(itm.Text)" Color="Color.Primary"></MudCheckBox>
+                    </MudItem>
+                }
+            </MudStack>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+
+
+}
