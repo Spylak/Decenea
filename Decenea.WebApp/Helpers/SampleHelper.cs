@@ -89,29 +89,32 @@ public static class SampleHelper
     {
         var question = new QuestionBaseModel<FillBlankDropdown>(new FillBlankDropdown())
         {
-            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
-        };
-        question.QuestionContent.Options = new List<FillBlankDropdown.SpaceOption>
-        {
-            new FillBlankDropdown.SpaceOption()
+            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
+            QuestionContent = new FillBlankDropdown()
             {
-                SpaceNo = 0,
-                Choices = new List<FillBlankDropdown.Choice>()
+                Options = new List<FillBlankDropdown.SpaceOption>
                 {
-                    new FillBlankDropdown.Choice() { Text = "One", Checked = false },
-                    new FillBlankDropdown.Choice() { Text = "Two!", Checked = false },
-                    new FillBlankDropdown.Choice() { Text = "Three!", Checked = false },
-                    new FillBlankDropdown.Choice() { Text = "Four!", Checked = false }
-                }
-            },
-            new FillBlankDropdown.SpaceOption()
-            {
-                SpaceNo = 1,
-                Choices = new List<FillBlankDropdown.Choice>()
-                {
-                    new FillBlankDropdown.Choice() { Text = "One", Checked = false },
-                    new FillBlankDropdown.Choice() { Text = "Two", Checked = false },
-                    new FillBlankDropdown.Choice() { Text = "Three", Checked = false }
+                    new FillBlankDropdown.SpaceOption()
+                    {
+                        SpaceNo = 0,
+                        Choices = new List<FillBlankDropdown.Choice>()
+                        {
+                            new FillBlankDropdown.Choice() { Text = "One", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Two!", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Three!", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Four!", Checked = false }
+                        }
+                    },
+                    new FillBlankDropdown.SpaceOption()
+                    {
+                        SpaceNo = 1,
+                        Choices = new List<FillBlankDropdown.Choice>()
+                        {
+                            new FillBlankDropdown.Choice() { Text = "One", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Two", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Three", Checked = false }
+                        }
+                    }
                 }
             }
         };

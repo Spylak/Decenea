@@ -1,4 +1,5 @@
 @using System.Linq
+@using Decenea.WebApp.Models.QuestionTypes
 @using NPOI.SS.Formula.Functions
 @inherits QuestionBaseComponent
 
@@ -8,7 +9,8 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          @bind-Value="MultipleChoiceSingleQuestionModel.Description"
+                          Value="MultipleChoiceSingleQuestionModel?.Description"
+                          ValueChanged="@(s => { if (MultipleChoiceSingleQuestionModel is not null) { MultipleChoiceSingleQuestionModel.Description = s; } })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>
@@ -25,14 +27,14 @@
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(MultipleChoiceSingleQuestionModel)">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else
     {
         <MudItem xs="12">
             <MudField Variant="Variant.Outlined" Label="Question">
-                @MultipleChoiceSingleQuestionModel.Description
+                @MultipleChoiceSingleQuestionModel?.Description
             </MudField>
         </MudItem>
     }

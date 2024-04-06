@@ -9,11 +9,20 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class OrderingDnDQuestion
 {
     [Parameter]
-    public QuestionBaseModel<OrderingDragAndDrop> OrderingDnDQuestionModel { get; set; } =
-        new QuestionBaseModel<OrderingDragAndDrop>(new OrderingDragAndDrop());
-    [Parameter] public EventCallback<QuestionBaseModel<OrderingDragAndDrop>> OrderingDnDQuestionModelChanged { get; set; }
-    private bool Rerender { get; set; } = false;
+    public QuestionBaseModel? OrderingDnDQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> OrderingDnDQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<OrderingDragAndDrop>? OrderingDnDQuestionModel { get; set; }
 
+    private bool Rerender { get; set; } = false;
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (OrderingDnDQuestionBaseModel is not null)
+        {
+            OrderingDnDQuestionModel = QuestionBaseModel.ConvertToGeneric<OrderingDragAndDrop>(OrderingDnDQuestionBaseModel);
+        }
+    }
+    
     protected override async Task OnParametersSetAsync()
     {
         await ValueChanged();
@@ -21,6 +30,9 @@ public partial class OrderingDnDQuestion
 
     private async Task AddNewField()
     {
+        if(OrderingDnDQuestionModel?.QuestionContent is null)
+            return;
+        
         var order = OrderingDnDQuestionModel.QuestionContent.Choices.Count + 1;
         OrderingDnDQuestionModel.QuestionContent.Choices.Add(new (order)
         {
@@ -33,14 +45,14 @@ public partial class OrderingDnDQuestion
     private async Task CreateSample()
     {
         OrderingDnDQuestionModel = SampleHelper.GetOrderingDnDQuestionSample();
-        await OrderingDnDQuestionModelChanged.InvokeAsync(OrderingDnDQuestionModel);
+        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingDnDQuestionModel));
         await ValueChanged();
     }
     
     private async Task Reset()
     {
-        OrderingDnDQuestionModel = new QuestionBaseModel<OrderingDragAndDrop>(new OrderingDragAndDrop());
-        await OrderingDnDQuestionModelChanged.InvokeAsync(OrderingDnDQuestionModel);
+        OrderingDnDQuestionModel = null;
+        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingDnDQuestionModel));
         await ValueChanged();
     }
 
@@ -53,12 +65,18 @@ public partial class OrderingDnDQuestion
 
     private async Task RemoveItem(OrderingDragAndDrop.DropItem item)
     {
+        if(OrderingDnDQuestionModel?.QuestionContent is null)
+            return;
+        
         OrderingDnDQuestionModel.QuestionContent.Choices.Remove(item);
         await ValueChanged();
     }
     
     private void ItemUpdated(MudItemDropInfo<OrderingDragAndDrop.DropItem> dropItem)
     {
+        if(OrderingDnDQuestionModel?.QuestionContent is null || dropItem.Item is null)
+            return;
+        
         dropItem.Item.Selector = dropItem.DropzoneIdentifier;
         
         var indexOffset = dropItem.DropzoneIdentifier switch

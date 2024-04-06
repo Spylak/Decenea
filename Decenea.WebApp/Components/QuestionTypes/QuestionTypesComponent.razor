@@ -1,6 +1,6 @@
 @using Decenea.WebApp.Models.QuestionTypes
 
-<MudPaper Class="ma-2" Outlined="true" Square="true" Style="@Style">
+<MudPaper Class="ma-2" Elevation="0" Square="true" Style="@Style">
     <MudGrid>
         @if (!PresentationOnly)
         {
@@ -23,14 +23,14 @@
         <MudItem xs="12">
             @if (VisibleQuestionType == QuestionTypeValues.FillBlank)
             {
-                <FillBlankQuestion @bind-FillBlankQuestionModel="FillBlankModel"
+                <FillBlankQuestion @bind-FillBlankQuestionBaseModel="Question"
                            SaveCallback="SaveQuestionToTest"
                            ReadOnly="@(PresentationOnly || PreviewMode)">
                 </FillBlankQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.FillBlankDropdown)
             {
-                <FillBlankDropdownQuestion @bind-FillBlankDropdownQuestionModel="FillBlankDropdownModel"
+                <FillBlankDropdownQuestion @bind-FillBlankDropdownQuestionBaseModel="Question"
                                    SaveCallback="SaveQuestionToTest"
                                    ReadOnly="@(PresentationOnly || PreviewMode)">
                 </FillBlankDropdownQuestion>
@@ -39,49 +39,49 @@
             {
                 <DragAndDropQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                              SaveCallback="SaveQuestionToTest"
-                             @bind-DragAndDropQuestionModel="DragAndDropModel">
+                             @bind-DragAndDropQuestionBaseModel="Question">
                 </DragAndDropQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.Dropdown)
             {
                 <DropdownQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                           SaveCallback="SaveQuestionToTest"
-                          @bind-DropdownQuestionModel="DropdownModel">
+                          @bind-DropdownQuestionBaseModel="Question">
                 </DropdownQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleChoice)
             {
                 <MultipleChoiceQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                 SaveCallback="SaveQuestionToTest"
-                                @bind-MultipleChoiceQuestionModel="MultipleChoiceModel">
+                                @bind-MultipleChoiceQuestionBaseModel="Question">
                 </MultipleChoiceQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleYesOrNo)
             {
                 <MultipleYesOrNoQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                  SaveCallback="SaveQuestionToTest"
-                                 @bind-MultipleYesOrNoQuestionModel="MultipleYesOrNoModel">
+                                 @bind-MultipleYesOrNoQuestionBaseModel="Question">
                 </MultipleYesOrNoQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.Ordering)
             {
                 <OrderingQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                           SaveCallback="SaveQuestionToTest"
-                          @bind-OrderingQuestionModel="OrderingModel">
+                          @bind-OrderingQuestionBaseModel="Question">
                 </OrderingQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleChoiceSingle)
             {
                 <MultipleChoiceSingleQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                       SaveCallback="SaveQuestionToTest"
-                                      @bind-MultipleChoiceSingleQuestionModel="MultipleChoiceSingleModel">
+                                      @bind-MultipleChoiceSingleQuestionBaseModel="Question">
                 </MultipleChoiceSingleQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.OrderingDragAndDrop)
             {
                 <OrderingDnDQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                              SaveCallback="SaveQuestionToTest"
-                             @bind-OrderingDnDQuestionModel="OrderingDragAndDropModel">
+                             @bind-OrderingDnDQuestionBaseModel="Question">
                 </OrderingDnDQuestion>
             }
         </MudItem>

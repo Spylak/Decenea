@@ -7,10 +7,18 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class MultipleChoiceQuestion
 {
     [Parameter]
-    public QuestionBaseModel<MultipleChoice> MultipleChoiceQuestionModel { get; set; } =
-        new QuestionBaseModel<MultipleChoice>(new MultipleChoice());
-    [Parameter] public EventCallback<QuestionBaseModel<MultipleChoice>> MultipleChoiceQuestionModelChanged { get; set; }
-    
+    public QuestionBaseModel? MultipleChoiceQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> MultipleChoiceQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (MultipleChoiceQuestionBaseModel is not null)
+        {
+            MultipleChoiceQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleChoice>(MultipleChoiceQuestionBaseModel);
+        }
+    }
     private class Field
     {
         public string Input { get; set; } = "";
@@ -22,6 +30,9 @@ public partial class MultipleChoiceQuestion
 
     protected override void OnInitialized()
     {
+        if(MultipleChoiceQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = MultipleChoiceQuestionModel.QuestionContent.SubQuestions.Select( i => new Field()
         {
             Input = "",
@@ -46,14 +57,14 @@ public partial class MultipleChoiceQuestion
     {
         MultipleChoiceQuestionModel = SampleHelper.GetMultipleChoiceQuestionSample();
         PopulateFields();
-        await MultipleChoiceQuestionModelChanged.InvokeAsync(MultipleChoiceQuestionModel);
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceQuestionModel));
     }
     
     private async Task Reset()
     {
         MultipleChoiceQuestionModel = new QuestionBaseModel<MultipleChoice>(new MultipleChoice());
         PopulateFields();
-        await MultipleChoiceQuestionModelChanged.InvokeAsync(MultipleChoiceQuestionModel);
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceQuestionModel));
     }
     
     private void RemoveChoices(Field item)
@@ -68,6 +79,9 @@ public partial class MultipleChoiceQuestion
 
     private void PopulateFields()
     {
+        if(MultipleChoiceQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = MultipleChoiceQuestionModel.QuestionContent.SubQuestions.Select( i => new Field()
         {
             Input = "",

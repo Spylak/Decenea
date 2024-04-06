@@ -1,15 +1,16 @@
 ﻿using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
+using Decenea.WebApp.Services.IService;
 
 namespace Decenea.WebApp.Components.QuestionTypes;
 
 public partial class FillBlankDropdownQuestion
 {
     [Parameter]
-    public QuestionBaseModel<FillBlankDropdown> FillBlankDropdownQuestionModel { get; set; } =
-        new QuestionBaseModel<FillBlankDropdown>(new FillBlankDropdown());
-    [Parameter] public EventCallback<QuestionBaseModel<FillBlankDropdown>> FillBlankDropdownQuestionModelChanged { get; set; }
+    public QuestionBaseModel? FillBlankDropdownQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> FillBlankDropdownQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; }
     private string SpecialChars { get; set; } = "_____";
     private List<string> QuestionText { get; set; } = new List<string>();
     private string DynamicQuestion { get; set; } = "";
@@ -24,8 +25,12 @@ public partial class FillBlankDropdownQuestion
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
-        UpdateOptions(FillBlankDropdownQuestionModel.Description);
-        PopulateDynamicQuestion();
+        if (FillBlankDropdownQuestionBaseModel is not null)
+        {
+            FillBlankDropdownQuestionModel = QuestionBaseModel.ConvertToGeneric<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
+            UpdateOptions(FillBlankDropdownQuestionModel.Description);
+            PopulateDynamicQuestion();
+        }
     }
 
     private void AddOption(Field field,string input)
@@ -42,6 +47,8 @@ public partial class FillBlankDropdownQuestion
     
     private void UpdateOptions(string question)
     {
+        if(FillBlankDropdownQuestionModel is null)
+            return;
         FillBlankDropdownQuestionModel.Description = question;
         NumberOfSpaces= question.Split(SpecialChars).Length - 1;
         var options = new List<FillBlankDropdown.SpaceOption>();
@@ -49,6 +56,9 @@ public partial class FillBlankDropdownQuestion
             .Description
             .Split(SpecialChars)
             .ToList();
+        if(FillBlankDropdownQuestionModel?.QuestionContent is null)
+            return;
+
         for (int i = 0; i < NumberOfSpaces; i++)
         {
             if (Fields.Count <= i)
@@ -94,7 +104,7 @@ public partial class FillBlankDropdownQuestion
         FillBlankDropdownQuestionModel = SampleHelper.GetFillBlankDropdownQuestionSample();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankDropdownQuestionModelChanged.InvokeAsync(FillBlankDropdownQuestionModel);
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankDropdownQuestionModel));
     }
     
     private async Task Reset()
@@ -103,11 +113,14 @@ public partial class FillBlankDropdownQuestion
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
         Fields = new List<Field>();
-        await FillBlankDropdownQuestionModelChanged.InvokeAsync(FillBlankDropdownQuestionModel);
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankDropdownQuestionModel));
     }
     
     private void PopulateDynamicQuestion()
     {
+        if(FillBlankDropdownQuestionModel?.QuestionContent is null)
+            return;
+        
         DynamicQuestion = "";
         QuestionText = new List<string>();
         QuestionText = FillBlankDropdownQuestionModel.Description.Split(SpecialChars).ToList();

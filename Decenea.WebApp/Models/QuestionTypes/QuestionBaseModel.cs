@@ -1,4 +1,6 @@
 
+using System.Text.Json;
+
 namespace Decenea.WebApp.Models.QuestionTypes;
 
 public class QuestionBaseModel
@@ -14,14 +16,68 @@ public class QuestionBaseModel
     public int Order { get; set; } 
     public double Weight { get; set; }
     public string QuestionType { get; init; }
+    public string SerializedQuestionContent { get; set; } = string.Empty;
     public List<int>? TestIds { get; set; }
+    public static QuestionBaseModel<T> ConvertToGeneric<T>(QuestionBaseModel nonGenericModel) where T : class
+    {
+        T questionContent = JsonSerializer.Deserialize<T>(nonGenericModel.SerializedQuestionContent)!;
+
+        if (questionContent == null)
+        {
+            throw new InvalidOperationException("Deserialization of question content failed.");
+        }
+
+        var genericModel = new QuestionBaseModel<T>(questionContent)
+        {
+            Id = nonGenericModel.Id,
+            Description = nonGenericModel.Description,
+            Title = nonGenericModel.Title,
+            SecondsToAnswer = nonGenericModel.SecondsToAnswer,
+            Order = nonGenericModel.Order,
+            Weight = nonGenericModel.Weight,
+            TestIds = nonGenericModel.TestIds
+        };
+
+        return genericModel;
+    }
+    
+    public static QuestionBaseModel ConvertToNonGeneric<T>(QuestionBaseModel<T>? genericModel) where T : class
+    {
+        if (genericModel is null)
+            return new QuestionBaseModel(typeof(T).Name);
+        
+        var nonGenericModel = new QuestionBaseModel(genericModel.QuestionType)
+        {
+            Id = genericModel.Id,
+            Description = genericModel.Description,
+            Title = genericModel.Title,
+            SecondsToAnswer = genericModel.SecondsToAnswer,
+            Order = genericModel.Order,
+            Weight = genericModel.Weight,
+            TestIds = genericModel.TestIds,
+            SerializedQuestionContent = JsonSerializer.Serialize(genericModel.QuestionContent)
+        };
+
+        return nonGenericModel;
+    }
 }
 
 public class QuestionBaseModel<T> : QuestionBaseModel where T : class
 {
+    private T? _questionContent;
     public QuestionBaseModel(T questionContent) : base(typeof(T).Name)
     {
+        SerializedQuestionContent = JsonSerializer.Serialize(questionContent);
         QuestionContent = questionContent;
     }
-    public T QuestionContent { get; set; }
+
+    public T? QuestionContent
+    {
+        get => _questionContent;
+        set
+        {
+            SerializedQuestionContent = JsonSerializer.Serialize(value);
+            _questionContent = value;
+        }
+    }
 }

@@ -1,3 +1,4 @@
+@using Decenea.WebApp.Models.QuestionTypes
 @inherits QuestionBaseComponent
 
 <MudGrid>
@@ -6,7 +7,8 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          @bind-Value="MultipleYesOrNoQuestionModel.Description"
+                          Value="MultipleYesOrNoQuestionModel?.Description"
+                          ValueChanged="@(s => { if (MultipleYesOrNoQuestionModel is not null) { MultipleYesOrNoQuestionModel.Description = s; } })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>
@@ -23,7 +25,7 @@
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(MultipleYesOrNoQuestionModel)">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else

@@ -1,4 +1,5 @@
 
+@using Decenea.WebApp.Models.QuestionTypes
 @inherits QuestionBaseComponent
 
 <MudGrid>
@@ -7,7 +8,8 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          @bind-Value="DropdownQuestionModel.Description"
+                          Value="DropdownQuestionModel?.Description"
+                          ValueChanged="@(s => { if (DropdownQuestionModel is not null) { DropdownQuestionModel.Description = s; } })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>
@@ -24,7 +26,7 @@
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(DropdownQuestionModel)">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(DropdownQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else

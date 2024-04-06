@@ -29,10 +29,10 @@
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
-                                       OnClick="async () => { if (context.Item.Id is not null) {await RemoveTest(context.Item.Id);} }"/>
+                                       OnClick="@(async () => { if (context.Item.Id is not null) {await RemoveTest(context.Item.Id);} })"/>
                         <MudIconButton Icon="@Icons.Material.Filled.Description"
                                        Color="Color.Primary"
-                                       OnClick="() => { if (context.Item.Id is not null) { TakeTest(context.Item.Id);} }"/>
+                                       OnClick="@(() => { if (context.Item.Id is not null) { TakeTest(context.Item.Id);} })"/>
                     </CellTemplate>
                 </TemplateColumn>
                 <PropertyColumn

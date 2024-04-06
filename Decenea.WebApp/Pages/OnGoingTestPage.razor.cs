@@ -15,7 +15,8 @@ public partial class OnGoingTestPage : IDisposable
     [Parameter] public string? TestId { get; set; }
     private Timer Timer { get; set; }
     private List<QuestionBaseModel> QuestionBaseModels { get; set; } = new List<QuestionBaseModel>();
-    private int ActiveQuestion = 0;
+    private int ActiveQuestionIndex = 0;
+    private QuestionBaseModel ActiveQuestion { get; set; }
     private int TimeRemaining => TestContainer.OngoingTest.MinutesToComplete*60 - ElapsedTime;
     private int ElapsedTime { get; set; }
     TimeSpan TimeSpan => TimeSpan.FromSeconds(TimeRemaining);
@@ -25,7 +26,7 @@ public partial class OnGoingTestPage : IDisposable
     {
         TestContainer.OngoingTest.StartingTime = DateTime.Now; 
         StateHasChanged();
-        Timer = new Timer(OnTimerElapsed, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+        // Timer = new Timer(OnTimerElapsed, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
     private async void OnTimerElapsed(object state)
     {
@@ -43,12 +44,12 @@ public partial class OnGoingTestPage : IDisposable
     
     public void Dispose()
     {
-        Timer?.Dispose();
+        Timer.Dispose();
     }
     
     public override async Task SetParametersAsync(ParameterView parameters)
     {
-        base.SetParametersAsync(parameters);
+        await base.SetParametersAsync(parameters);
         var keys = await IndexedDb.GetKeysAsync();
         if (keys.IsSuccess)
         {
@@ -100,23 +101,26 @@ public partial class OnGoingTestPage : IDisposable
             }
 
             QuestionBaseModels = TestContainer.OngoingTest.QuestionBaseModels;
+            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
             StateHasChanged();
         }
     }
 
     private void NextQuestion()
     {
-        if (ActiveQuestion + 1 < QuestionBaseModels.Count)
+        if (ActiveQuestionIndex + 1 < QuestionBaseModels.Count)
         {
-            ActiveQuestion++;
+            ActiveQuestionIndex++;
+            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
         }
     }
 
     private void PreviousQuestion()
     {
-        if (ActiveQuestion - 1 >= 0)
+        if (ActiveQuestionIndex - 1 >= 0)
         {
-            ActiveQuestion--;
+            ActiveQuestionIndex--;
+            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
         }
     }
 }

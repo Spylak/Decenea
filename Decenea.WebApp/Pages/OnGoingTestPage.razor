@@ -1,6 +1,6 @@
 @attribute [Route($"/{Routes.OnGoingTest}/{{testId}}")]
 <PageTitle>OnGoingTestPage</PageTitle>
-<h3>OnGoingTestPage</h3>
+
 @if (TestContainer.OngoingTest.StartingTime > DateTime.Now)
 {
     <h4>The test is starting in @((TestContainer.OngoingTest.StartingTime - DateTime.Now).ToString("mm:ss")))</h4>
@@ -25,14 +25,14 @@ else
             <MudItem xs="12">
                 <QuestionTypesComponent Test="TestContainer.OngoingTest"
                                         PresentationOnly="true"
-                                        Question="QuestionBaseModels[ActiveQuestion]"/>
+                                        Question="ActiveQuestion"/>
             </MudItem>
             <MudItem >
-                @if (ActiveQuestion + 1 < QuestionBaseModels.Count)
+                @if (ActiveQuestionIndex + 1 < QuestionBaseModels.Count)
                 {
                     <MudButton OnClick="NextQuestion">Next</MudButton>
                 }
-                @if (ActiveQuestion - 1 >= 0)
+                @if (ActiveQuestionIndex - 1 >= 0)
                 {
                     <MudButton OnClick="PreviousQuestion">Previous</MudButton>
                 }

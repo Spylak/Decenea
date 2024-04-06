@@ -7,10 +7,17 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class MultipleYesOrNoQuestion
 {
     [Parameter]
-    public QuestionBaseModel<MultipleYesOrNo> MultipleYesOrNoQuestionModel { get; set; } =
-        new QuestionBaseModel<MultipleYesOrNo>(new MultipleYesOrNo());
-    [Parameter] public EventCallback<QuestionBaseModel<MultipleYesOrNo>> MultipleYesOrNoQuestionModelChanged { get; set; }
-    
+    public QuestionBaseModel? MultipleYesOrNoQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> MultipleYesOrNoQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (MultipleYesOrNoQuestionBaseModel is not null)
+        {
+            MultipleYesOrNoQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleYesOrNo>(MultipleYesOrNoQuestionBaseModel);
+        }
+    }
     private class Field
     {
         public string Input { get; set; } = "";
@@ -22,6 +29,9 @@ public partial class MultipleYesOrNoQuestion
 
     protected override void OnInitialized()
     {
+        if(MultipleYesOrNoQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = MultipleYesOrNoQuestionModel.QuestionContent.SubQuestions.Select(i => new Field()
         {
             Input = "",
@@ -32,18 +42,21 @@ public partial class MultipleYesOrNoQuestion
     {
         MultipleYesOrNoQuestionModel = SampleHelper.GetMultipleYesOrNoQuestionSample();
         PopulateFields();
-        await MultipleYesOrNoQuestionModelChanged.InvokeAsync(MultipleYesOrNoQuestionModel);
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel));
     }
     
     private async Task Reset()
     {
         MultipleYesOrNoQuestionModel = new QuestionBaseModel<MultipleYesOrNo>(new MultipleYesOrNo());
         PopulateFields();
-        await MultipleYesOrNoQuestionModelChanged.InvokeAsync(MultipleYesOrNoQuestionModel);
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel));
     }
 
     private void PopulateFields()
     {
+        if(MultipleYesOrNoQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = MultipleYesOrNoQuestionModel.QuestionContent.SubQuestions.Select(i => new Field()
         {
             Input = "",

@@ -7,12 +7,26 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class OrderingQuestion
 {
     [Parameter]
-    public QuestionBaseModel<Ordering> OrderingQuestionModel { get; set; } = new QuestionBaseModel<Ordering>(new Ordering());
-    [Parameter] public EventCallback<QuestionBaseModel<Ordering>> OrderingQuestionModelChanged { get; set; }
+    public QuestionBaseModel? OrderingQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> OrderingQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<Ordering>? OrderingQuestionModel { get; set; }
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (OrderingQuestionBaseModel is not null)
+        {
+            OrderingQuestionModel = QuestionBaseModel.ConvertToGeneric<Ordering>(OrderingQuestionBaseModel);
+        }
+    }
+
     private string Choice { get; set; } = "";
     
     private void OnClickRight(string name)
     {
+        if(OrderingQuestionModel?.QuestionContent is null)
+            return;
+        
         var choice = OrderingQuestionModel.QuestionContent.Choices.FirstOrDefault(i => i.Text == name);
         if(choice is null)
             return;
@@ -21,6 +35,9 @@ public partial class OrderingQuestion
     } 
     private void OnClickLeft(string name)
     {
+        if(OrderingQuestionModel?.QuestionContent is null)
+            return;
+        
         var choice = OrderingQuestionModel.QuestionContent.Choices.FirstOrDefault(i => i.Text == name);
         if(choice is null)
             return;
@@ -29,6 +46,9 @@ public partial class OrderingQuestion
     }  
     private void OnClickUp(string name)
     {
+        if(OrderingQuestionModel?.QuestionContent is null)
+            return;
+        
         var item = OrderingQuestionModel.QuestionContent.Choices.FirstOrDefault(i => i.Text == name);
         if(item is null)
             return;
@@ -36,6 +56,9 @@ public partial class OrderingQuestion
     }  
     private void OnClickDown(string name)
     {
+        if(OrderingQuestionModel?.QuestionContent is null)
+            return;
+        
         var item = OrderingQuestionModel.QuestionContent.Choices.FirstOrDefault(i => i.Text == name);
         if(item is null)
             return;
@@ -44,22 +67,30 @@ public partial class OrderingQuestion
     private async Task CreateSample()
     {
         OrderingQuestionModel = SampleHelper.GetOrderingQuestionSample();
-        await OrderingQuestionModelChanged.InvokeAsync(OrderingQuestionModel);
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingQuestionModel));
     }
     private async Task Reset()
     {
         OrderingQuestionModel = new QuestionBaseModel<Ordering>(new Ordering());
-        await OrderingQuestionModelChanged.InvokeAsync(OrderingQuestionModel);
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingQuestionModel));
     }
     
     private void RemoveChoice(Ordering.Choice choice)
     {
+        if(OrderingQuestionModel?.QuestionContent is null)
+            return;
+        
         OrderingQuestionModel.QuestionContent.Choices.Remove(choice);
     }
     
     private void AddChoice()
     {
-        var choices = OrderingQuestionModel.QuestionContent.Choices;
+        if (OrderingQuestionModel?.QuestionContent is null)
+        {
+            OrderingQuestionModel = new QuestionBaseModel<Ordering>(new Ordering());
+        }
+        
+        var choices = OrderingQuestionModel.QuestionContent!.Choices;
         if (choices.Select(i => i.Text).Contains(Choice))
         {
             // There is already a choice like this

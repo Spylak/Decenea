@@ -7,10 +7,22 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class MultipleChoiceSingleQuestion
 {
     [Parameter]
-    public QuestionBaseModel<MultipleChoiceSingle> MultipleChoiceSingleQuestionModel { get; set; } =
-        new QuestionBaseModel<MultipleChoiceSingle>(new MultipleChoiceSingle());
-    [Parameter] public EventCallback<QuestionBaseModel<MultipleChoiceSingle>> MultipleChoiceSingleQuestionModelChanged { get; set; }
-    
+    public QuestionBaseModel? MultipleChoiceSingleQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> MultipleChoiceSingleQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<MultipleChoiceSingle>? MultipleChoiceSingleQuestionModel { get; set; }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (MultipleChoiceSingleQuestionBaseModel is not null)
+        {
+            MultipleChoiceSingleQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel);
+            Fields = MultipleChoiceSingleQuestionModel.QuestionContent?.SubQuestions.Select(i => new Field()
+            {
+                Input = "",
+                SubQuestion = i
+            }).ToList() ?? new List<Field>();
+        }
+    }
     private class Field
     {
         public string Input { get; set; } = "";
@@ -20,28 +32,19 @@ public partial class MultipleChoiceSingleQuestion
     }
 
     private List<Field> Fields { get; set; } = new List<Field>();
-
-    protected override void OnInitialized()
-    {
-        Fields = MultipleChoiceSingleQuestionModel.QuestionContent.SubQuestions.Select(i => new Field()
-        {
-            Input = "",
-            SubQuestion = i
-        }).ToList();
-    }
     
     private async Task CreateSample()
     {
         MultipleChoiceSingleQuestionModel = SampleHelper.GetMultipleChoiceSingleQuestionSample();
         PopulateFields();
-        await MultipleChoiceSingleQuestionModelChanged.InvokeAsync(MultipleChoiceSingleQuestionModel);
+        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel));
     }
     
     private async Task Reset()
     {
         MultipleChoiceSingleQuestionModel = new QuestionBaseModel<MultipleChoiceSingle>(new MultipleChoiceSingle());
         PopulateFields();
-        await MultipleChoiceSingleQuestionModelChanged.InvokeAsync(MultipleChoiceSingleQuestionModel);
+        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel));
     }
 
     private void RemoveChoices(Field item)
@@ -53,6 +56,9 @@ public partial class MultipleChoiceSingleQuestion
 
     private void PopulateFields()
     {
+        if(MultipleChoiceSingleQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = MultipleChoiceSingleQuestionModel.QuestionContent.SubQuestions.Select(i => new Field()
         {
             Input = "",

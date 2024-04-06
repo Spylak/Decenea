@@ -7,9 +7,17 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class DropdownQuestion
 {
     [Parameter]
-    public QuestionBaseModel<Dropdown> DropdownQuestionModel { get; set; } = new QuestionBaseModel<Dropdown>(new Dropdown());
-    [Parameter] public EventCallback<QuestionBaseModel<Dropdown>> DropdownQuestionModelChanged { get; set; }
-    
+    public QuestionBaseModel? DropdownQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> DropdownQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<Dropdown>? DropdownQuestionModel { get; set; }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (DropdownQuestionBaseModel is not null)
+        {
+            DropdownQuestionModel = QuestionBaseModel.ConvertToGeneric<Dropdown>(DropdownQuestionBaseModel);
+        }
+    }
     private class Field
     {
         public string Input { get; set; } = "";
@@ -22,18 +30,21 @@ public partial class DropdownQuestion
     {
         DropdownQuestionModel = SampleHelper.GetDropdownQuestionSample();
         PopulateFields();
-        await DropdownQuestionModelChanged.InvokeAsync(DropdownQuestionModel);
+        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DropdownQuestionModel));
     }
     
     private async Task Reset()
     {
         DropdownQuestionModel = new QuestionBaseModel<Dropdown>(new Dropdown());
         PopulateFields();
-        await DropdownQuestionModelChanged.InvokeAsync(DropdownQuestionModel);
+        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DropdownQuestionModel));
     }
 
     private void PopulateFields()
     {
+        if(DropdownQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = DropdownQuestionModel.QuestionContent.SubQuestions.Select( i => new Field()
         {
             Input = "",

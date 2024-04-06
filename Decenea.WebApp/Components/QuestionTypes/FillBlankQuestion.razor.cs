@@ -10,8 +10,17 @@ public partial class FillBlankQuestion
 {
 
     [Parameter]
-    public QuestionBaseModel<FillBlank> FillBlankQuestionModel { get; set; } = new QuestionBaseModel<FillBlank>(new FillBlank());
-    [Parameter] public EventCallback<QuestionBaseModel<FillBlank>> FillBlankQuestionModelChanged { get; set; }
+    public QuestionBaseModel? FillBlankQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> FillBlankQuestionBaseModelChanged { get; set; }
+    private QuestionBaseModel<FillBlank>? FillBlankQuestionModel { get; set; }
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        await base.SetParametersAsync(parameters);
+        if (FillBlankQuestionBaseModel is not null)
+        {
+            FillBlankQuestionModel = QuestionBaseModel.ConvertToGeneric<FillBlank>(FillBlankQuestionBaseModel);
+        }
+    }
     private string DynamicQuestion { get; set; } = "";
     private List<FillBlank.SpaceOption> Fields { get; set; } = new List<FillBlank.SpaceOption>();
     private string SpecialChars { get; set; } = "_____";
@@ -20,6 +29,9 @@ public partial class FillBlankQuestion
     
     private void UpdateOptions(string question)
     {
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         FillBlankQuestionModel.Description = question;
         FillBlankQuestionModel.QuestionContent.Options = new List<FillBlank.SpaceOption>();
         QuestionText = new List<string>();
@@ -56,23 +68,32 @@ public partial class FillBlankQuestion
     private async Task CreateSample()
     {
         FillBlankQuestionModel = SampleHelper.GetFillBlankQuestionSample();
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankQuestionModelChanged.InvokeAsync(FillBlankQuestionModel);
+        await FillBlankQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankQuestionModel));
     }
     
     private async Task Reset()
     {
         FillBlankQuestionModel = new QuestionBaseModel<FillBlank>(new FillBlank());
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankQuestionModelChanged.InvokeAsync(FillBlankQuestionModel);
+        await FillBlankQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankQuestionModel));
     }
     
     protected override void OnInitialized()
     {
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
         PopulateDynamicQuestion();
@@ -80,6 +101,9 @@ public partial class FillBlankQuestion
 
     private void PopulateDynamicQuestion()
     {
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         DynamicQuestion = "";
         QuestionText = new List<string>();
         QuestionText = FillBlankQuestionModel.Description.Split(SpecialChars).ToList();
@@ -98,6 +122,9 @@ public partial class FillBlankQuestion
     
     private void OnValueChange(string args,int j)
     {
+        if(FillBlankQuestionModel?.QuestionContent is null)
+            return;
+        
         var option = FillBlankQuestionModel.QuestionContent.Options.FirstOrDefault(i => i.SpaceNo == j);
         if (option is not null)
             option.Text = args;
