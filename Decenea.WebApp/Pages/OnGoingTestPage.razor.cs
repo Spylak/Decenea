@@ -13,7 +13,7 @@ public partial class OnGoingTestPage : IDisposable
     [Inject] private IndexedDb IndexedDb { get; set; }
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     [Parameter] public string? TestId { get; set; }
-    private Timer Timer { get; set; }
+    private Timer? Timer { get; set; }
     private List<QuestionBaseModel> QuestionBaseModels { get; set; } = new List<QuestionBaseModel>();
     private int ActiveQuestionIndex = 0;
     private QuestionBaseModel ActiveQuestion { get; set; }
@@ -32,19 +32,18 @@ public partial class OnGoingTestPage : IDisposable
     {
         if (TimeRemaining <= 0)
         {
-            Timer.Dispose();
+            Timer?.Dispose();
         }
         else
         {
             ElapsedTime++;
-            Console.WriteLine(TimeRemaining);
             await InvokeAsync(StateHasChanged);
         }
     }
     
     public void Dispose()
     {
-        Timer.Dispose();
+        Timer?.Dispose();
     }
     
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -104,6 +103,12 @@ public partial class OnGoingTestPage : IDisposable
             ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
             StateHasChanged();
         }
+    }
+
+    private void UpdateActiveQuestion(QuestionBaseModel activeQuestion)
+    {
+        ActiveQuestion = activeQuestion;
+        QuestionBaseModels[ActiveQuestionIndex] = activeQuestion;
     }
 
     private void NextQuestion()

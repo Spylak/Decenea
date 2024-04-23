@@ -15,7 +15,7 @@ public partial class MultipleChoiceSingleQuestion
         await base.SetParametersAsync(parameters);
         if (MultipleChoiceSingleQuestionBaseModel is not null)
         {
-            MultipleChoiceSingleQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel);
+            MultipleChoiceSingleQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel);
             Fields = MultipleChoiceSingleQuestionModel.QuestionContent?.SubQuestions.Select(i => new Field()
             {
                 Input = "",
@@ -37,23 +37,29 @@ public partial class MultipleChoiceSingleQuestion
     {
         MultipleChoiceSingleQuestionModel = SampleHelper.GetMultipleChoiceSingleQuestionSample();
         PopulateFields();
-        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel));
+        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceSingleQuestionModel));
     }
     
-    private async Task Reset()
+    private void Reset()
     {
         MultipleChoiceSingleQuestionModel = new QuestionBaseModel<MultipleChoiceSingle>(new MultipleChoiceSingle());
+        MultipleChoiceSingleQuestionModel.Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         PopulateFields();
-        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel));
     }
 
-    private void RemoveChoices(Field item)
+    private async Task RemoveChoices(Field item)
     {
         var remaining = item.SubQuestion.Choices.Except(item.SelectedChoices);
         item.SubQuestion.Choices = remaining.ToList();
         item.SelectedChoices = new List<string>();
+        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceSingleQuestionModel));
     }
 
+    private async Task ChoiceChanged()
+    {
+        await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceSingleQuestionModel));
+    }
+    
     private void PopulateFields()
     {
         if(MultipleChoiceSingleQuestionModel?.QuestionContent is null)
@@ -74,7 +80,6 @@ public partial class MultipleChoiceSingleQuestion
             SubQuestion = new MultipleChoiceSingle.SubQuestion()
             {
                 Text = "New",
-                Picked = "",
                 Choices = new List<string>()
             }
         });

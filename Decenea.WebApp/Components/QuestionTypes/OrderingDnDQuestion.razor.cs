@@ -14,17 +14,13 @@ public partial class OrderingDnDQuestion
     private QuestionBaseModel<OrderingDragAndDrop>? OrderingDnDQuestionModel { get; set; }
 
     private bool Rerender { get; set; } = false;
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        await base.SetParametersAsync(parameters);
-        if (OrderingDnDQuestionBaseModel is not null)
-        {
-            OrderingDnDQuestionModel = QuestionBaseModel.ConvertToGeneric<OrderingDragAndDrop>(OrderingDnDQuestionBaseModel);
-        }
-    }
     
     protected override async Task OnParametersSetAsync()
     {
+        if (OrderingDnDQuestionBaseModel is not null)
+        {
+            OrderingDnDQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<OrderingDragAndDrop>(OrderingDnDQuestionBaseModel);
+        }
         await ValueChanged();
     }
 
@@ -45,14 +41,14 @@ public partial class OrderingDnDQuestion
     private async Task CreateSample()
     {
         OrderingDnDQuestionModel = SampleHelper.GetOrderingDnDQuestionSample();
-        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingDnDQuestionModel));
+        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingDnDQuestionModel));
         await ValueChanged();
     }
     
     private async Task Reset()
     {
-        OrderingDnDQuestionModel = null;
-        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingDnDQuestionModel));
+        OrderingDnDQuestionModel = new QuestionBaseModel<OrderingDragAndDrop>(new OrderingDragAndDrop());
+        OrderingDnDQuestionModel.Id = OrderingDnDQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         await ValueChanged();
     }
 
@@ -72,7 +68,7 @@ public partial class OrderingDnDQuestion
         await ValueChanged();
     }
     
-    private void ItemUpdated(MudItemDropInfo<OrderingDragAndDrop.DropItem> dropItem)
+    private async Task ItemUpdated(MudItemDropInfo<OrderingDragAndDrop.DropItem> dropItem)
     {
         if(OrderingDnDQuestionModel?.QuestionContent is null || dropItem.Item is null)
             return;
@@ -85,5 +81,6 @@ public partial class OrderingDnDQuestion
             _ => 0,
         };
         OrderingDnDQuestionModel.QuestionContent.Choices.UpdateOrder(dropItem, item => item.Order, indexOffset);
+        await OrderingDnDQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingDnDQuestionModel));
     }
 }

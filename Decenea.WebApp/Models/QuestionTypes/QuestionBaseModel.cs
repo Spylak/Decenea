@@ -18,7 +18,7 @@ public class QuestionBaseModel
     public string QuestionType { get; init; }
     public string SerializedQuestionContent { get; set; } = string.Empty;
     public List<int>? TestIds { get; set; }
-    public static QuestionBaseModel<T> ConvertToGeneric<T>(QuestionBaseModel nonGenericModel) where T : class
+    public static QuestionBaseModel<T> ConvertToGenericBaseModel<T>(QuestionBaseModel nonGenericModel) where T : class
     {
         T questionContent = JsonSerializer.Deserialize<T>(nonGenericModel.SerializedQuestionContent)!;
 
@@ -41,7 +41,7 @@ public class QuestionBaseModel
         return genericModel;
     }
     
-    public static QuestionBaseModel ConvertToNonGeneric<T>(QuestionBaseModel<T>? genericModel) where T : class
+    public static QuestionBaseModel ConvertToNonGenericBaseModel<T>(QuestionBaseModel<T>? genericModel) where T : class
     {
         if (genericModel is null)
             return new QuestionBaseModel(typeof(T).Name);
@@ -64,14 +64,14 @@ public class QuestionBaseModel
 
 public class QuestionBaseModel<T> : QuestionBaseModel where T : class
 {
-    private T? _questionContent;
+    private T _questionContent;
     public QuestionBaseModel(T questionContent) : base(typeof(T).Name)
     {
         SerializedQuestionContent = JsonSerializer.Serialize(questionContent);
         QuestionContent = questionContent;
     }
 
-    public T? QuestionContent
+    public T QuestionContent
     {
         get => _questionContent;
         set

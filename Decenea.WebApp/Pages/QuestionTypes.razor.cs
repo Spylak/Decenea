@@ -2,35 +2,35 @@ using Microsoft.AspNetCore.Components;
 using Decenea.Common.Constants;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models.QuestionTypes;
-using Decenea.WebApp.Services;
 using Decenea.WebApp.Services.IService;
 
 namespace Decenea.WebApp.Pages;
 
 public partial class QuestionTypes
 {
+    [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     int activeIndex = 0;
 
-    private QuestionBaseModel<DragAndDrop> DragAndDrop;
+    private QuestionBaseModel DragAndDrop { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<DragAndDrop>(SampleHelper.GetDragAndDropQuestionSample());
     
-    private QuestionBaseModel<OrderingDragAndDrop> OrderingDnDQuestionModel;
+    private QuestionBaseModel OrderingDnDQuestionModel { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<OrderingDragAndDrop>(SampleHelper.GetOrderingDnDQuestionSample());
     
-    private QuestionBaseModel<FillBlank> FillBlank;
+    private QuestionBaseModel FillBlank { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<FillBlank>(SampleHelper.GetFillBlankQuestionSample());
 
-    private QuestionBaseModel<Ordering> OrderingQuestionModel;
+    private QuestionBaseModel OrderingQuestionModel { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<Ordering>(SampleHelper.GetOrderingQuestionSample());
 
-    private QuestionBaseModel<MultipleYesOrNo> MultipleYesOrNo;
+    private QuestionBaseModel MultipleYesOrNo { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleYesOrNo>(SampleHelper.GetMultipleYesOrNoQuestionSample());
 
-    private QuestionBaseModel<MultipleChoice> MultipleChoice;
+    private QuestionBaseModel MultipleChoice { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoice>(SampleHelper.GetMultipleChoiceQuestionSample());
 
-    private QuestionBaseModel<Dropdown> Dropdown;
+    private QuestionBaseModel Dropdown { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<Dropdown>(SampleHelper.GetDropdownQuestionSample());
 
-    private QuestionBaseModel<MultipleChoiceSingle> MultipleChoiceSingle;
-    private QuestionBaseModel<FillBlankDropdown> FillBlankDropdownQuestion;
+    private QuestionBaseModel MultipleChoiceSingle { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoiceSingle>(SampleHelper.GetMultipleChoiceSingleQuestionSample());
+    private QuestionBaseModel FillBlankDropdownQuestion { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<FillBlankDropdown>(SampleHelper.GetFillBlankDropdownQuestionSample());
 
     private Dictionary<string, bool> Visibility = new Dictionary<string, bool>()
     {
-        { QuestionTypeValues.DragAndDrop, false },
+        { QuestionTypeValues.DragAndDrop, true },
         { QuestionTypeValues.OrderingDragAndDrop, false },
         { QuestionTypeValues.Dropdown, false },
         { QuestionTypeValues.FillBlank, false },
@@ -41,20 +41,6 @@ public partial class QuestionTypes
         { QuestionTypeValues.Ordering, false }
     };
 
-    protected override void OnInitialized()
-    {
-        Visibility["DragAndDrop"] = true;
-        FillBlankDropdownQuestion = SampleHelper.GetFillBlankDropdownQuestionSample();
-        FillBlank = SampleHelper.GetFillBlankQuestionSample();
-        MultipleChoiceSingle = SampleHelper.GetMultipleChoiceSingleQuestionSample();
-        Dropdown = SampleHelper.GetDropdownQuestionSample();
-        MultipleChoice = SampleHelper.GetMultipleChoiceQuestionSample();
-        MultipleYesOrNo = SampleHelper.GetMultipleYesOrNoQuestionSample();
-        OrderingQuestionModel = SampleHelper.GetOrderingQuestionSample();
-        OrderingDnDQuestionModel = SampleHelper.GetOrderingDnDQuestionSample();
-        DragAndDrop = SampleHelper.GetDragAndDropQuestionSample();
-    }
-
     private void OpenOverlay(string type)
     {
         foreach (var item in Visibility.Keys)
@@ -63,5 +49,6 @@ public partial class QuestionTypes
         }
 
         Visibility[type] = true;
+        StateHasChanged();
     }
 }

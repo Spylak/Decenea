@@ -10,15 +10,15 @@ public partial class MultipleChoiceQuestion
     public QuestionBaseModel? MultipleChoiceQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<QuestionBaseModel> MultipleChoiceQuestionBaseModelChanged { get; set; }
     private QuestionBaseModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; }
-
-    public override async Task SetParametersAsync(ParameterView parameters)
+    protected override void OnParametersSet()
     {
-        await base.SetParametersAsync(parameters);
         if (MultipleChoiceQuestionBaseModel is not null)
         {
-            MultipleChoiceQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleChoice>(MultipleChoiceQuestionBaseModel);
+            MultipleChoiceQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoice>(MultipleChoiceQuestionBaseModel);
+            PopulateFields();
         }
     }
+
     private class Field
     {
         public string Input { get; set; } = "";
@@ -57,14 +57,14 @@ public partial class MultipleChoiceQuestion
     {
         MultipleChoiceQuestionModel = SampleHelper.GetMultipleChoiceQuestionSample();
         PopulateFields();
-        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceQuestionModel));
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceQuestionModel));
     }
     
-    private async Task Reset()
+    private void Reset()
     {
         MultipleChoiceQuestionModel = new QuestionBaseModel<MultipleChoice>(new MultipleChoice());
+        MultipleChoiceQuestionModel.Id = MultipleChoiceQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         PopulateFields();
-        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceQuestionModel));
     }
     
     private void RemoveChoices(Field item)
@@ -92,6 +92,11 @@ public partial class MultipleChoiceQuestion
     private void RemoveField(Field field)
     {
         Fields.Remove(field);
+    }
+
+    private async Task CheckChanged()
+    {
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceQuestionModel));
     }
     
     private void AddChoice(Field field,string input)

@@ -13,7 +13,7 @@
                           Label="Question"/>
         </MudItem>
         <MudItem xs="12" sm="4">
-            <MudTextField @bind-Value="Choice" 
+            <MudTextField @bind-Value="Choice"
                           Label="Choice"
                           Variant="Variant.Outlined"
                           Adornment="Adornment.End"
@@ -27,12 +27,12 @@
             <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Reset">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(OrderingQuestionModel))">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel))">Save</MudButton>
         </MudItem>
-        foreach (var choice in OrderingQuestionModel?.QuestionContent?.Choices ?? [])
+        foreach (var choice in OrderingQuestionModel?.QuestionContent.Choices ?? [])
         {
             <MudItem xs="12" sm="4" Style="text-align: end">
                 <MudTextField @bind-Value="choice.Text"
@@ -51,29 +51,23 @@
             </MudField>
         </MudItem>
     }
-    <MudItem xs="12">
         <MudItem xs="6">
             <MudGrid>
-                @foreach (var item in OrderingQuestionModel?.QuestionContent?.Choices.OrderBy(i => i.Order) ?? Enumerable.Empty<Ordering.Choice>())
+                @foreach (var item in OrderingQuestionModel?.QuestionContent.Choices.Where(i => !i.Active).OrderBy(i => i.Order) ?? Enumerable.Empty<Ordering.Choice>())
                 {
-                    if (!item.Active)
-                    {
                         <MudItem xs="12">
                             <div>
                                 <MudFab Size="Size.Small" EndIcon="@Icons.Material.Filled.ArrowForward" OnClick="@(() => OnClickRight(item.Text))"></MudFab>
                                 @item.Text
                             </div>
                         </MudItem>
-                    }
                 }
             </MudGrid>
         </MudItem>
         <MudItem xs="6">
             <MudGrid>
-                @foreach (var item in OrderingQuestionModel?.QuestionContent?.Choices.OrderBy(i => i.Order) ?? Enumerable.Empty<Ordering.Choice>())
+                @foreach (var item in OrderingQuestionModel?.QuestionContent.Choices.Where(i => i.Active).OrderBy(i => i.Order) ?? Enumerable.Empty<Ordering.Choice>())
                 {
-                    if (item.Active && OrderingQuestionModel?.QuestionContent is not null)
-                    {
                         <MudItem xs="12">
                             <div>
                                 <MudFab OnClick="@(() => OnClickLeft(item.Text))" Size="Size.Small" EndIcon="@Icons.Material.Filled.ArrowBack"></MudFab>
@@ -88,11 +82,9 @@
                                 }
                             </div>
                         </MudItem>
-                    }
                 }
             </MudGrid>
         </MudItem>
-    </MudItem>
 </MudGrid>
 
 @code {

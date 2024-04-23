@@ -5,7 +5,8 @@
         @if (!PresentationOnly)
         {
             <MudItem xs="12" sm="6">
-                <MudSelect T="string" Value="VisibleQuestionType"
+                <MudSelect T="string" 
+                           Value="VisibleQuestionType"
                            ValueChanged="@(choice => ChangeType(choice))"
                            Variant="Variant.Outlined"
                            AnchorOrigin="Origin.BottomCenter">
@@ -23,14 +24,16 @@
         <MudItem xs="12">
             @if (VisibleQuestionType == QuestionTypeValues.FillBlank)
             {
-                <FillBlankQuestion @bind-FillBlankQuestionBaseModel="Question"
+                <FillBlankQuestion FillBlankQuestionBaseModel="Question"
+                                   FillBlankQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)"
                            SaveCallback="SaveQuestionToTest"
                            ReadOnly="@(PresentationOnly || PreviewMode)">
                 </FillBlankQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.FillBlankDropdown)
             {
-                <FillBlankDropdownQuestion @bind-FillBlankDropdownQuestionBaseModel="Question"
+                <FillBlankDropdownQuestion FillBlankDropdownQuestionBaseModel="Question"
+                                           FillBlankDropdownQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)"
                                    SaveCallback="SaveQuestionToTest"
                                    ReadOnly="@(PresentationOnly || PreviewMode)">
                 </FillBlankDropdownQuestion>
@@ -39,49 +42,56 @@
             {
                 <DragAndDropQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                              SaveCallback="SaveQuestionToTest"
-                             @bind-DragAndDropQuestionBaseModel="Question">
+                             DragAndDropQuestionBaseModel="Question"
+                             DragAndDropQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </DragAndDropQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.Dropdown)
             {
                 <DropdownQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                           SaveCallback="SaveQuestionToTest"
-                          @bind-DropdownQuestionBaseModel="Question">
+                          DropdownQuestionBaseModel="Question"
+                          DropdownQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </DropdownQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleChoice)
             {
                 <MultipleChoiceQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                 SaveCallback="SaveQuestionToTest"
-                                @bind-MultipleChoiceQuestionBaseModel="Question">
+                                MultipleChoiceQuestionBaseModel="Question"
+                                MultipleChoiceQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </MultipleChoiceQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleYesOrNo)
             {
                 <MultipleYesOrNoQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                  SaveCallback="SaveQuestionToTest"
-                                 @bind-MultipleYesOrNoQuestionBaseModel="Question">
+                                 MultipleYesOrNoQuestionBaseModel="Question"
+                                 MultipleYesOrNoQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </MultipleYesOrNoQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.Ordering)
             {
                 <OrderingQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                           SaveCallback="SaveQuestionToTest"
-                          @bind-OrderingQuestionBaseModel="Question">
+                          OrderingQuestionBaseModel="Question"
+                          OrderingQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </OrderingQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.MultipleChoiceSingle)
             {
                 <MultipleChoiceSingleQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                                       SaveCallback="SaveQuestionToTest"
-                                      @bind-MultipleChoiceSingleQuestionBaseModel="Question">
+                                      MultipleChoiceSingleQuestionBaseModel="Question"
+                                      MultipleChoiceSingleQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </MultipleChoiceSingleQuestion>
             }
             else if (VisibleQuestionType == QuestionTypeValues.OrderingDragAndDrop)
             {
                 <OrderingDnDQuestion ReadOnly="@(PresentationOnly || PreviewMode)"
                              SaveCallback="SaveQuestionToTest"
-                             @bind-OrderingDnDQuestionBaseModel="Question">
+                             OrderingDnDQuestionBaseModel="Question"
+                             OrderingDnDQuestionBaseModelChanged="async (question) => await UpdateQuestion(question)">
                 </OrderingDnDQuestion>
             }
         </MudItem>

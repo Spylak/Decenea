@@ -25,16 +25,18 @@ else
             <MudItem xs="12">
                 <QuestionTypesComponent Test="TestContainer.OngoingTest"
                                         PresentationOnly="true"
-                                        Question="ActiveQuestion"/>
+                                        Question="ActiveQuestion"
+                                        QuestionChanged="(question) => UpdateActiveQuestion(question)"/>
             </MudItem>
-            <MudItem >
-                @if (ActiveQuestionIndex + 1 < QuestionBaseModels.Count)
-                {
-                    <MudButton OnClick="NextQuestion">Next</MudButton>
-                }
+            <MudItem xs="12">
                 @if (ActiveQuestionIndex - 1 >= 0)
                 {
                     <MudButton OnClick="PreviousQuestion">Previous</MudButton>
+                }
+                <MudSpacer/>
+                @if (ActiveQuestionIndex + 1 < QuestionBaseModels.Count)
+                {
+                    <MudButton OnClick="NextQuestion">Next</MudButton>
                 }
             </MudItem>
         }

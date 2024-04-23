@@ -22,6 +22,9 @@ public class OrderingDragAndDrop
     }
     public class DropItem
     {
+        public DropItem()
+        {
+        }
         public DropItem(int showOrder)
         {
             Order = showOrder;

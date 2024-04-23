@@ -12,45 +12,38 @@ public partial class DragAndDropQuestion
     [Parameter] public EventCallback<QuestionBaseModel> DragAndDropQuestionBaseModelChanged { get; set; }
     private QuestionBaseModel<DragAndDrop>? DragAndDropQuestionModel { get; set; }
 
-    protected override void OnInitialized()
-    {
-        if (DragAndDropQuestionBaseModel is not null)
-        {
-            DragAndDropQuestionModel = QuestionBaseModel.ConvertToGeneric<DragAndDrop>(DragAndDropQuestionBaseModel);
-        }
-        else
-        {
-            DragAndDropQuestionModel = new QuestionBaseModel<DragAndDrop>(new DragAndDrop());
-        }
-    }
-
     private string DropZoneInput { get; set; } = "";
     private string DropItemInput { get; set; } = "";
     private bool Rerender { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
+        if (DragAndDropQuestionBaseModel is not null)
+        {
+            DragAndDropQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<DragAndDrop>(DragAndDropQuestionBaseModel);
+        }
         await ValueChanged();
     }
     
-    private void ItemUpdated(MudItemDropInfo<DragAndDrop.DropItem> dropItem)
+    private async Task ItemUpdated(MudItemDropInfo<DragAndDrop.DropItem> dropItem)
     {
         if (dropItem.Item is null)
             return;
         dropItem.Item.Selector = dropItem.DropzoneIdentifier;
+        await DragAndDropQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DragAndDropQuestionModel));
     }
     
     private async Task CreateSample()
     {
         DragAndDropQuestionModel = SampleHelper.GetDragAndDropQuestionSample();
-        await DragAndDropQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DragAndDropQuestionModel));
+        await DragAndDropQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DragAndDropQuestionModel));
         await ValueChanged();
     }
     
     private async Task Reset()
     {
         DragAndDropQuestionModel = new QuestionBaseModel<DragAndDrop>(new DragAndDrop());
-        await DragAndDropQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DragAndDropQuestionModel));
+        DragAndDropQuestionModel.Id = DragAndDropQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         await ValueChanged();
     }
     

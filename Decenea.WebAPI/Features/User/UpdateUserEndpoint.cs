@@ -18,7 +18,6 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
     public override void Configure()
     {
         Post("/User/Update");
-        AllowAnonymous();
     }
 
     public override async Task<ApiResponse<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)

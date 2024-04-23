@@ -18,16 +18,16 @@
             <MudButton Color="Color.Info" Variant="Variant.Filled" OnClick="AddNewField">Add Sub Question</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2">
-            
+
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
             <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Reset">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(MultipleChoiceSingleQuestionModel))">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceSingleQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else
@@ -69,14 +69,14 @@
                                   AdornmentIcon="@Icons.Material.Filled.Add"
                                   AdornmentColor="Color.Success"
                                   OnAdornmentClick="() => AddChoice(item, item.Input)"/>
-                    <MudSelect T="string" 
-                               OnAdornmentClick="@(() => RemoveChoices(item))" 
+                    <MudSelect T="string"
+                               OnAdornmentClick="@(() => RemoveChoices(item))"
                                Variant="Variant.Outlined"
                                Placeholder="Remove Choices"
-                               AdornmentIcon="@Icons.Material.Filled.Delete" 
+                               AdornmentIcon="@Icons.Material.Filled.Delete"
                                AdornmentColor="Color.Error"
                                AnchorOrigin="Origin.BottomCenter"
-                               MultiSelection="true" 
+                               MultiSelection="true"
                                @bind-SelectedValues="item.SelectedChoices">
                         @foreach (var choice in item.SubQuestion.Choices)
                         {
@@ -84,7 +84,9 @@
                         }
                     </MudSelect>
                 }
-                <MudRadioGroup SelectedOption="@("")">
+                <MudRadioGroup T="string?"
+                               Value="@(item.SubQuestion.Picked)"
+                               ValueChanged="@(async (s) => { item.SubQuestion.Picked = s; await ChoiceChanged(); })">
                     @foreach (var choice in item.SubQuestion.Choices)
                     {
                         <MudRadio Size="Size.Large" Color="Color.Primary" Option="choice"> @choice </MudRadio>

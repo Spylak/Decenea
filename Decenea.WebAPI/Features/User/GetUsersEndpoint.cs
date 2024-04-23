@@ -17,7 +17,7 @@ public class GetManyUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<o
     public override void Configure()
     {
         Get("/User/GetMany");
-        Roles(Role.AllowAny());
+        Roles(Role.Admin.ToString());
     }
 
     public override async Task<ApiResponse<List<object>>> ExecuteAsync(GetUsersRequest req, CancellationToken ct)

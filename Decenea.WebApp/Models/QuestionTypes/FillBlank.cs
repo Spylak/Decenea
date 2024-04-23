@@ -8,6 +8,10 @@ public class FillBlank
 
     public class SpaceOption
     {
+        public SpaceOption()
+        {
+            
+        }
         public int SpaceNo { get; set; }
         public string Text { get; set; } = string.Empty;
     }

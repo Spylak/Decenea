@@ -10,14 +10,15 @@ public partial class MultipleYesOrNoQuestion
     public QuestionBaseModel? MultipleYesOrNoQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<QuestionBaseModel> MultipleYesOrNoQuestionBaseModelChanged { get; set; }
     private QuestionBaseModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; }
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        await base.SetParametersAsync(parameters);
+    protected override void OnParametersSet()
+    {  
         if (MultipleYesOrNoQuestionBaseModel is not null)
         {
-            MultipleYesOrNoQuestionModel = QuestionBaseModel.ConvertToGeneric<MultipleYesOrNo>(MultipleYesOrNoQuestionBaseModel);
+            MultipleYesOrNoQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<MultipleYesOrNo>(MultipleYesOrNoQuestionBaseModel);
+            PopulateFields();
         }
     }
+
     private class Field
     {
         public string Input { get; set; } = "";
@@ -42,16 +43,21 @@ public partial class MultipleYesOrNoQuestion
     {
         MultipleYesOrNoQuestionModel = SampleHelper.GetMultipleYesOrNoQuestionSample();
         PopulateFields();
-        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel));
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleYesOrNoQuestionModel));
     }
     
-    private async Task Reset()
+    private void Reset()
     {
         MultipleYesOrNoQuestionModel = new QuestionBaseModel<MultipleYesOrNo>(new MultipleYesOrNo());
+        MultipleYesOrNoQuestionModel.Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         PopulateFields();
-        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel));
     }
 
+    private async Task ChoiceChanged()
+    {
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleYesOrNoQuestionModel));
+    }
+    
     private void PopulateFields()
     {
         if(MultipleYesOrNoQuestionModel?.QuestionContent is null)

@@ -10,14 +10,15 @@ public partial class DropdownQuestion
     public QuestionBaseModel? DropdownQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<QuestionBaseModel> DropdownQuestionBaseModelChanged { get; set; }
     private QuestionBaseModel<Dropdown>? DropdownQuestionModel { get; set; }
-    public override async Task SetParametersAsync(ParameterView parameters)
+    protected override void OnParametersSet()
     {
-        await base.SetParametersAsync(parameters);
         if (DropdownQuestionBaseModel is not null)
         {
-            DropdownQuestionModel = QuestionBaseModel.ConvertToGeneric<Dropdown>(DropdownQuestionBaseModel);
+            DropdownQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<Dropdown>(DropdownQuestionBaseModel);
+            PopulateFields();
         }
     }
+
     private class Field
     {
         public string Input { get; set; } = "";
@@ -30,14 +31,19 @@ public partial class DropdownQuestion
     {
         DropdownQuestionModel = SampleHelper.GetDropdownQuestionSample();
         PopulateFields();
-        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DropdownQuestionModel));
+        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DropdownQuestionModel));
     }
     
-    private async Task Reset()
+    private void Reset()
     {
         DropdownQuestionModel = new QuestionBaseModel<Dropdown>(new Dropdown());
-        PopulateFields();
-        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(DropdownQuestionModel));
+        DropdownQuestionModel.Id = DropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        ClearFields();
+    }
+
+    private void ClearFields()
+    {
+        Fields = new List<Field>();
     }
 
     private void PopulateFields()
@@ -87,9 +93,10 @@ public partial class DropdownQuestion
         }
     }
     
-    private void OnValueChanged(string choice,string subQuestion)
+    private async Task OnValueChanged(string choice,string subQuestion)
     {
-        var subQ = Fields.Select(i => i.SubQuestion).FirstOrDefault(i => i.Text == subQuestion);
+        var subQuestions = Fields.Select(i => i.SubQuestion).ToList();
+        var subQ = subQuestions.FirstOrDefault(i => i.Text == subQuestion);
         foreach (var item in subQ?.Choices ?? new List<Dropdown.Choice>())
         {
             if (item.Text==choice)
@@ -100,6 +107,12 @@ public partial class DropdownQuestion
             {
                 item.Checked = false;
             }
+        }
+
+        if (DropdownQuestionModel is not null)
+        {
+            DropdownQuestionModel.QuestionContent = new Dropdown() { SubQuestions = subQuestions };
+            await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DropdownQuestionModel));
         }
     }
 }

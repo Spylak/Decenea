@@ -22,12 +22,11 @@ public partial class FillBlankDropdownQuestion
     }
     private List<Field> Fields { get; set; } = new List<Field>();
 
-    public override async Task SetParametersAsync(ParameterView parameters)
+    protected override void OnParametersSet()
     {
-        await base.SetParametersAsync(parameters);
         if (FillBlankDropdownQuestionBaseModel is not null)
         {
-            FillBlankDropdownQuestionModel = QuestionBaseModel.ConvertToGeneric<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
+            FillBlankDropdownQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
             UpdateOptions(FillBlankDropdownQuestionModel.Description);
             PopulateDynamicQuestion();
         }
@@ -104,16 +103,16 @@ public partial class FillBlankDropdownQuestion
         FillBlankDropdownQuestionModel = SampleHelper.GetFillBlankDropdownQuestionSample();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankDropdownQuestionModel));
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankDropdownQuestionModel));
     }
     
-    private async Task Reset()
+    private void Reset()
     {
         FillBlankDropdownQuestionModel = new QuestionBaseModel<FillBlankDropdown>(new FillBlankDropdown());
+        FillBlankDropdownQuestionModel.Id = FillBlankDropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
         Fields = new List<Field>();
-        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(FillBlankDropdownQuestionModel));
     }
     
     private void PopulateDynamicQuestion()
@@ -136,7 +135,7 @@ public partial class FillBlankDropdownQuestion
         DynamicQuestion += QuestionText[^1];
     }
     
-    private void OnValueChange(string args,int j)
+    private async Task OnValueChange(string args,int j)
     {
         var answers= Fields.Select(i => i.Option)
             .FirstOrDefault(i => i.SpaceNo == j);
@@ -152,5 +151,6 @@ public partial class FillBlankDropdownQuestion
             }
         }
         PopulateDynamicQuestion();
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankDropdownQuestionModel));
     }
 }

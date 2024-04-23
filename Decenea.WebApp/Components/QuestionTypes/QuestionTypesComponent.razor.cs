@@ -16,6 +16,7 @@ public partial class QuestionTypesComponent
     [Parameter] public Test Test { get; set; }
 
     [Parameter] public QuestionBaseModel? Question { get; set; }
+    [Parameter] public EventCallback<QuestionBaseModel> QuestionChanged { get; set; }
     [Parameter] public string Style { get; set; } = "";
 
     [Parameter] public bool PresentationOnly { get; set; } = false;
@@ -46,17 +47,29 @@ public partial class QuestionTypesComponent
             if (!string.IsNullOrWhiteSpace(questionBaseModel.Description))
             {
                 Test.QuestionBaseModels.Add(questionBaseModel);
-                Question = new QuestionBaseModel(QuestionTypeValues.MultipleChoiceSingle);
                 Snackbar.Add(Messages.QuestionSaved, Severity.Success);
                 return;
             }
         }
         else
         {
-                Snackbar.Add(Messages.QuestionSaved, Severity.Success);
-                return;
+            Test.QuestionBaseModels.Remove(question);
+            Test.QuestionBaseModels.Add(questionBaseModel);
+            Snackbar.Add(Messages.QuestionSaved, Severity.Success);
+            return;
         }
 
         Snackbar.Add(Messages.QuestionError, Severity.Error);
+    }
+
+    private async Task UpdateQuestion(QuestionBaseModel questionBaseModel)
+    {
+        var question = Test.QuestionBaseModels
+            .FirstOrDefault(i => i.Id!.Equals(questionBaseModel.Id));
+        if (question is null)
+            return;
+        Test.QuestionBaseModels.Remove(question);
+        Test.QuestionBaseModels.Add(questionBaseModel);
+        await QuestionChanged.InvokeAsync(questionBaseModel);
     }
 }

@@ -10,19 +10,18 @@ public partial class OrderingQuestion
     public QuestionBaseModel? OrderingQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<QuestionBaseModel> OrderingQuestionBaseModelChanged { get; set; }
     private QuestionBaseModel<Ordering>? OrderingQuestionModel { get; set; }
+    private string Choice { get; set; } = "";
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
         if (OrderingQuestionBaseModel is not null)
         {
-            OrderingQuestionModel = QuestionBaseModel.ConvertToGeneric<Ordering>(OrderingQuestionBaseModel);
+            OrderingQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<Ordering>(OrderingQuestionBaseModel);
         }
     }
-
-    private string Choice { get; set; } = "";
     
-    private void OnClickRight(string name)
+    private async Task OnClickRight(string name)
     {
         if(OrderingQuestionModel?.QuestionContent is null)
             return;
@@ -32,8 +31,9 @@ public partial class OrderingQuestion
             return;
         ListHelper.UpdateOrders(choice,OrderingQuestionModel.QuestionContent.Choices.Count - 1,OrderingQuestionModel.QuestionContent.Choices);
         choice.Active=true;
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
     } 
-    private void OnClickLeft(string name)
+    private async Task OnClickLeft(string name)
     {
         if(OrderingQuestionModel?.QuestionContent is null)
             return;
@@ -43,8 +43,9 @@ public partial class OrderingQuestion
             return;
         ListHelper.UpdateOrders(choice,OrderingQuestionModel.QuestionContent.Choices.Count(i => !i.Active),OrderingQuestionModel.QuestionContent.Choices);
         choice.Active = false;
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
     }  
-    private void OnClickUp(string name)
+    private async Task OnClickUp(string name)
     {
         if(OrderingQuestionModel?.QuestionContent is null)
             return;
@@ -53,8 +54,9 @@ public partial class OrderingQuestion
         if(item is null)
             return;
         ListHelper.UpdateOrders(item,item.Order-1,OrderingQuestionModel.QuestionContent.Choices);
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
     }  
-    private void OnClickDown(string name)
+    private async Task OnClickDown(string name)
     {
         if(OrderingQuestionModel?.QuestionContent is null)
             return;
@@ -63,16 +65,17 @@ public partial class OrderingQuestion
         if(item is null)
             return;
         ListHelper.UpdateOrders(item,item.Order+1,OrderingQuestionModel.QuestionContent.Choices);
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
     }
     private async Task CreateSample()
     {
         OrderingQuestionModel = SampleHelper.GetOrderingQuestionSample();
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
     }
-    private async Task Reset()
+    private void Reset()
     {
         OrderingQuestionModel = new QuestionBaseModel<Ordering>(new Ordering());
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGeneric(OrderingQuestionModel));
+        OrderingQuestionModel.Id = OrderingQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
     }
     
     private void RemoveChoice(Ordering.Choice choice)

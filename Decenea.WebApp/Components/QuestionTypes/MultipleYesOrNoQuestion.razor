@@ -22,17 +22,17 @@
             <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="async () => await CreateSample()">Sample</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
+            <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Reset">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGeneric(MultipleYesOrNoQuestionModel))">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleYesOrNoQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else
     {
         <MudItem>
             <MudField Variant="Variant.Outlined" Label="Question">
-                @MultipleYesOrNoQuestionModel.Description
+                @MultipleYesOrNoQuestionModel?.Description
             </MudField>
         </MudItem>
     }
@@ -60,7 +60,9 @@
         </MudItem>
         <MudItem xs="0" sm="2"></MudItem>
         <MudItem xs="12" sm="10">
-            <MudSwitch Color="Color.Success" T="bool" @bind-Checked="@(item.SubQuestion.Checked)" Label="@(item.SubQuestion.Checked ? "Yes" : "No")"/>
+            <MudSwitch Color="Color.Success" T="bool" Value="@(item.SubQuestion.Checked)"
+                       ValueChanged="@(async (b) => { item.SubQuestion.Checked = b; await ChoiceChanged(); })"
+                       Label="@(item.SubQuestion.Checked ? "Yes" : "No")"/>
         </MudItem>
     }
 </MudGrid>
