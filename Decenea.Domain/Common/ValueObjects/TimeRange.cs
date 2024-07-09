@@ -19,7 +19,7 @@ public class TimeRange : ValueObject
     {
         if (start.Date != end.Date || start >= end)
         {
-            return Result<TimeRange, Exception>.Anticipated(null, "Start date is greater than end date.");
+            return Result<TimeRange, Exception>.Anticipated(null, ["Start date is greater than end date."]);
         }
 
         return Result<TimeRange, Exception>.Anticipated(new TimeRange(TimeOnly.FromDateTime(start),

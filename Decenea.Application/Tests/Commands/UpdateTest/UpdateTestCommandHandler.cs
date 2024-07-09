@@ -28,11 +28,11 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Resul
                 .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
 
             if (existingTest is null)
-                return Result<TestDto, Exception>.Anticipated(null, "Test not found.");
+                return Result<TestDto, Exception>.Anticipated(null, ["Test not found."]);
 
             if (existingTest.Version != command.Version)
             {
-                return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), "Concurrency issue.", false);
+                return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), ["Concurrency issue."], false);
             }
 
             var updateResult = Test.Update(existingTest, command.Title,
@@ -48,7 +48,7 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Resul
             if(!result.IsSuccess)
                 return Result<TestDto, Exception>.Anticipated(null, result.Messages);
                 
-            return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), "Successfully updated entity.", true);
+            return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), ["Successfully updated entity."], true);
         }
         catch (Exception ex)
         {

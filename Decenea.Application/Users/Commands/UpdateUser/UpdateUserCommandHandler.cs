@@ -25,11 +25,11 @@ public class UpdateUserCommandHandler
 
             if (existingUser is null)
             {
-                return Result<UserDto, Exception>.Anticipated(null,"User not found.");
+                return Result<UserDto, Exception>.Anticipated(null,["User not found."]);
             }
 
             if (existingUser.Version != command.Version)
-                return Result<UserDto, Exception>.Anticipated(existingUser.UserToUserDto(), "Concurrency issue.",false);
+                return Result<UserDto, Exception>.Anticipated(existingUser.UserToUserDto(), ["Concurrency issue."],false);
 
             var user = User.Update(existingUser,
                 command.FirstName,
@@ -54,7 +54,7 @@ public class UpdateUserCommandHandler
             
             var userDto = user.Value.UserToUserDto();
             
-            return Result<UserDto, Exception>.Anticipated(userDto,"Successfully updated user info.");
+            return Result<UserDto, Exception>.Anticipated(userDto,["Successfully updated user info."]);
         }
         catch (Exception ex)
         {

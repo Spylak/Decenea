@@ -35,7 +35,7 @@ public static class ClaimJwtExtension
         
         var claim = listClaims.Value?.FirstOrDefault(c => c.Key == key);
         if(claim is null)
-            return Result<string,Exception>.Anticipated(null, $"No value found for key {key}");
+            return Result<string,Exception>.Anticipated(null, [$"No value found for key {key}"]);
  
         return Result<string,Exception>.Anticipated(claim.Value);
     }
@@ -55,11 +55,11 @@ public static class ClaimJwtExtension
     public static Result<IEnumerable<Claim>, Exception> GetTokenClaims(this string jwtString)
     {
         if (string.IsNullOrWhiteSpace(jwtString))
-            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, "The given token string is empty or null.");
+            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, ["The given token string is empty or null."]);
             
         var handler = new JwtSecurityTokenHandler();
         if (!handler.CanReadToken(jwtString))
-            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, "The given token string cannot be read");
+            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, ["The given token string cannot be read"]);
 
         var jwtToken = handler.ReadJwtToken(jwtString);
         return Result<IEnumerable<Claim>, Exception>.Anticipated(jwtToken.Claims);
@@ -84,7 +84,7 @@ public static class ClaimJwtExtension
         catch (Exception e)
         {
             return Result<List<ClaimJwt>,Exception>
-                .Excepted(e,$"Didn't manage to get values from token: {jwtString}");
+                .Excepted(e,[$"Didn't manage to get values from token: {jwtString}"]);
         }
     }
 }

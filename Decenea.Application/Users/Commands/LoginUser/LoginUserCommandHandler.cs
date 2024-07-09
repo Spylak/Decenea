@@ -30,10 +30,10 @@ public class LoginUserCommandHandler
                 .FirstOrDefaultAsync(i=> i.Email == command.Email, cancellationToken);
             
             if(user is null)
-                return Result<LoginUserResponse, Exception>.Anticipated(null,"User not found.");
+                return Result<LoginUserResponse, Exception>.Anticipated(null,["User not found."]);
 
             if(user.LockoutEnabled)
-                return Result<LoginUserResponse, Exception>.Anticipated(null,"User is locked.");
+                return Result<LoginUserResponse, Exception>.Anticipated(null,["User is locked."]);
             
             _dbContext.CreatedBy = user.Id;
 
@@ -85,7 +85,7 @@ public class LoginUserCommandHandler
         {
             Log.Error("Didn't manage to login user: {email} : {ex}",command.Email,ex);
             return Result<LoginUserResponse, Exception>
-                .Excepted(ex,$"Didn't manage to login user: {command.Email}");
+                .Excepted(ex,[$"Didn't manage to login user: {command.Email}"]);
         }
     }
     
@@ -96,8 +96,8 @@ public class LoginUserCommandHandler
             
         if (!passHelper.VerifyPassword(password, passwordHash))
         {
-            return Result<LoginUserResponse, Exception>.Anticipated(null,"Credentials don't match.");
+            return Result<LoginUserResponse, Exception>.Anticipated(null,["Credentials don't match."]);
         }
-        return Result<LoginUserResponse, Exception>.Anticipated(null,"Credentials match.",true);
+        return Result<LoginUserResponse, Exception>.Anticipated(null,["Credentials match."],true);
     }
 }

@@ -32,7 +32,7 @@ public class GetManyTestsQueryHandler
         catch (Exception ex)
         {
             return Result<IEnumerable<TestDto>, Exception>
-                .Excepted(ex, "Didn't manage to get list of Micro Ads.");
+                .Excepted(ex, ["Didn't manage to get list of Micro Ads."]);
         }
     }
 }

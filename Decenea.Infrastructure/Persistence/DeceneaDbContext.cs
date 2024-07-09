@@ -52,7 +52,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
     {
         CreatedBy ??= createdBy;
         if (CreatedBy is null)
-            return Result<object,Exception>.Anticipated(null,"Unable to save changes.");
+            return Result<object,Exception>.Anticipated(null,["Unable to save changes."]);
 
         DomainEvents ??= GetDomainEvents();
 
@@ -66,7 +66,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             catch (DbUpdateConcurrencyException ex)
             {
                 //Handle concurrency exception
-                return Result<object,Exception>.Anticipated(null,"Unable to save changes due to invalid data.");
+                return Result<object,Exception>.Anticipated(null,["Unable to save changes due to invalid data."]);
             }
         }
 
@@ -87,7 +87,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             await base.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
-            return Result<object,Exception>.Anticipated(null,"Successful process.", true);
+            return Result<object,Exception>.Anticipated(null,["Successful process."], true);
         }
         catch (Exception ex)
         {
@@ -96,7 +96,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",
                 ex.Message);
             await base.SaveChangesAsync(cancellationToken);
-            return Result<object,Exception>.Excepted(null,"Unable to Handle DomainEvents in DbContext.");
+            return Result<object,Exception>.Excepted(null,["Unable to Handle DomainEvents in DbContext."]);
         }
     }
 

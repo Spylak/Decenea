@@ -32,7 +32,7 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Resul
 
             await _dbContext.Set<Test>().AddAsync(createResult.Value, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result<TestDto, Exception>.Anticipated(createResult.Value.TestToTestDto(),"Successfully created!", true);
+            return Result<TestDto, Exception>.Anticipated(createResult.Value.TestToTestDto(),["Successfully created!"], true);
         }
         catch (Exception ex)
         {

@@ -30,7 +30,7 @@ public class RegisterUserCommandHandler
 
             if (existingUser is not null)
             {
-                return Result<UserDto, Exception>.Anticipated(null,"Email already in use.");
+                return Result<UserDto, Exception>.Anticipated(null,["Email already in use."]);
             }
             
             var passwordHelper = new PasswordHelper(Convert.FromBase64String(_configuration["Auth:Pepper"]));
@@ -61,7 +61,7 @@ public class RegisterUserCommandHandler
             if (!result.IsSuccess)
                 return Result<UserDto, Exception>.Anticipated(null, result.Messages);
             var userDto = user.Value.UserToUserDto();
-            return Result<UserDto, Exception>.Anticipated(userDto,"Successfully registered user.");
+            return Result<UserDto, Exception>.Anticipated(userDto,["Successfully registered user."]);
         }
         catch (Exception ex)
         {

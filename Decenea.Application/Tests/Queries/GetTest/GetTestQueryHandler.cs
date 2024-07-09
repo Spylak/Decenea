@@ -25,7 +25,7 @@ public class GetTestQueryHandler
         catch (Exception ex)
         {
             return Result<TestDto, Exception>
-                .Excepted(ex, "Didn't manage to get Micro Ad.");
+                .Excepted(ex, ["Didn't manage to get Micro Ad."]);
         }
     }
 }

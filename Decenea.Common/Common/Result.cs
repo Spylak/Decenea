@@ -17,23 +17,6 @@ public record Result<TValue, TError>
         Exception = default;
         Messages = messages ?? new List<string>();
     }
-    private Result(TValue? value, string? message, bool? isSuccess)
-    {
-        IsExcepted = false;
-        IsSuccess = isSuccess ?? value is not null;
-        Value = value;
-        Exception = default;
-        Messages = message is null ? new List<string>() : new List<string>(){message};
-    }
-
-    private Result(TError? error, string? message, bool? isSuccess)
-    {
-        IsExcepted = true;
-        IsSuccess = isSuccess ?? false;
-        Exception = error;
-        Value = default;
-        Messages = message is null ? new List<string>() : new List<string>(){message};
-    }
     private Result(TError? error, List<string>? messages, bool? isSuccess)
     {
         IsExcepted = true;
@@ -47,12 +30,6 @@ public record Result<TValue, TError>
         Func<TValue, TResult> success,
         Func<TError, TResult> failure) =>
         !IsExcepted ? success(Value!) : failure(Exception!);
-    
-    public static Result<TValue, TError> Anticipated(TValue? value, string message, bool? isSuccess = null) => 
-        new(value, message, isSuccess);
-    
-    public static Result<TValue, TError> Excepted(TError? error, string message, bool? isSuccess = null) => 
-        new(error, message, isSuccess);
     
     public static Result<TValue, TError> Anticipated(TValue? value, List<string>? messages = null, bool? isSuccess = null) => 
         new(value, messages, isSuccess);
