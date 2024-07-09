@@ -2,7 +2,6 @@ namespace Decenea.Application.Users.Commands.LoginUser;
 
 public class LoginUserResponse
 {
-    public string CityId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string MiddleName { get; set; }

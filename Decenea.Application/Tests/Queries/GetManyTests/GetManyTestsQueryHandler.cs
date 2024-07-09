@@ -14,14 +14,13 @@ public class GetManyTestsQueryHandler
         _testRepository = testRepository;
     }
 
-    public async ValueTask<Result<IEnumerable<TestDto>, Exception>> Handle(GetManyTestsQuery query,
+    public async Task<Result<IEnumerable<TestDto>, Exception>> Handle(GetManyTestsQuery query,
         CancellationToken cancellationToken)
     {
         try
         {
             var testDtos = await _testRepository
                 .GetManyTestDtos(query.CountryId,
-                    query.CityId,
                     query.CommunityId,
                     query.MunicipalUnitId,
                     query.MunicipalityId,

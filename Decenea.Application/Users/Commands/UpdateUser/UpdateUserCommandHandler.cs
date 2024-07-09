@@ -15,7 +15,7 @@ public class UpdateUserCommandHandler
     {
         _dbContext = dbContext;
     }
-    public async ValueTask<Result<UserDto, Exception>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<UserDto, Exception>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -37,8 +37,7 @@ public class UpdateUserCommandHandler
                 command.UserName,
                 command.LastName,
                 command.MiddleName,
-                command.PhoneNumber,
-                command.CityId);
+                command.PhoneNumber);
 
             if (!user.IsSuccess || user.Value is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;

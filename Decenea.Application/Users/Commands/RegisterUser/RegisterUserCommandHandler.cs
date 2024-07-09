@@ -1,9 +1,12 @@
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Helpers;
 using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
+using Decenea.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegisterUser;
@@ -11,11 +14,13 @@ namespace Decenea.Application.Users.Commands.RegisterUser;
 public class RegisterUserCommandHandler
 {
     private readonly IDeceneaDbContext _dbContext;
-    public RegisterUserCommandHandler(IDeceneaDbContext dbContext)
+    private readonly IConfiguration _configuration;
+    public RegisterUserCommandHandler(IDeceneaDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
+        _configuration = configuration;
     }
-    public async ValueTask<Result<UserDto, Exception>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<UserDto, Exception>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -28,14 +33,20 @@ public class RegisterUserCommandHandler
                 return Result<UserDto, Exception>.Anticipated(null,"Email already in use.");
             }
             
+            var passwordHelper = new PasswordHelper(Convert.FromBase64String(_configuration["Auth:Pepper"]));
+            var validatePassword = passwordHelper.ValidatePassword(command.Password);
+        
+            if (!validatePassword.IsSuccess)
+                return Result<UserDto, Exception>.Anticipated(null, validatePassword.Messages);
+        
+            var passHash = passwordHelper.HashPassword(command.Password);
             var user = User.Create(command.FirstName,
                 command.Email,
                 command.UserName,
                 command.LastName,
                 command.MiddleName,
                 command.PhoneNumber,
-                command.CityId,
-                command.Password);
+                passHash);
 
             if (!user.IsSuccess || user.Value is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;

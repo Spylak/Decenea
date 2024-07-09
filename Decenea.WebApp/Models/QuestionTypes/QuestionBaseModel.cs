@@ -17,7 +17,6 @@ public class QuestionBaseModel
     public double Weight { get; set; }
     public string QuestionType { get; init; }
     public string SerializedQuestionContent { get; set; } = string.Empty;
-    public List<int>? TestIds { get; set; }
     public static QuestionBaseModel<T> ConvertToGenericBaseModel<T>(QuestionBaseModel nonGenericModel) where T : class
     {
         T questionContent = JsonSerializer.Deserialize<T>(nonGenericModel.SerializedQuestionContent)!;
@@ -35,7 +34,6 @@ public class QuestionBaseModel
             SecondsToAnswer = nonGenericModel.SecondsToAnswer,
             Order = nonGenericModel.Order,
             Weight = nonGenericModel.Weight,
-            TestIds = nonGenericModel.TestIds
         };
 
         return genericModel;
@@ -54,7 +52,6 @@ public class QuestionBaseModel
             SecondsToAnswer = genericModel.SecondsToAnswer,
             Order = genericModel.Order,
             Weight = genericModel.Weight,
-            TestIds = genericModel.TestIds,
             SerializedQuestionContent = JsonSerializer.Serialize(genericModel.QuestionContent)
         };
 

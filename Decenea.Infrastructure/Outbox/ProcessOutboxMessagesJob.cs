@@ -1,5 +1,6 @@
-﻿using Decenea.Domain.Common;
-using Decenea.Infrastructure.Persistance;
+﻿using Decenea.Application.Abstractions.Persistance;
+using Decenea.Domain.Common;
+using Decenea.Infrastructure.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,9 +20,9 @@ internal sealed class ProcessOutboxMessagesJob : IJob
     };
     
     private readonly OutboxOptions _outboxOptions;
-    private readonly DeceneaDbContext _dbContext;
+    private readonly IDeceneaDbContext _dbContext;
 
-    public ProcessOutboxMessagesJob(IOptions<OutboxOptions> outboxOptions, DeceneaDbContext dbContext)
+    public ProcessOutboxMessagesJob(IOptions<OutboxOptions> outboxOptions, IDeceneaDbContext dbContext)
     {
         _dbContext = dbContext;
         _outboxOptions = outboxOptions.Value;

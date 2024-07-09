@@ -2,7 +2,6 @@ namespace Decenea.Domain.Common;
 
 public abstract class AuditableAggregateRoot : AuditableEntity
 {
-    
     protected AuditableAggregateRoot() { }
 
     protected readonly Queue<IDomainEvent> _domainEvents = new ();

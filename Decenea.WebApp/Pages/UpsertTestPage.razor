@@ -34,7 +34,7 @@
                          ColumnResizeMode="ResizeMode.Column">
                 <ToolBarContent>
                     <MudSpacer/>
-                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Warning" OnClick="@(() => GlobalFunctionService.ConsoleLog(""))"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Warning" OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))"></MudIconButton>
                     <MudIconButton
                         OnClick="async () => await QuestionDialog()"
                         Icon="@Icons.Material.Filled.Add"

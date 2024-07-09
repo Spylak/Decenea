@@ -19,14 +19,15 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json");
 
 builder.Services
-    .AddAuthorization()
     .AddFastEndpoints()
     .AddInfrastructure(builder.Configuration)
+    .AddAuthorization()
     .AddApplication();
 
 builder.Services.SwaggerDocument();
 
 var app = builder.Build();
+await app.ExecuteInfrastructureOnStartup();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(c => {

@@ -29,7 +29,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Folder Include="Persistance\EntityConfigurations\Question\" />
+      <Folder Include="Persistence\EntityConfigurations\Question\" />
     </ItemGroup>
 
 </Project>

@@ -29,4 +29,12 @@
       <ProjectReference Include="..\Decenea.Infrastructure\Decenea.Infrastructure.csproj" />
       <ProjectReference Include="..\Decenea.Common\Decenea.Common.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="logs\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="logs\log20240305.txt" />
+    </ItemGroup>
 </Project>

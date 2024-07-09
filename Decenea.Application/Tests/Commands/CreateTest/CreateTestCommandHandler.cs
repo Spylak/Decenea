@@ -3,11 +3,12 @@ using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Domain.Aggregates.TestAggregate;
+using FastEndpoints;
 using Serilog;
 
 namespace Decenea.Application.Tests.Commands.CreateTest;
 
-public class CreateTestCommandHandler
+public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Result<TestDto,Exception>>
 {    
     private readonly IDeceneaDbContext _dbContext;
 
@@ -16,13 +17,12 @@ public class CreateTestCommandHandler
         _dbContext = dbContext;
     }
 
-    public async ValueTask<Result<TestDto, Exception>> Handle(CreateTestCommand command, CancellationToken cancellationToken)
+    public async Task<Result<TestDto, Exception>> ExecuteAsync(CreateTestCommand command, CancellationToken cancellationToken)
     {
         try
         {
             var createResult = Test.Create(command.Title,
                 command.Description,
-                command.CityId,
                 command.UserId,
                 command.ContactEmail,
                 command.ContactPhone);

@@ -25,7 +25,6 @@ public static class UserMapper
         userDto.LastName = user.LastName;
         userDto.MiddleName = user.MiddleName;
         userDto.PhoneNumber = user.PhoneNumber;
-        userDto.CityId = user.CityId;
         return userDto;
     }
 }

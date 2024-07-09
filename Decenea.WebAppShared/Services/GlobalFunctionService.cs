@@ -11,13 +11,5 @@ public class GlobalFunctionService : IGlobalFunctionService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task ConsoleLogAsync<T>(T obj) where  T : class
-    {
-        await _jsRuntime.InvokeVoidAsync("GlobalFunctions.Log", obj);
-    }
-    public async Task ReloadAsync()
-    {
-        await _jsRuntime.InvokeVoidAsync("location.reload");
-        await _jsRuntime.InvokeVoidAsync("GlobalFunctions.Home", "/");
-    }
+    
 }

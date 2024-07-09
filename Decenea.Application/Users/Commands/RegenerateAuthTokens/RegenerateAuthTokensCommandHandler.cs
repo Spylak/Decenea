@@ -20,7 +20,7 @@ public class RegenerateAuthTokensCommandHandler
         _configuration = configuration;
     }
 
-    public async ValueTask<Result<RegenerateAuthTokensResponse, Exception>> Handle(RegenerateAuthTokensCommand command,
+    public async Task<Result<RegenerateAuthTokensResponse, Exception>> Handle(RegenerateAuthTokensCommand command,
         CancellationToken cancellationToken)
     {
         
@@ -65,7 +65,7 @@ public class RegenerateAuthTokensCommandHandler
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
-                signingKey: _configuration["JWTSigningKey"],
+                signingKey: _configuration["Auth:JWTSigningKey"],
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
@@ -77,7 +77,6 @@ public class RegenerateAuthTokensCommandHandler
                     u.Claims.Add(new("email", email));
 
                     u["userId"] = user.Id; //indexer based claim setting
-                    u["cityId"] = user.CityId;
                 });
 
             var refreshToken = AuthTokenHelper.GenerateRefreshToken();

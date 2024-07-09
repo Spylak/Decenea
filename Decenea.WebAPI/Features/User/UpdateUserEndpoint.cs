@@ -31,7 +31,6 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
             LastName = req.LastName,
             MiddleName = req.MiddleName,
             PhoneNumber = req.PhoneNumber,
-            CityId = req.CityId,
             Version = req.Version
         };
         

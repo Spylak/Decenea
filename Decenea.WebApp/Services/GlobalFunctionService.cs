@@ -10,10 +10,14 @@ public class GlobalFunctionService : IGlobalFunctionService
     {
         _jsRuntime = jsRuntime;
     }
-
-    public async Task ConsoleLog<T>(T obj) where  T :class
+    public async Task ConsoleLogAsync<T>(T obj) where  T : class
     {
         await _jsRuntime.InvokeVoidAsync("blazorExtensions.Log", obj);
+    }
+    public async Task ReloadAsync()
+    {
+        await _jsRuntime.InvokeVoidAsync("location.reload");
+        await _jsRuntime.InvokeVoidAsync("GlobalFunctions.Home", "/");
     }
     public async void Reload()
     {

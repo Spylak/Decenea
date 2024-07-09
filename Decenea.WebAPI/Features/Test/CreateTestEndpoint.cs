@@ -11,12 +11,6 @@ namespace Decenea.WebAPI.Features.Test;
 
 public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDto>>
 {
-    private readonly CreateTestCommandHandler _createTestCommandHandler;
-    public CreateTestEndpoint(CreateTestCommandHandler createTestCommandHandler)
-    {
-        _createTestCommandHandler = createTestCommandHandler;
-    }
-    
     public override void Configure()
     {
         Post("/Test/Create");
@@ -32,23 +26,20 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
 
         var claims = accessToken.GetTokenClaimJwts();
 
-        var userId = claims.Value?.GetClaimValueByKey("userId");   
-        var cityId = claims.Value?.GetClaimValueByKey("cityId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");
         
-        if(userId is null || cityId is null)
+        if(userId is null)
             return new ApiResponse<TestDto>(null, false, "Invalid JWT.");
         
-        var createTestCommand = new CreateTestCommand()
+        var result = await new CreateTestCommand()
         {
             UserId = userId,
-            CityId = cityId,
             Title = req.Title,
             ContactPhone = req.ContactPhone,
             ContactEmail = req.ContactEmail,
             Description = req.Description
-        };
+        }.ExecuteAsync(ct);
         
-        var result = await _createTestCommandHandler.Handle(createTestCommand, ct);
         return new ApiResponse<TestDto>(result.Value, result.IsSuccess, result.Messages);
     }
 }

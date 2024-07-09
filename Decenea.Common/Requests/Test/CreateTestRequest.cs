@@ -1,6 +1,6 @@
 namespace Decenea.Common.Requests.Test;
 
-public class CreateTestRequest
+public record CreateTestRequest
 {
     public string Title { get; set; }
     public string Description { get; set; }

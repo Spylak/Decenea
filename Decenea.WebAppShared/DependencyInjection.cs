@@ -9,8 +9,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddWebAppShared(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
-        services.AddTransient<ICookieService,CookieService>();
+        
 
         return services;
     }

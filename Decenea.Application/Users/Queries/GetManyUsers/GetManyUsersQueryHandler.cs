@@ -14,7 +14,7 @@ public class GetManyUsersQueryHandler
     {
         _dbContext = dbContext;
     }
-    public async ValueTask<Result<List<User>, Exception>> Handle(GetManyUsersQuery query, CancellationToken cancellationToken)
+    public async Task<Result<List<User>, Exception>> Handle(GetManyUsersQuery query, CancellationToken cancellationToken)
     {
         var users = await _dbContext.Set<User>().ToListAsync();
         return Result<List<User>, Exception>.Anticipated(users);

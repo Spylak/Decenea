@@ -9,7 +9,6 @@ public class User : AuditableAggregateRoot
     private readonly List<string> _testIds = new ();
     private readonly List<string> _userClaimIds = new ();
     private readonly List<string> _userTokenIds = new ();
-    public required string CityId { get; set; }
     public int? CountryId { get; set; }
     public int RoleId { get; set; }
     public required string Email { get; set; }
@@ -18,7 +17,6 @@ public class User : AuditableAggregateRoot
     public required string MiddleName { get; set; }
     
     public required string PasswordHash { get; set; }
-    public required byte[] PasswordSalt { get; set; }
     public string FullName => $"{FirstName} {MiddleName} {LastName}";
     public string? UserName { get; set; }
     public string? Title { get; set; }
@@ -31,40 +29,19 @@ public class User : AuditableAggregateRoot
     public DateTime? LockoutEnd { get; set; }
     public bool LockoutEnabled { get; set; }
     public int AccessFailedCount { get; set; }
+    public DateTime? LastAccessFailed { get; set; }
     public bool IsVerified { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public DateTime? DateVerified { get; set; }
-
-    public static Result<object, Exception> CheckPassword(string password,
-        string passwordHash, byte[] passwordSalt)
-    {
-        var passHelper = new PassowordHelper();
-            
-        if (!passHelper.VerifyPassword(password, passwordHash, passwordSalt))
-        {
-            return Result<object, Exception>.Anticipated(null,"Credentials don't match.");
-        }
-        return Result<object, Exception>.Anticipated(null,"Credentials match.", true);
-    }
-    
     public static Result<User,Exception> Create(string firstName,
         string email,
         string userName,
         string lastName,
         string middleName,
         string phoneNumber,
-        string cityId,
-        string password)
+        string passHash)
     {
-        var passwordHelper = new PassowordHelper();
-        var validatePassword = passwordHelper.ValidatePassword(password);
-        
-        if (!validatePassword.IsSuccess)
-            return Result<User,Exception>.Anticipated(null, validatePassword.Messages);
-        
-        var passHash = passwordHelper.HashPasword(password, out var salt);
-        
         var user = new User()
         {
             FirstName = firstName,
@@ -73,10 +50,8 @@ public class User : AuditableAggregateRoot
             LastName = lastName,
             MiddleName = middleName,
             PhoneNumber = phoneNumber,
-            CityId = cityId,
             RoleId = Role.Guest,
-            PasswordHash = passHash,
-            PasswordSalt = salt
+            PasswordHash = passHash
         };
         
         return Result<User,Exception>.Anticipated(user);
@@ -87,8 +62,7 @@ public class User : AuditableAggregateRoot
         string userName,
         string lastName,
         string middleName,
-        string phoneNumber,
-        string cityId)
+        string phoneNumber)
     {
         user.FirstName = firstName;
         user.Email = email;
@@ -96,7 +70,6 @@ public class User : AuditableAggregateRoot
         user.LastName = lastName;
         user.MiddleName = middleName;
         user.PhoneNumber = phoneNumber;
-        user.CityId = cityId;
         
         return Result<User,Exception>.Anticipated(user);
     }

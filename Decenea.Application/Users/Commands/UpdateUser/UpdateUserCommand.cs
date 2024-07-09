@@ -12,5 +12,4 @@ public class UpdateUserCommand: UpdateCommand
     public string LastName { get; init; }
     public string MiddleName { get; init; }
     public string PhoneNumber { get; init; }
-    public string CityId { get; init; }
 };

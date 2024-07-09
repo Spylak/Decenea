@@ -11,9 +11,8 @@ public class Test : AuditableAggregateRoot
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
     public string UserId { get; set; }
-    public string CityId { get; set; }
     public static Result<Test, Exception> Create(string title, string descripton,
-        string cityId, string userId,
+        string userId,
         string contactEmail,
         string contactPhone)
     {
@@ -21,7 +20,6 @@ public class Test : AuditableAggregateRoot
         {
             Title = title,
             Description = descripton,
-            CityId = cityId,
             UserId = userId,
             ContactEmail = contactEmail,
             ContactPhone = contactPhone
@@ -31,13 +29,11 @@ public class Test : AuditableAggregateRoot
     }
     
     public static Result<Test, Exception> Update(Test test, string title, string descripton,
-        string cityId,
         string contactEmail,
         string contactPhone)
     {
         test.Title = title;
         test.Description = descripton;
-        test.CityId = cityId;
         test.ContactEmail = contactEmail;
         test.ContactPhone = contactPhone;
         

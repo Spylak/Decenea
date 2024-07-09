@@ -28,7 +28,6 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest,ApiResponse<obj
             req.LastName,
             req.MiddleName,
             req.PhoneNumber,
-            req.CityId,
             req.Password);
         
         var result = await _registerUserCommandHandler.Handle(command, ct);

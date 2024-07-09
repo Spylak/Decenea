@@ -2,21 +2,44 @@ namespace Decenea.Common.Common;
 
 public class ApiResponse
 {
+    public ApiResponse(bool? isSuccess = null)
+    {
+        IsSuccess = isSuccess ?? false;
+        Messages = [];
+        Data = null;
+    }
+    
     public ApiResponse(bool? isSuccess = null, List<string>? messages = null)
     {
         IsSuccess = isSuccess ?? false;
-        Messages = messages ?? new List<string>();
+        Messages = messages ?? [];
+        Data = null;
     }
+    
     public ApiResponse(bool? isSuccess = null, string? message = null)
     {
         IsSuccess = isSuccess ?? false;
-        Messages = new List<string>();
-        if(message is not null)
-            Messages.Add(message);
+        Messages = [ message ?? "" ];
+        Data = null;
+    }
+    
+    public ApiResponse(bool? isSuccess = null, object? data = null, List<string>? messages = null)
+    {
+        IsSuccess = isSuccess ?? false;
+        Messages = messages ?? [];
+        Data = data;
+    }
+    
+    public ApiResponse(bool? isSuccess = null, object? data = null, string? message = null)
+    {
+        IsSuccess = isSuccess ?? false;
+        Messages = [ message ?? "" ];
+        Data = data;
     }
 
     public bool? IsSuccess { get; set; }
     public List<string> Messages { get; set; } 
+    public object? Data { get; set; }
 }
 
 public class ApiResponse<T> : ApiResponse where T : class?
@@ -30,5 +53,5 @@ public class ApiResponse<T> : ApiResponse where T : class?
     {
         Data = data;
     }
-    public T? Data { get; set; }
+    public new T? Data { get; set; }
 }

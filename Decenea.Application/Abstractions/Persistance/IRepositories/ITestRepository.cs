@@ -4,10 +4,9 @@ namespace Decenea.Application.Abstractions.Persistance.IRepositories;
 
 public interface ITestRepository
 {
-    ValueTask<TestDto> GetTestDtoByTestId(string testId, string? userId = null);
+    Task<TestDto> GetTestDtoByTestId(string testId, string? userId = null);
 
-    ValueTask<IEnumerable<TestDto>> GetManyTestDtos(int countryId,
-        string? cityId = null,
+    Task<IEnumerable<TestDto>> GetManyTestDtos(int countryId,
         string? communityId = null,
         string? municipalUnitId = null,
         string? municipalityId = null,

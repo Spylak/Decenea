@@ -26,7 +26,6 @@ public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponse<IE
         {
             Skip = req.Skip,
             Take = req.Take,
-            CityId = req.CityId,
             CommunityId = req.CommunityId,
             MunicipalUnitId = req.MunicipalUnitId,
             MunicipalityId = req.MunicipalityId,

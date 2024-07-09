@@ -1,4 +1,7 @@
 window.blazorExtensions = {
+    Home: function (obj) {
+        window.location.href = obj;
+    },
     SendLocalEmail: function (mailto, subject, body) {
         var link = document.createElement('a');
         var uri = "mailto:" + mailto + "?";

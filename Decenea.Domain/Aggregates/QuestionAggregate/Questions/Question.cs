@@ -1,9 +1,9 @@
 
 using Decenea.Domain.Common;
 
-namespace Decenea.Domain.Aggregates.QuestionAggregate.Common;
+namespace Decenea.Domain.Aggregates.QuestionAggregate.Questions;
 
-public class Question<T> : Entity where T : class 
+public class Question : Entity
 {
     private readonly List<string> _testIds = new ();
     public string Desription { get; set; }
@@ -12,5 +12,5 @@ public class Question<T> : Entity where T : class
     public int Order { get; set; } 
     public double Weight { get; set; }
     public string QuestionType { get; set; }
-    public T QuestionContent { get; set; }
+    public string SerializedQuestionContent { get; set; } = string.Empty;
 }

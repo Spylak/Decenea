@@ -13,7 +13,7 @@ public class GetTestQueryHandler
     {
         _testRepository = testRepository;
     }
-    public async ValueTask<Result<TestDto, Exception>> Handle(GetTestQuery query, CancellationToken cancellationToken)
+    public async Task<Result<TestDto, Exception>> Handle(GetTestQuery query, CancellationToken cancellationToken)
     {
         try
         {

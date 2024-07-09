@@ -4,10 +4,11 @@ using Decenea.Application.Abstractions.DataAccess;
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Abstractions.Persistance.IRepositories;
 using Decenea.Infrastructure.Outbox;
-using Decenea.Infrastructure.Persistance;
-using Decenea.Infrastructure.Persistance.DataAccess;
-using Decenea.Infrastructure.Persistance.Repositories;
+using Decenea.Infrastructure.Persistence;
+using Decenea.Infrastructure.Persistence.DataAccess;
+using Decenea.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Quartz;
@@ -57,7 +58,7 @@ public static class DependencyInjection
             .AddAuthentication(o => o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(o =>
             {
-                SecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JWTSigningKey"]!));
+                SecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Auth:JWTSigningKey"]!));
 
                 //set defaults
                 o.TokenValidationParameters.IssuerSigningKey = key;
@@ -86,5 +87,15 @@ public static class DependencyInjection
         });
         
         services.ConfigureOptions<ProcessOutboxMessagesJobSetup>();
+    }
+
+    public static async Task ExecuteInfrastructureOnStartup(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<DeceneaDbContext>();
+        if ((await db.Database.GetPendingMigrationsAsync()).Any())
+        {
+            await db.Database.MigrateAsync();
+        }
     }
 }

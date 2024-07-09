@@ -1,4 +1,5 @@
 using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Helpers;
 using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -19,7 +20,7 @@ public class LoginUserCommandHandler
         _dbContext = dbContext;
         _configuration = configuration;
     }
-    public async ValueTask<Result<LoginUserResponse, Exception>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<LoginUserResponse, Exception>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -36,7 +37,7 @@ public class LoginUserCommandHandler
             
             _dbContext.CreatedBy = user.Id;
 
-            var passCheck = User.CheckPassword(command.Password,user.PasswordHash, user.PasswordSalt);
+            var passCheck = CheckPassword(command.Password, user.PasswordHash);
             
             if (!passCheck.IsSuccess)
             {
@@ -45,7 +46,7 @@ public class LoginUserCommandHandler
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
-                signingKey: _configuration["JWTSigningKey"],
+                signingKey: _configuration["Auth:JWTSigningKey"],
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
@@ -57,7 +58,6 @@ public class LoginUserCommandHandler
                     u.Claims.Add(new("email", user.Email));
                     
                     u["userId"] = user.Id; //indexer based claim setting
-                    u["cityId"] = user.CityId; 
                 });
             
             if (command.RememberMe)
@@ -70,7 +70,6 @@ public class LoginUserCommandHandler
                 _dbContext.Set<User>().Update(user);
             }
             
-            loginUserResponse.CityId = user.CityId;
             loginUserResponse.AccessToken = jwtToken;
             loginUserResponse.AccessTokenExpiryTime = accessTokenExpiryTime;
             user.UserToLoginUserDto(loginUserResponse);
@@ -88,5 +87,17 @@ public class LoginUserCommandHandler
             return Result<LoginUserResponse, Exception>
                 .Excepted(ex,$"Didn't manage to login user: {command.Email}");
         }
+    }
+    
+    private Result<LoginUserResponse, Exception> CheckPassword(string password,
+        string passwordHash)
+    {
+        var passHelper = new PasswordHelper();
+            
+        if (!passHelper.VerifyPassword(password, passwordHash))
+        {
+            return Result<LoginUserResponse, Exception>.Anticipated(null,"Credentials don't match.");
+        }
+        return Result<LoginUserResponse, Exception>.Anticipated(null,"Credentials match.",true);
     }
 }
