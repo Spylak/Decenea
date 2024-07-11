@@ -8,12 +8,6 @@ namespace Decenea.WebAPI.Features.User;
 
 public class GetManyUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<object>>>
 {
-    private readonly GetManyUsersQueryHandler _getManyUsersQueryHandler;
-    public GetManyUsersEndpoint(GetManyUsersQueryHandler getManyUsersQueryHandler)
-    {
-        _getManyUsersQueryHandler = getManyUsersQueryHandler;
-    }
-    
     public override void Configure()
     {
         Get("/User/GetMany");
@@ -22,7 +16,7 @@ public class GetManyUsersEndpoint : Endpoint<GetUsersRequest, ApiResponse<List<o
 
     public override async Task<ApiResponse<List<object>>> ExecuteAsync(GetUsersRequest req, CancellationToken ct)
     {
-        var result = await _getManyUsersQueryHandler.Handle(new GetManyUsersQuery(), ct);
+        var result = await new GetManyUsersQuery().ExecuteAsync(ct);
         return new ApiResponse<List<object>>(null, result.IsSuccess, result.Messages);
     }
 }

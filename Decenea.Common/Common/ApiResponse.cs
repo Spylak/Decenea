@@ -1,7 +1,13 @@
 namespace Decenea.Common.Common;
 
-public class ApiResponse
+public record ApiResponse
 {
+    public ApiResponse()
+    {
+        IsSuccess = false;
+        Messages = [];
+    }
+    
     public ApiResponse(bool? isSuccess = null)
     {
         IsSuccess = isSuccess ?? false;
@@ -42,8 +48,14 @@ public class ApiResponse
     public object? Data { get; set; }
 }
 
-public class ApiResponse<T> : ApiResponse where T : class?
+public record ApiResponse<T> : ApiResponse where T : class?
 {
+    public ApiResponse()
+    {
+        IsSuccess = false;
+        Messages = [];
+    }
+
     public ApiResponse(T? data = null, bool? isSuccess = null, List<string>? messages = null) : base(isSuccess, messages)
     {
         Data = data;

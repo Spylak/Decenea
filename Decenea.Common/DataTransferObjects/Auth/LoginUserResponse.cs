@@ -1,4 +1,4 @@
-namespace Decenea.Application.Users.Commands.LoginUser;
+namespace Decenea.Common.DataTransferObjects.Auth;
 
 public class LoginUserResponse
 {

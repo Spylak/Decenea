@@ -7,14 +7,8 @@ using Decenea.Common.Requests.User;
 
 namespace Decenea.WebAPI.Features.User;
 
-public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto>>
+public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponse<UserDto>>
 {
-    private readonly UpdateUserCommandHandler _updateUserCommandHandler;
-    public UpdateUserEndpoint(UpdateUserCommandHandler updateUserCommandHandler)
-    {
-        _updateUserCommandHandler = updateUserCommandHandler;
-    }
-
     public override void Configure()
     {
         Post("/User/Update");
@@ -22,7 +16,7 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
 
     public override async Task<ApiResponse<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)
     {
-        var command = new UpdateUserCommand()
+        var result = await new UpdateUserCommand()
         {
             Id = req.Id,
             Email = req.Email,
@@ -32,9 +26,7 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest,ApiResponse<UserDto
             MiddleName = req.MiddleName,
             PhoneNumber = req.PhoneNumber,
             Version = req.Version
-        };
-        
-        var result = await _updateUserCommandHandler.Handle(command, ct);
+        }.ExecuteAsync(ct);
         
         return new ApiResponse<UserDto>(result.Value,result.IsSuccess,result.Messages);
     }

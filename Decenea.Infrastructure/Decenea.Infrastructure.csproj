@@ -30,6 +30,7 @@
     
     <ItemGroup>
       <Folder Include="Persistence\EntityConfigurations\Question\" />
+      <Folder Include="Persistence\Repositories\" />
     </ItemGroup>
 
 </Project>

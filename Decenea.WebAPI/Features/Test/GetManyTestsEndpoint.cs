@@ -8,12 +8,6 @@ namespace Decenea.WebAPI.Features.Test;
 
 public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponse<IEnumerable<TestDto>>>
 {
-    private readonly GetManyTestsQueryHandler _getManyTestsQueryHandler;
-    public GetManyTestsEndpoint(GetManyTestsQueryHandler getManyTestsQueryHandler)
-    {
-        _getManyTestsQueryHandler = getManyTestsQueryHandler;
-    }
-    
     public override void Configure()
     {
         Get("/Test/GetMany");
@@ -22,18 +16,12 @@ public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponse<IE
     
     public override async Task<ApiResponse<IEnumerable<TestDto>>> ExecuteAsync(GetManyTestsRequest req, CancellationToken ct)
     {
-        var query = new GetManyTestsQuery
+        var result = await new GetManyTestsQuery
         {
             Skip = req.Skip,
-            Take = req.Take,
-            CommunityId = req.CommunityId,
-            MunicipalUnitId = req.MunicipalUnitId,
-            MunicipalityId = req.MunicipalityId,
-            RegionalUnitId = req.RegionalUnitId,
-            RegionId = req.RegionId,
-            CountryId = req.CountryId,
-        };
-        var result = await _getManyTestsQueryHandler.Handle(query, ct);
+            Take = req.Take
+        }.ExecuteAsync(ct);
+        
         return new ApiResponse<IEnumerable<TestDto>>(result.Value, result.IsSuccess, result.Messages);
     }
 }

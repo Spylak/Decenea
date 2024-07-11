@@ -1,26 +1,29 @@
-using Decenea.Application.Abstractions.Persistance.IRepositories;
+using Decenea.Application.Abstractions.Persistance;
+using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Domain.Aggregates.TestAggregate;
+using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Decenea.Application.Tests.Queries.GetTest;
 
-public class GetTestQueryHandler
+public class GetTestQueryHandler : ICommandHandler<GetTestQuery, Result<TestDto, Exception>>
 {
-    private readonly ITestRepository _testRepository;
-
-    public GetTestQueryHandler(ITestRepository testRepository)
+    private readonly IDeceneaDbContext _dbContext;
+    public GetTestQueryHandler(IDeceneaDbContext dbContext)
     {
-        _testRepository = testRepository;
+        _dbContext = dbContext;
     }
-    public async Task<Result<TestDto, Exception>> Handle(GetTestQuery query, CancellationToken cancellationToken)
+    public async Task<Result<TestDto, Exception>> ExecuteAsync(GetTestQuery query, CancellationToken cancellationToken)
     {
         try
         {
-            var testDto = await _testRepository
-                .GetTestDtoByTestId(query.Id);
+            var testDto = await _dbContext.Set<Test>()
+                .FirstOrDefaultAsync(i => i.Id.Equals(query.Id), cancellationToken);
 
-            return Result<TestDto, Exception>.Anticipated(testDto);
+            return Result<TestDto, Exception>.Anticipated(testDto?.TestToTestDto());
         }
         catch (Exception ex)
         {

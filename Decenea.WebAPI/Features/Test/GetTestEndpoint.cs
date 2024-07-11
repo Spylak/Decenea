@@ -9,12 +9,6 @@ namespace Decenea.WebAPI.Features.Test;
 
 public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponse<TestDto>>
 {
-    private readonly GetTestQueryHandler _getTestQueryHandler;
-    public GetTestEndpoint(GetTestQueryHandler getTestQueryHandler)
-    {
-        _getTestQueryHandler = getTestQueryHandler;
-    }
-    
     public override void Configure()
     {
         Get("/Test/Get");
@@ -23,12 +17,11 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponse<TestDto>>
     
     public override async Task<ApiResponse<TestDto>> ExecuteAsync(GetTestRequest req, CancellationToken ct)
     {
-        var test = new GetTestQuery()
+        var result = await new GetTestQuery()
         {
             Id = req.Id
-        };
+        }.ExecuteAsync(ct);
         
-        var result = await _getTestQueryHandler.Handle(test, ct);
         return new ApiResponse<TestDto>(result.Value, result.IsSuccess, result.Messages);
     }
 }

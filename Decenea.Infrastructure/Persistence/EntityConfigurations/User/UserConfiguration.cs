@@ -11,5 +11,8 @@ public class UserConfiguration : AuditableAggregateTypeConfiguration<Domain.Aggr
         base.Configure(builder);
 
         builder.ToTable(name: "Users");
+        
+        builder.HasIndex(u => u.Email)
+            .IsUnique();
     }
 }

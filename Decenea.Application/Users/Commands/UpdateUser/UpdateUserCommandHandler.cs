@@ -3,19 +3,20 @@ using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
+using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommandHandler
+public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Result<UserDto, Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
     public UpdateUserCommandHandler(IDeceneaDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    public async Task<Result<UserDto, Exception>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<UserDto, Exception>> ExecuteAsync(UpdateUserCommand command, CancellationToken cancellationToken)
     {
         try
         {

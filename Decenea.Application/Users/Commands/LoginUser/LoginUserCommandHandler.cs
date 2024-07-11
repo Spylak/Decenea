@@ -2,8 +2,10 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Helpers;
 using Decenea.Application.Mappers;
 using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
+using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +13,7 @@ using Serilog;
 
 namespace Decenea.Application.Users.Commands.LoginUser;
 
-public class LoginUserCommandHandler
+public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<LoginUserResponse, Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -20,7 +22,7 @@ public class LoginUserCommandHandler
         _dbContext = dbContext;
         _configuration = configuration;
     }
-    public async Task<Result<LoginUserResponse, Exception>> Handle(LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<LoginUserResponse, Exception>> ExecuteAsync(LoginUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -92,9 +94,10 @@ public class LoginUserCommandHandler
     private Result<LoginUserResponse, Exception> CheckPassword(string password,
         string passwordHash)
     {
-        var passHelper = new PasswordHelper();
+        var passwordHelper = new PasswordHelper(Convert.FromBase64String(_configuration["Auth:Pepper"]));
+
             
-        if (!passHelper.VerifyPassword(password, passwordHash))
+        if (!passwordHelper.VerifyPassword(password, passwordHash))
         {
             return Result<LoginUserResponse, Exception>.Anticipated(null,["Credentials don't match."]);
         }

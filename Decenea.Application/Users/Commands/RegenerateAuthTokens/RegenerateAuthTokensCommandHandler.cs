@@ -1,8 +1,10 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Extensions;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
+using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +12,7 @@ using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
 
-public class RegenerateAuthTokensCommandHandler
+public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand, Result<RegenerateAuthTokensResponse, Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -21,7 +23,7 @@ public class RegenerateAuthTokensCommandHandler
         _configuration = configuration;
     }
 
-    public async Task<Result<RegenerateAuthTokensResponse, Exception>> Handle(RegenerateAuthTokensCommand command,
+    public async Task<Result<RegenerateAuthTokensResponse, Exception>> ExecuteAsync(RegenerateAuthTokensCommand command,
         CancellationToken cancellationToken)
     {
         var claims = command.AccessToken.GetTokenClaimJwts();

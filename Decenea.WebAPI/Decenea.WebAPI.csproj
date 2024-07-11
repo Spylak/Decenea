@@ -36,5 +36,6 @@
 
     <ItemGroup>
       <None Remove="logs\log20240305.txt" />
+      <None Remove="logs\log20240711.txt" />
     </ItemGroup>
 </Project>

@@ -4,14 +4,14 @@ using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
-using Decenea.Domain.Helpers;
+using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegisterUser;
 
-public class RegisterUserCommandHandler
+public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Result<UserDto, Exception>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -20,7 +20,7 @@ public class RegisterUserCommandHandler
         _dbContext = dbContext;
         _configuration = configuration;
     }
-    public async Task<Result<UserDto, Exception>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<UserDto, Exception>> ExecuteAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         try
         {

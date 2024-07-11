@@ -1,5 +1,6 @@
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
+using FastEndpoints;
 
 
 namespace Decenea.Application.Users.Commands.RegisterUser;
@@ -10,4 +11,4 @@ public record RegisterUserCommand(string Email,
     string LastName,
     string MiddleName,
     string PhoneNumber,
-    string Password);
+    string Password) : ICommand<Result<UserDto, Exception>>;

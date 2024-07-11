@@ -28,6 +28,10 @@ builder.Services.SwaggerDocument();
 
 var app = builder.Build();
 await app.ExecuteInfrastructureOnStartup();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseDefaultExceptionHandler(useGenericReason: true);
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(c => {

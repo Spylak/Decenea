@@ -21,6 +21,7 @@
 
 
     <ItemGroup>
+      <Folder Include="Extensions\Messaging\" />
       <Folder Include="Tests\Events\" />
       <Folder Include="Tests\IntegrationEvents\" />
       <Folder Include="Users\Events\" />
