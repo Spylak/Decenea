@@ -7,14 +7,14 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class MultipleYesOrNoQuestion
 {
     [Parameter]
-    public QuestionBaseModel? MultipleYesOrNoQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> MultipleYesOrNoQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; }
+    public GenericQuestionModel? MultipleYesOrNoQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> MultipleYesOrNoQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; }
     protected override void OnParametersSet()
     {  
         if (MultipleYesOrNoQuestionBaseModel is not null)
         {
-            MultipleYesOrNoQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<MultipleYesOrNo>(MultipleYesOrNoQuestionBaseModel);
+            MultipleYesOrNoQuestionModel = GenericQuestionModel.ConvertToGenericModel<MultipleYesOrNo>(MultipleYesOrNoQuestionBaseModel);
             PopulateFields();
         }
     }
@@ -43,19 +43,19 @@ public partial class MultipleYesOrNoQuestion
     {
         MultipleYesOrNoQuestionModel = SampleHelper.GetMultipleYesOrNoQuestionSample();
         PopulateFields();
-        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleYesOrNoQuestionModel));
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleYesOrNoQuestionModel));
     }
     
     private void Reset()
     {
-        MultipleYesOrNoQuestionModel = new QuestionBaseModel<MultipleYesOrNo>(new MultipleYesOrNo());
+        MultipleYesOrNoQuestionModel = new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo());
         MultipleYesOrNoQuestionModel.Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         PopulateFields();
     }
 
     private async Task ChoiceChanged()
     {
-        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleYesOrNoQuestionModel));
+        await MultipleYesOrNoQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleYesOrNoQuestionModel));
     }
     
     private void PopulateFields()

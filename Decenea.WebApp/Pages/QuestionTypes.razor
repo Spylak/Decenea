@@ -6,15 +6,15 @@
     <MudItem xs="12" sm="3">
         <MudHidden Breakpoint="Breakpoint.SmAndUp" Invert="true">
             <MudTabs Elevation="0" Outlined="true" @bind-ActivePanelIndex="activeIndex" Position="Position.Left">
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.DragAndDrop))" Text="Drag and drop" ID='"pn_one"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.OrderingDragAndDrop))" Text="Ordering DragAndDrop" ID='"pn_one"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.Dropdown))" Text="Dropdown" ID='"pn_two"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.FillBlank))" Text="Fill Blank" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.FillBlankDropdown))" Text="Space In Text" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleChoice))" Text="Multiple Choice" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleChoiceSingle))" Text="Multiple Choice Single" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.MultipleYesOrNo))" Text="Yes or No" ID='"pn_three"'></MudTabPanel>
-                <MudTabPanel OnClick="@(() => OpenOverlay(QuestionTypeValues.Ordering))" Text="Ordering" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.DragAndDrop)))" Text="Drag and drop" ID='"pn_one"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.OrderingDragAndDrop)))" Text="Ordering DragAndDrop" ID='"pn_one"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.Dropdown)))" Text="Dropdown" ID='"pn_two"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.FillBlank)))" Text="Fill Blank" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.FillBlankDropdown)))" Text="Space In Text" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.MultipleChoice)))" Text="Multiple Choice" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.MultipleChoiceSingle)))" Text="Multiple Choice Single" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.MultipleYesOrNo)))" Text="Yes or No" ID='"pn_three"'></MudTabPanel>
+                <MudTabPanel OnClick="@(() => OpenOverlay(nameof(QuestionType.Ordering)))" Text="Ordering" ID='"pn_three"'></MudTabPanel>
             </MudTabs>
         </MudHidden>
         <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
@@ -27,41 +27,41 @@
         </MudHidden>
     </MudItem>
     <MudItem xs="12" sm="9">
-        @if (Visibility[QuestionTypeValues.FillBlank])
+        @if (Visibility[nameof(QuestionType.FillBlank)])
         {
             <FillBlankQuestion ReadOnly="true" FillBlankQuestionBaseModel="FillBlank"></FillBlankQuestion>
         }
-        else if (Visibility[QuestionTypeValues.FillBlankDropdown])
+        else if (Visibility[nameof(QuestionType.FillBlankDropdown)])
         {
-            <FillBlankDropdownQuestion ReadOnly="true" FillBlankDropdownQuestionBaseModel="FillBlankDropdownQuestion"></FillBlankDropdownQuestion>
+            <FillBlankDropdownQuestion ReadOnly="true" FillBlankDropdownQuestionBaseModel="FillBlankDropdownGenericQuestion"></FillBlankDropdownQuestion>
         }
-        else if (Visibility[QuestionTypeValues.DragAndDrop])
+        else if (Visibility[nameof(QuestionType.DragAndDrop)])
         {
             <DragAndDropQuestion ReadOnly="true" DragAndDropQuestionBaseModel="DragAndDrop"></DragAndDropQuestion>
         }
-        else if (Visibility[QuestionTypeValues.Dropdown])
+        else if (Visibility[nameof(QuestionType.Dropdown)])
         {
             <DropdownQuestion ReadOnly="true" DropdownQuestionBaseModel="Dropdown"></DropdownQuestion>
         }
-        else if (Visibility[QuestionTypeValues.MultipleChoice])
+        else if (Visibility[nameof(QuestionType.MultipleChoice)])
         {
             <MultipleChoiceQuestion ReadOnly="true" MultipleChoiceQuestionBaseModel="MultipleChoice"></MultipleChoiceQuestion>
         }
-        else if (Visibility[QuestionTypeValues.MultipleYesOrNo])
+        else if (Visibility[nameof(QuestionType.MultipleYesOrNo)])
         {
             <MultipleYesOrNoQuestion ReadOnly="true" MultipleYesOrNoQuestionBaseModel="MultipleYesOrNo"></MultipleYesOrNoQuestion>
         }
-        else if (Visibility[QuestionTypeValues.Ordering])
+        else if (Visibility[nameof(QuestionType.Ordering)])
         {
-            <OrderingQuestion ReadOnly="true" OrderingQuestionBaseModel="OrderingQuestionModel"></OrderingQuestion>
+            <OrderingQuestion ReadOnly="true" OrderingQuestionBaseModel="OrderingGenericQuestionModel"></OrderingQuestion>
         }
-        else if (Visibility[QuestionTypeValues.MultipleChoiceSingle])
+        else if (Visibility[nameof(QuestionType.MultipleChoiceSingle)])
         {
             <MultipleChoiceSingleQuestion ReadOnly="true" MultipleChoiceSingleQuestionBaseModel="MultipleChoiceSingle"></MultipleChoiceSingleQuestion>
         }
-        else if (Visibility[QuestionTypeValues.OrderingDragAndDrop])
+        else if (Visibility[nameof(QuestionType.OrderingDragAndDrop)])
         {
-            <OrderingDnDQuestion ReadOnly="true" OrderingDnDQuestionBaseModel="OrderingDnDQuestionModel"></OrderingDnDQuestion>
+            <OrderingDnDQuestion ReadOnly="true" OrderingDnDQuestionBaseModel="OrderingDnDGenericQuestionModel"></OrderingDnDQuestion>
         }
 
     </MudItem>

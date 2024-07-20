@@ -20,8 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Aggregates\QuestionAggregate\" />
-      <Folder Include="Aggregates\QuestionAggregate\Common\" />
       <Folder Include="Services\IServices\" />
     </ItemGroup>
 

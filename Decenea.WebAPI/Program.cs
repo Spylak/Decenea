@@ -10,9 +10,9 @@ var builder = WebApplication.CreateBuilder();
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.Console()
-    .WriteTo.File("logs/log.txt",
-        rollingInterval: RollingInterval.Day,
-        rollOnFileSizeLimit: true)
+    // .WriteTo.File("logs/log.txt",
+    //     rollingInterval: RollingInterval.Day,
+    //     rollOnFileSizeLimit: true)
     .CreateLogger();
 
 builder.Configuration

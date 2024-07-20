@@ -1,9 +1,15 @@
-using Decenea.Common.Constants;
+
+
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class OrderingDragAndDrop
+public class OrderingDragAndDrop : QuestionBase
 {
+    public OrderingDragAndDrop() : base(QuestionType.OrderingDragAndDrop)
+    {
+        
+    }
     public List<DropItem> Choices { get; set; } = new List<DropItem>();
     public DropZone AnswerZone { get; set; } = new DropZone()
     {

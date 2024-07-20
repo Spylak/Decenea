@@ -1,6 +1,6 @@
 using Decenea.Common.Common;
 
-namespace Decenea.Domain.Aggregates.QuestionAggregate.Questions.ValueObjects;
+namespace Decenea.Domain.Aggregates.TestAggregate.Questions.ValueObjects;
 
 public class FillBlank : ValueObject
 {

@@ -1,12 +1,11 @@
 
-
-using Decenea.Common.Constants;
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class DragAndDrop
+public class DragAndDrop : QuestionBase
 {
-    public DragAndDrop(List<DropZone>? dropzones = null)
+    public DragAndDrop(List<DropZone>? dropzones = null) : base(QuestionType.DragAndDrop)
     {
         DropZones = new List<DropZone>()
         {

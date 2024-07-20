@@ -12,5 +12,5 @@ public class Test
     public DateTime FinishTime => StartingTime.AddMinutes(MinutesToComplete);
     public bool IsActive { get; set; }
     public bool IsDraft { get; set; }
-    public List<QuestionBaseModel> QuestionBaseModels { get; set; } = new List<QuestionBaseModel>();
+    public List<GenericQuestionModel> GenericQuestionModels { get; set; } = new List<GenericQuestionModel>();
 }

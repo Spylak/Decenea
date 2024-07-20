@@ -1,10 +1,15 @@
-using Decenea.Common.Constants;
+
+using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class Ordering
+public class Ordering : QuestionBase
 {
+    public Ordering() : base(QuestionType.Ordering)
+    {
+        
+    }
     public List<Choice> Choices { get; set; } = new List<Choice>();
 
     public class Choice : ISortable

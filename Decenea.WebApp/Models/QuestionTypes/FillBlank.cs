@@ -1,9 +1,13 @@
-using Decenea.Common.Constants;
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class FillBlank
+public class FillBlank : QuestionBase
 {
+    public FillBlank() : base(QuestionType.FillBlank)
+    {
+        
+    }
     public List<SpaceOption> Options { get; set; }  = new List<SpaceOption>();
 
     public class SpaceOption

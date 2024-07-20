@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 
-public class UserVersionConfiguration : EntityVersionTypeConfiguration<UserVersion>
+public class UserVersionConfiguration : EntityVersionConfiguration<UserVersion>
 {
     public override void Configure(EntityTypeBuilder<UserVersion> builder)
     {

@@ -11,11 +11,11 @@ public static class TestExtension
     {
         try
         {
-            var question = test.QuestionBaseModels.FirstOrDefault(i => i.Id == questionId);
+            var question = test.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId);
             if(question is null)
                 return new ResponseAPI<dynamic?>(null, false, "No question found.");
 
-            test.QuestionBaseModels.Remove(question);
+            test.GenericQuestionModels.Remove(question);
             return new ResponseAPI<dynamic?>(question, true, "Successfully deleted question.");
         }
         catch (Exception ex)

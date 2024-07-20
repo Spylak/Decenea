@@ -6,11 +6,11 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 
 public class QuestionBaseComponent : ComponentBase
 {
-    [Parameter] public EventCallback<QuestionBaseModel> SaveCallback { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> SaveCallback { get; set; }
     [Parameter] public bool ReadOnly { get; set; } = false;
     [Inject] protected IGlobalFunctionService GlobalFunctionService { get; set; }
-    protected async Task Save(QuestionBaseModel questionBaseModel)
+    protected async Task Save(GenericQuestionModel genericQuestionModel)
     {
-        await SaveCallback.InvokeAsync(questionBaseModel);
+        await SaveCallback.InvokeAsync(genericQuestionModel);
     }
 }

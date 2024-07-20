@@ -1,5 +1,6 @@
+using Decenea.Common.Enums;
 using Microsoft.AspNetCore.Components;
-using Decenea.Common.Constants;
+
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models.QuestionTypes;
 using Decenea.WebApp.Services.IService;
@@ -11,34 +12,34 @@ public partial class QuestionTypes
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     int activeIndex = 0;
 
-    private QuestionBaseModel DragAndDrop { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<DragAndDrop>(SampleHelper.GetDragAndDropQuestionSample());
+    private GenericQuestionModel DragAndDrop { get; set; } = GenericQuestionModel.ConvertToGenericModel<DragAndDrop>(SampleHelper.GetDragAndDropQuestionSample());
     
-    private QuestionBaseModel OrderingDnDQuestionModel { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<OrderingDragAndDrop>(SampleHelper.GetOrderingDnDQuestionSample());
+    private GenericQuestionModel OrderingDnDGenericQuestionModel { get; set; } = GenericQuestionModel.ConvertToGenericModel<OrderingDragAndDrop>(SampleHelper.GetOrderingDnDQuestionSample());
     
-    private QuestionBaseModel FillBlank { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<FillBlank>(SampleHelper.GetFillBlankQuestionSample());
+    private GenericQuestionModel FillBlank { get; set; } = GenericQuestionModel.ConvertToGenericModel<FillBlank>(SampleHelper.GetFillBlankQuestionSample());
 
-    private QuestionBaseModel OrderingQuestionModel { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<Ordering>(SampleHelper.GetOrderingQuestionSample());
+    private GenericQuestionModel OrderingGenericQuestionModel { get; set; } = GenericQuestionModel.ConvertToGenericModel<Ordering>(SampleHelper.GetOrderingQuestionSample());
 
-    private QuestionBaseModel MultipleYesOrNo { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleYesOrNo>(SampleHelper.GetMultipleYesOrNoQuestionSample());
+    private GenericQuestionModel MultipleYesOrNo { get; set; } = GenericQuestionModel.ConvertToGenericModel<MultipleYesOrNo>(SampleHelper.GetMultipleYesOrNoQuestionSample());
 
-    private QuestionBaseModel MultipleChoice { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoice>(SampleHelper.GetMultipleChoiceQuestionSample());
+    private GenericQuestionModel MultipleChoice { get; set; } = GenericQuestionModel.ConvertToGenericModel<MultipleChoice>(SampleHelper.GetMultipleChoiceQuestionSample());
 
-    private QuestionBaseModel Dropdown { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<Dropdown>(SampleHelper.GetDropdownQuestionSample());
+    private GenericQuestionModel Dropdown { get; set; } = GenericQuestionModel.ConvertToGenericModel<Dropdown>(SampleHelper.GetDropdownQuestionSample());
 
-    private QuestionBaseModel MultipleChoiceSingle { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoiceSingle>(SampleHelper.GetMultipleChoiceSingleQuestionSample());
-    private QuestionBaseModel FillBlankDropdownQuestion { get; set; } = QuestionBaseModel.ConvertToGenericBaseModel<FillBlankDropdown>(SampleHelper.GetFillBlankDropdownQuestionSample());
+    private GenericQuestionModel MultipleChoiceSingle { get; set; } = GenericQuestionModel.ConvertToGenericModel<MultipleChoiceSingle>(SampleHelper.GetMultipleChoiceSingleQuestionSample());
+    private GenericQuestionModel FillBlankDropdownGenericQuestion { get; set; } = GenericQuestionModel.ConvertToGenericModel<FillBlankDropdown>(SampleHelper.GetFillBlankDropdownQuestionSample());
 
     private Dictionary<string, bool> Visibility = new Dictionary<string, bool>()
     {
-        { QuestionTypeValues.DragAndDrop, true },
-        { QuestionTypeValues.OrderingDragAndDrop, false },
-        { QuestionTypeValues.Dropdown, false },
-        { QuestionTypeValues.FillBlank, false },
-        { QuestionTypeValues.FillBlankDropdown, false },
-        { QuestionTypeValues.MultipleChoice, false },
-        { QuestionTypeValues.MultipleChoiceSingle, false },
-        { QuestionTypeValues.MultipleYesOrNo, false },
-        { QuestionTypeValues.Ordering, false }
+        { nameof(QuestionType.DragAndDrop), true },
+        { nameof(QuestionType.OrderingDragAndDrop), false },
+        { nameof(QuestionType.Dropdown), false },
+        { nameof(QuestionType.FillBlank), false },
+        { nameof(QuestionType.FillBlankDropdown), false },
+        { nameof(QuestionType.MultipleChoice), false },
+        { nameof(QuestionType.MultipleChoiceSingle), false },
+        { nameof(QuestionType.MultipleYesOrNo), false },
+        { nameof(QuestionType.Ordering), false }
     };
 
     private void OpenOverlay(string type)

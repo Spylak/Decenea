@@ -8,9 +8,9 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class FillBlankDropdownQuestion
 {
     [Parameter]
-    public QuestionBaseModel? FillBlankDropdownQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> FillBlankDropdownQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; }
+    public GenericQuestionModel? FillBlankDropdownQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> FillBlankDropdownQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; }
     private string SpecialChars { get; set; } = "_____";
     private List<string> QuestionText { get; set; } = new List<string>();
     private string DynamicQuestion { get; set; } = "";
@@ -26,7 +26,7 @@ public partial class FillBlankDropdownQuestion
     {
         if (FillBlankDropdownQuestionBaseModel is not null)
         {
-            FillBlankDropdownQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
+            FillBlankDropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
             UpdateOptions(FillBlankDropdownQuestionModel.Description);
             PopulateDynamicQuestion();
         }
@@ -103,12 +103,12 @@ public partial class FillBlankDropdownQuestion
         FillBlankDropdownQuestionModel = SampleHelper.GetFillBlankDropdownQuestionSample();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankDropdownQuestionModel));
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(FillBlankDropdownQuestionModel));
     }
     
     private void Reset()
     {
-        FillBlankDropdownQuestionModel = new QuestionBaseModel<FillBlankDropdown>(new FillBlankDropdown());
+        FillBlankDropdownQuestionModel = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown());
         FillBlankDropdownQuestionModel.Id = FillBlankDropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
@@ -151,6 +151,6 @@ public partial class FillBlankDropdownQuestion
             }
         }
         PopulateDynamicQuestion();
-        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankDropdownQuestionModel));
+        await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(FillBlankDropdownQuestionModel));
     }
 }

@@ -7,7 +7,7 @@ namespace Decenea.WebApp.Database;
 
 public class IndexedDb(IJSRuntime jsRuntime) : BlazorIndexedDb(jsRuntime)
 {
-    public readonly IndexedDbTable<QuestionBaseModel> Questions = new(jsRuntime, "questions");
+    public readonly IndexedDbTable<GenericQuestionModel> Questions = new(jsRuntime, "questions");
     public readonly IndexedDbTable<Test> Tests = new(jsRuntime, "tests");
     public readonly IndexedDbTable<Test> CompletedTests = new(jsRuntime, "completedtests");
     public readonly IndexedDbTable<Test> UpsertTest = new(jsRuntime, "upserttest");

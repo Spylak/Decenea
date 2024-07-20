@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 
-public class UserClaimConfiguration : AuditableEntityTypeConfiguration<UserClaim>
+public class UserClaimConfiguration : AuditableEntityConfiguration<UserClaim>
 {
     public override void Configure(EntityTypeBuilder<UserClaim> builder)
     {

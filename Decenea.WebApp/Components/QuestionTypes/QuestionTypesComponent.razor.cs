@@ -1,6 +1,7 @@
+using Decenea.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using Decenea.Common.Constants;
+
 using Decenea.WebApp.Constants;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models;
@@ -15,12 +16,12 @@ public partial class QuestionTypesComponent
     [Inject] private ISnackbar Snackbar { get; set; }
     [Parameter] public Test Test { get; set; }
 
-    [Parameter] public QuestionBaseModel? Question { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> QuestionChanged { get; set; }
+    [Parameter] public GenericQuestionModel? Question { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> QuestionChanged { get; set; }
     [Parameter] public string Style { get; set; } = "";
 
     [Parameter] public bool PresentationOnly { get; set; } = false;
-    private string VisibleQuestionType { get; set; } = QuestionTypeValues.MultipleChoiceSingle;
+    private QuestionType? VisibleQuestionType { get; set; } = QuestionType.MultipleChoiceSingle;
     private bool PreviewMode { get; set; } = false;
     public override async Task SetParametersAsync(ParameterView parameters)
     {
@@ -31,30 +32,30 @@ public partial class QuestionTypesComponent
         }
     }
 
-    private void ChangeType(string? type = null)
+    private void ChangeType(QuestionType? type = null)
     {
         if (type is null)
             return;
         VisibleQuestionType = type;
         StateHasChanged();
     }
-    private void SaveQuestionToTest(QuestionBaseModel questionBaseModel)
+    private void SaveQuestionToTest(GenericQuestionModel genericQuestionModel)
     {
-        var question = Test.QuestionBaseModels
-            .FirstOrDefault(i => i.Id!.Equals(questionBaseModel.Id));
+        var question = Test.GenericQuestionModels
+            .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
         if (question is null)
         {
-            if (!string.IsNullOrWhiteSpace(questionBaseModel.Description))
+            if (!string.IsNullOrWhiteSpace(genericQuestionModel.Description))
             {
-                Test.QuestionBaseModels.Add(questionBaseModel);
+                Test.GenericQuestionModels.Add(genericQuestionModel);
                 Snackbar.Add(Messages.QuestionSaved, Severity.Success);
                 return;
             }
         }
         else
         {
-            Test.QuestionBaseModels.Remove(question);
-            Test.QuestionBaseModels.Add(questionBaseModel);
+            Test.GenericQuestionModels.Remove(question);
+            Test.GenericQuestionModels.Add(genericQuestionModel);
             Snackbar.Add(Messages.QuestionSaved, Severity.Success);
             return;
         }
@@ -62,14 +63,14 @@ public partial class QuestionTypesComponent
         Snackbar.Add(Messages.QuestionError, Severity.Error);
     }
 
-    private async Task UpdateQuestion(QuestionBaseModel questionBaseModel)
+    private async Task UpdateQuestion(GenericQuestionModel genericQuestionModel)
     {
-        var question = Test.QuestionBaseModels
-            .FirstOrDefault(i => i.Id!.Equals(questionBaseModel.Id));
+        var question = Test.GenericQuestionModels
+            .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
         if (question is null)
             return;
-        Test.QuestionBaseModels.Remove(question);
-        Test.QuestionBaseModels.Add(questionBaseModel);
-        await QuestionChanged.InvokeAsync(questionBaseModel);
+        Test.GenericQuestionModels.Remove(question);
+        Test.GenericQuestionModels.Add(genericQuestionModel);
+        await QuestionChanged.InvokeAsync(genericQuestionModel);
     }
 }

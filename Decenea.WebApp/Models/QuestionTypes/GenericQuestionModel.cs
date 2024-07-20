@@ -1,13 +1,18 @@
-
 using System.Text.Json;
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class QuestionBaseModel
-{
-    public QuestionBaseModel(string questionType)
+public class GenericQuestionModel
+{ 
+    public GenericQuestionModel(QuestionType? questionType)
     {
-        QuestionType = questionType;
+        if (questionType is null)
+        {
+            throw new Exception("QuestionType is null");
+        }
+        
+        QuestionType = questionType.Value;
     }
     public string? Id { get; set; } = Guid.NewGuid().ToString();
     public string Description { get; set; } = "";
@@ -15,9 +20,9 @@ public class QuestionBaseModel
     public int SecondsToAnswer { get; set; } 
     public int Order { get; set; } 
     public double Weight { get; set; }
-    public string QuestionType { get; init; }
+    public QuestionType QuestionType { get; init; }
     public string SerializedQuestionContent { get; set; } = string.Empty;
-    public static QuestionBaseModel<T> ConvertToGenericBaseModel<T>(QuestionBaseModel nonGenericModel) where T : class
+    public static GenericQuestionModel<T> ConvertToGenericModel<T>(GenericQuestionModel nonGenericModel) where T : QuestionBase
     {
         T questionContent = JsonSerializer.Deserialize<T>(nonGenericModel.SerializedQuestionContent)!;
 
@@ -26,7 +31,7 @@ public class QuestionBaseModel
             throw new InvalidOperationException("Deserialization of question content failed.");
         }
 
-        var genericModel = new QuestionBaseModel<T>(questionContent)
+        var genericModel = new GenericQuestionModel<T>(questionContent)
         {
             Id = nonGenericModel.Id,
             Description = nonGenericModel.Description,
@@ -39,12 +44,16 @@ public class QuestionBaseModel
         return genericModel;
     }
     
-    public static QuestionBaseModel ConvertToNonGenericBaseModel<T>(QuestionBaseModel<T>? genericModel) where T : class
+    public static GenericQuestionModel ConvertToNonGenericModel<T>(GenericQuestionModel<T> genericModel) where T : QuestionBase
     {
-        if (genericModel is null)
-            return new QuestionBaseModel(typeof(T).Name);
+        var questionType = (QuestionType?)typeof(T)
+            .GetProperty(nameof(Common.Enums.QuestionType))?
+            .GetValue(genericModel.QuestionContent);
         
-        var nonGenericModel = new QuestionBaseModel(genericModel.QuestionType)
+        if (!questionType.HasValue)
+            throw new Exception("Question type is empty.");
+            
+        var nonGenericModel = new GenericQuestionModel(questionType.Value)
         {
             Id = genericModel.Id,
             Description = genericModel.Description,
@@ -59,13 +68,13 @@ public class QuestionBaseModel
     }
 }
 
-public class QuestionBaseModel<T> : QuestionBaseModel where T : class
+public class GenericQuestionModel<T> : GenericQuestionModel where T : QuestionBase
 {
     private T _questionContent;
-    public QuestionBaseModel(T questionContent) : base(typeof(T).Name)
+    public GenericQuestionModel(T questionContent) : base((QuestionType?)typeof(T).GetProperty(nameof(Common.Enums.QuestionType))?.GetValue(questionContent))
     {
         SerializedQuestionContent = JsonSerializer.Serialize(questionContent);
-        QuestionContent = questionContent;
+        _questionContent = questionContent;
     }
 
     public T QuestionContent

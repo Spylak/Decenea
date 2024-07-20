@@ -4,9 +4,9 @@ namespace Decenea.WebApp.Helpers;
 
 public static class SampleHelper
 {
-    public static QuestionBaseModel<DragAndDrop> GetDragAndDropQuestionSample()
+    public static GenericQuestionModel<DragAndDrop> GetDragAndDropQuestionSample()
     {
-        return new QuestionBaseModel<DragAndDrop>(new DragAndDrop())
+        return new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
         {
             Description =
                 "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
@@ -31,9 +31,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<Dropdown> GetDropdownQuestionSample()
+    public static GenericQuestionModel<Dropdown> GetDropdownQuestionSample()
     {
-        return new QuestionBaseModel<Dropdown>(new Dropdown())
+        return new GenericQuestionModel<Dropdown>(new Dropdown())
         {
             Description  = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
             QuestionContent = new Dropdown
@@ -66,9 +66,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<Ordering> GetOrderingQuestionSample()
+    public static GenericQuestionModel<Ordering> GetOrderingQuestionSample()
     {
-        return new QuestionBaseModel<Ordering>(new Ordering())
+        return new GenericQuestionModel<Ordering>(new Ordering())
         {
             Description = "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
             QuestionContent = new Ordering()
@@ -85,9 +85,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<FillBlankDropdown> GetFillBlankDropdownQuestionSample()
+    public static GenericQuestionModel<FillBlankDropdown> GetFillBlankDropdownQuestionSample()
     {
-        var question = new QuestionBaseModel<FillBlankDropdown>(new FillBlankDropdown())
+        var question = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
         {
             Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
             QuestionContent = new FillBlankDropdown()
@@ -121,18 +121,18 @@ public static class SampleHelper
         return question;
     }
 
-    public static QuestionBaseModel<FillBlank> GetFillBlankQuestionSample()
+    public static GenericQuestionModel<FillBlank> GetFillBlankQuestionSample()
     {
-        return new QuestionBaseModel<FillBlank>(new FillBlank())
+        return new GenericQuestionModel<FillBlank>(new FillBlank())
         {
             Description = 
                 "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,  comes from a line in section 1.10.32.The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 fromby Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
         };
     }
 
-    public static QuestionBaseModel<MultipleChoiceSingle> GetMultipleChoiceSingleQuestionSample()
+    public static GenericQuestionModel<MultipleChoiceSingle> GetMultipleChoiceSingleQuestionSample()
     {
-        return new QuestionBaseModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
+        return new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
         {
             QuestionContent = new MultipleChoiceSingle()
             {
@@ -163,9 +163,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<MultipleYesOrNo> GetMultipleYesOrNoQuestionSample()
+    public static GenericQuestionModel<MultipleYesOrNo> GetMultipleYesOrNoQuestionSample()
     {
-        return new QuestionBaseModel<MultipleYesOrNo>(new MultipleYesOrNo())
+        return new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo())
         {
             QuestionContent = new MultipleYesOrNo()
             {
@@ -180,9 +180,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<MultipleChoice> GetMultipleChoiceQuestionSample()
+    public static GenericQuestionModel<MultipleChoice> GetMultipleChoiceQuestionSample()
     {
-        return new QuestionBaseModel<MultipleChoice>(new MultipleChoice())
+        return new GenericQuestionModel<MultipleChoice>(new MultipleChoice())
         {
             QuestionContent = new MultipleChoice()
             {
@@ -215,9 +215,9 @@ public static class SampleHelper
         };
     }
 
-    public static QuestionBaseModel<OrderingDragAndDrop> GetOrderingDnDQuestionSample()
+    public static GenericQuestionModel<OrderingDragAndDrop> GetOrderingDnDQuestionSample()
     {
-        return new QuestionBaseModel<OrderingDragAndDrop>(new OrderingDragAndDrop())
+        return new GenericQuestionModel<OrderingDragAndDrop>(new OrderingDragAndDrop())
         {
             QuestionContent = new OrderingDragAndDrop()
             {

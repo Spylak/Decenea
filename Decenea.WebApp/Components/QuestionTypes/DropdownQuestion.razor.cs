@@ -7,14 +7,14 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class DropdownQuestion
 {
     [Parameter]
-    public QuestionBaseModel? DropdownQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> DropdownQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<Dropdown>? DropdownQuestionModel { get; set; }
+    public GenericQuestionModel? DropdownQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> DropdownQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<Dropdown>? DropdownQuestionModel { get; set; }
     protected override void OnParametersSet()
     {
         if (DropdownQuestionBaseModel is not null)
         {
-            DropdownQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<Dropdown>(DropdownQuestionBaseModel);
+            DropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<Dropdown>(DropdownQuestionBaseModel);
             PopulateFields();
         }
     }
@@ -31,12 +31,12 @@ public partial class DropdownQuestion
     {
         DropdownQuestionModel = SampleHelper.GetDropdownQuestionSample();
         PopulateFields();
-        await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DropdownQuestionModel));
+        await DropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DropdownQuestionModel));
     }
     
     private void Reset()
     {
-        DropdownQuestionModel = new QuestionBaseModel<Dropdown>(new Dropdown());
+        DropdownQuestionModel = new GenericQuestionModel<Dropdown>(new Dropdown());
         DropdownQuestionModel.Id = DropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         ClearFields();
     }
@@ -112,7 +112,7 @@ public partial class DropdownQuestion
         if (DropdownQuestionModel is not null)
         {
             DropdownQuestionModel.QuestionContent = new Dropdown() { SubQuestions = subQuestions };
-            await DropdownQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(DropdownQuestionModel));
+            await DropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DropdownQuestionModel));
         }
     }
 }

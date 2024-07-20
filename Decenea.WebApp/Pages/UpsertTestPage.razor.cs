@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Decenea.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Components;
@@ -78,16 +79,16 @@ public partial class UpsertTestPage
         NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTest.Id}");
     }
 
-    private async Task Update(QuestionBaseModel entity)
+    private async Task Update(GenericQuestionModel entity)
     {
     }
 
-    async Task CommittedItemChanges(QuestionBaseModel item)
+    async Task CommittedItemChanges(GenericQuestionModel item)
     {
         await Update(item);
     }
 
-    private async Task RemoveRange(ICollection<QuestionBaseModel> questions)
+    private async Task RemoveRange(ICollection<GenericQuestionModel> questions)
     {
         if (questions is null)
             return;
@@ -96,7 +97,7 @@ public partial class UpsertTestPage
             var obj =
                 TestContainer.UpsertTest
                     .GetType()
-                    .GetProperty(question.QuestionType);
+                    .GetProperty(nameof(question.QuestionType));
             obj
                 .GetType()
                 .GetMethod("Remove")
@@ -104,7 +105,7 @@ public partial class UpsertTestPage
         }
     }
 
-    private async Task QuestionDialog(string? questionType = null, string? questionId = null)
+    private async Task QuestionDialog(QuestionType? questionType = null, string? questionId = null)
     {
         var parameters = new DialogParameters
         {
@@ -118,7 +119,7 @@ public partial class UpsertTestPage
             CloseOnEscapeKey = true
         };
         if (questionType is not null && questionId is not null)
-            parameters.Add("Question",TestContainer.UpsertTest.QuestionBaseModels.FirstOrDefault(i => i.Id == questionId));
+            parameters.Add("Question",TestContainer.UpsertTest.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
         var dialog = DialogService.Show<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
         await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTest);

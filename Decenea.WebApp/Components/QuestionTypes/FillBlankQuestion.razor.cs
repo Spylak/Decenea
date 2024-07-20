@@ -10,9 +10,9 @@ public partial class FillBlankQuestion
 {
 
     [Parameter]
-    public QuestionBaseModel? FillBlankQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> FillBlankQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<FillBlank>? FillBlankQuestionModel { get; set; }
+    public GenericQuestionModel? FillBlankQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> FillBlankQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<FillBlank>? FillBlankQuestionModel { get; set; }
     private string DynamicQuestion { get; set; } = "";
     private List<FillBlank.SpaceOption> Fields { get; set; } = new List<FillBlank.SpaceOption>();
     private string SpecialChars { get; set; } = "_____";
@@ -22,7 +22,7 @@ public partial class FillBlankQuestion
     {
         if (FillBlankQuestionBaseModel is not null)
         {
-            FillBlankQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<FillBlank>(FillBlankQuestionBaseModel);
+            FillBlankQuestionModel = GenericQuestionModel.ConvertToGenericModel<FillBlank>(FillBlankQuestionBaseModel);
             Fields = FillBlankQuestionModel.QuestionContent.Options;
             UpdateOptions(FillBlankQuestionModel.Description);
             PopulateDynamicQuestion();
@@ -72,12 +72,12 @@ public partial class FillBlankQuestion
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
         PopulateDynamicQuestion();
-        await FillBlankQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankQuestionModel));
+        await FillBlankQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(FillBlankQuestionModel));
     }
     
     private void Reset()
     {
-        FillBlankQuestionModel = new QuestionBaseModel<FillBlank>(new FillBlank());
+        FillBlankQuestionModel = new GenericQuestionModel<FillBlank>(new FillBlank());
         FillBlankQuestionModel.Id = FillBlankQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
@@ -118,6 +118,6 @@ public partial class FillBlankQuestion
             return;
         field.Text = args;
         PopulateDynamicQuestion();
-        await FillBlankQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankQuestionModel));
+        await FillBlankQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(FillBlankQuestionModel));
     }
 }

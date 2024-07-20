@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 
-public class AuditLogConfiguration : EntityVersionTypeConfiguration<AuditLog>
+public class AuditLogConfiguration : EntityVersionConfiguration<AuditLog>
 {
     public override void Configure(EntityTypeBuilder<AuditLog> builder)
     {

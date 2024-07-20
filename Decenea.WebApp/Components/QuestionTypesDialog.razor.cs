@@ -11,7 +11,7 @@ public partial class QuestionTypesDialog
 
     [Parameter] public string? ContentText { get; set; }
     [Parameter] public Test Test { get; set; }
-    [Parameter] public QuestionBaseModel Question { get; set; }
+    [Parameter] public GenericQuestionModel GenericQuestion { get; set; }
 
     [Parameter] public string? ButtonText { get; set; }
 

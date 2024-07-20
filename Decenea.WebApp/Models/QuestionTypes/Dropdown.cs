@@ -1,11 +1,17 @@
 
 
-using Decenea.Common.Constants;
+
+
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class Dropdown
+public class Dropdown : QuestionBase
 {
+    public Dropdown() : base(QuestionType.Dropdown)
+    {
+        
+    }
     public List<SubQuestion> SubQuestions { get; set; } = new List<SubQuestion>();
     public class SubQuestion
     {

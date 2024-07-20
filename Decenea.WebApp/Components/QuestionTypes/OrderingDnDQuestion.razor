@@ -26,7 +26,7 @@
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="async () => await Reset()">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingDnDQuestionModel))">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(GenericQuestionModel.ConvertToNonGenericModel(OrderingDnDQuestionModel))">Save</MudButton>
         </MudItem>
         foreach (var item in OrderingDnDQuestionModel?.QuestionContent?.Choices ?? [])
         {

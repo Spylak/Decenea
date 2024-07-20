@@ -14,9 +14,9 @@ public partial class OnGoingTestPage : IDisposable
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     [Parameter] public string? TestId { get; set; }
     private Timer? Timer { get; set; }
-    private List<QuestionBaseModel> QuestionBaseModels { get; set; } = new List<QuestionBaseModel>();
+    private List<GenericQuestionModel> QuestionBaseModels { get; set; } = new List<GenericQuestionModel>();
     private int ActiveQuestionIndex = 0;
-    private QuestionBaseModel ActiveQuestion { get; set; }
+    private GenericQuestionModel ActiveGenericQuestion { get; set; }
     private int TimeRemaining => TestContainer.OngoingTest.MinutesToComplete*60 - ElapsedTime;
     private int ElapsedTime { get; set; }
     TimeSpan TimeSpan => TimeSpan.FromSeconds(TimeRemaining);
@@ -99,16 +99,16 @@ public partial class OnGoingTestPage : IDisposable
                 }
             }
 
-            QuestionBaseModels = TestContainer.OngoingTest.QuestionBaseModels;
-            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
+            QuestionBaseModels = TestContainer.OngoingTest.GenericQuestionModels;
+            ActiveGenericQuestion = QuestionBaseModels[ActiveQuestionIndex];
             StateHasChanged();
         }
     }
 
-    private void UpdateActiveQuestion(QuestionBaseModel activeQuestion)
+    private void UpdateActiveQuestion(GenericQuestionModel activeGenericQuestion)
     {
-        ActiveQuestion = activeQuestion;
-        QuestionBaseModels[ActiveQuestionIndex] = activeQuestion;
+        ActiveGenericQuestion = activeGenericQuestion;
+        QuestionBaseModels[ActiveQuestionIndex] = activeGenericQuestion;
     }
 
     private void NextQuestion()
@@ -116,7 +116,7 @@ public partial class OnGoingTestPage : IDisposable
         if (ActiveQuestionIndex + 1 < QuestionBaseModels.Count)
         {
             ActiveQuestionIndex++;
-            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
+            ActiveGenericQuestion = QuestionBaseModels[ActiveQuestionIndex];
         }
     }
 
@@ -125,7 +125,7 @@ public partial class OnGoingTestPage : IDisposable
         if (ActiveQuestionIndex - 1 >= 0)
         {
             ActiveQuestionIndex--;
-            ActiveQuestion = QuestionBaseModels[ActiveQuestionIndex];
+            ActiveGenericQuestion = QuestionBaseModels[ActiveQuestionIndex];
         }
     }
 }

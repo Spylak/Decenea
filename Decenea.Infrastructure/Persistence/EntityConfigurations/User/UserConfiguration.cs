@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 
-public class UserConfiguration : AuditableAggregateTypeConfiguration<Domain.Aggregates.UserAggregate.User>
+public class UserConfiguration : AuditableAggregateConfiguration<Domain.Aggregates.UserAggregate.User>
 {
     public override void Configure(EntityTypeBuilder<Domain.Aggregates.UserAggregate.User> builder)
     {

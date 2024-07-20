@@ -1,9 +1,11 @@
 
+using Decenea.Common.Enums;
+
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class FillBlankDropdown
+public class FillBlankDropdown : QuestionBase
 {
-    public FillBlankDropdown()
+    public FillBlankDropdown() : base(QuestionType.FillBlank)
     {
         
     }

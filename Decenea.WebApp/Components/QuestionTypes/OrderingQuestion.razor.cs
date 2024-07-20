@@ -7,9 +7,9 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class OrderingQuestion
 {
     [Parameter]
-    public QuestionBaseModel? OrderingQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> OrderingQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<Ordering>? OrderingQuestionModel { get; set; }
+    public GenericQuestionModel? OrderingQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> OrderingQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<Ordering>? OrderingQuestionModel { get; set; }
     private string Choice { get; set; } = "";
 
     public override async Task SetParametersAsync(ParameterView parameters)
@@ -17,7 +17,7 @@ public partial class OrderingQuestion
         await base.SetParametersAsync(parameters);
         if (OrderingQuestionBaseModel is not null)
         {
-            OrderingQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<Ordering>(OrderingQuestionBaseModel);
+            OrderingQuestionModel = GenericQuestionModel.ConvertToGenericModel<Ordering>(OrderingQuestionBaseModel);
         }
     }
     
@@ -31,7 +31,7 @@ public partial class OrderingQuestion
             return;
         ListHelper.UpdateOrders(choice,OrderingQuestionModel.QuestionContent.Choices.Count - 1,OrderingQuestionModel.QuestionContent.Choices);
         choice.Active=true;
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(OrderingQuestionModel));
     } 
     private async Task OnClickLeft(string name)
     {
@@ -43,7 +43,7 @@ public partial class OrderingQuestion
             return;
         ListHelper.UpdateOrders(choice,OrderingQuestionModel.QuestionContent.Choices.Count(i => !i.Active),OrderingQuestionModel.QuestionContent.Choices);
         choice.Active = false;
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(OrderingQuestionModel));
     }  
     private async Task OnClickUp(string name)
     {
@@ -54,7 +54,7 @@ public partial class OrderingQuestion
         if(item is null)
             return;
         ListHelper.UpdateOrders(item,item.Order-1,OrderingQuestionModel.QuestionContent.Choices);
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(OrderingQuestionModel));
     }  
     private async Task OnClickDown(string name)
     {
@@ -65,16 +65,16 @@ public partial class OrderingQuestion
         if(item is null)
             return;
         ListHelper.UpdateOrders(item,item.Order+1,OrderingQuestionModel.QuestionContent.Choices);
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(OrderingQuestionModel));
     }
     private async Task CreateSample()
     {
         OrderingQuestionModel = SampleHelper.GetOrderingQuestionSample();
-        await OrderingQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(OrderingQuestionModel));
+        await OrderingQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(OrderingQuestionModel));
     }
     private void Reset()
     {
-        OrderingQuestionModel = new QuestionBaseModel<Ordering>(new Ordering());
+        OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering());
         OrderingQuestionModel.Id = OrderingQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
     }
     
@@ -90,7 +90,7 @@ public partial class OrderingQuestion
     {
         if (OrderingQuestionModel?.QuestionContent is null)
         {
-            OrderingQuestionModel = new QuestionBaseModel<Ordering>(new Ordering());
+            OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering());
         }
         
         var choices = OrderingQuestionModel.QuestionContent!.Choices;

@@ -1,19 +1,17 @@
+
 using Decenea.Common.Common;
 
-namespace Decenea.Domain.Aggregates.QuestionAggregate.Questions.ValueObjects;
+namespace Decenea.Domain.Aggregates.TestAggregate.Questions.ValueObjects;
 
-public class Dropdown : ValueObject
+public class MultipleChoiceSingle : ValueObject
 {
     public List<SubQuestion> SubQuestions { get; set; }
+
     public class SubQuestion
     {
         public string Text { get; set; }
-        public List<Choice> Choices { get; set; }
-    }
-    public class Choice
-    {
-        public string Text { get; set; }
-        public bool Checked { get; set; }
+        public string Picked { get; set; }
+        public List<string> Choices { get; set; }
     }
 
     public override IEnumerable<object> GetEqualityComponents()

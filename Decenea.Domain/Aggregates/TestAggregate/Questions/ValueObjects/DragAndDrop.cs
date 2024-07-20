@@ -1,12 +1,12 @@
 using Decenea.Common.Common;
+using Decenea.Domain.Aggregates.QuestionAggregate.Common;
 
-namespace Decenea.Domain.Aggregates.QuestionAggregate.Questions.ValueObjects;
+namespace Decenea.Domain.Aggregates.TestAggregate.Questions.ValueObjects;
 
-public class OrderingDnD : ValueObject
+public class DragAndDrop : ValueObject
 {
     public List<DropItem> Choices { get; set; } 
-    public DropZone AnswerZone { get; set; } 
-    public DropZone OptionZone { get; set; } 
+    public List<DropZone> DropZones { get; set; }
     public class DropZone
     {
         public string Name { get; set; }
@@ -16,13 +16,11 @@ public class OrderingDnD : ValueObject
     {
         public string Name { get; set; }
         public string Selector { get; set; }
-        public int Order { get; set; }
     }
 
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Choices;
-        yield return AnswerZone;
-        yield return OptionZone;
+        yield return DropZones;
     }
 }

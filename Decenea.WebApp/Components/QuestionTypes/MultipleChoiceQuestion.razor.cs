@@ -7,14 +7,14 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 public partial class MultipleChoiceQuestion
 {
     [Parameter]
-    public QuestionBaseModel? MultipleChoiceQuestionBaseModel { get; set; }
-    [Parameter] public EventCallback<QuestionBaseModel> MultipleChoiceQuestionBaseModelChanged { get; set; }
-    private QuestionBaseModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; }
+    public GenericQuestionModel? MultipleChoiceQuestionBaseModel { get; set; }
+    [Parameter] public EventCallback<GenericQuestionModel> MultipleChoiceQuestionBaseModelChanged { get; set; }
+    private GenericQuestionModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; }
     protected override void OnParametersSet()
     {
         if (MultipleChoiceQuestionBaseModel is not null)
         {
-            MultipleChoiceQuestionModel = QuestionBaseModel.ConvertToGenericBaseModel<MultipleChoice>(MultipleChoiceQuestionBaseModel);
+            MultipleChoiceQuestionModel = GenericQuestionModel.ConvertToGenericModel<MultipleChoice>(MultipleChoiceQuestionBaseModel);
             PopulateFields();
         }
     }
@@ -57,12 +57,12 @@ public partial class MultipleChoiceQuestion
     {
         MultipleChoiceQuestionModel = SampleHelper.GetMultipleChoiceQuestionSample();
         PopulateFields();
-        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceQuestionModel));
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleChoiceQuestionModel));
     }
     
     private void Reset()
     {
-        MultipleChoiceQuestionModel = new QuestionBaseModel<MultipleChoice>(new MultipleChoice());
+        MultipleChoiceQuestionModel = new GenericQuestionModel<MultipleChoice>(new MultipleChoice());
         MultipleChoiceQuestionModel.Id = MultipleChoiceQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
         PopulateFields();
     }
@@ -96,7 +96,7 @@ public partial class MultipleChoiceQuestion
 
     private async Task CheckChanged()
     {
-        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(QuestionBaseModel.ConvertToNonGenericBaseModel(MultipleChoiceQuestionModel));
+        await MultipleChoiceQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleChoiceQuestionModel));
     }
     
     private void AddChoice(Field field,string input)

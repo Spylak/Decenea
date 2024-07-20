@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 
-public class UserTokenConfiguration : AuditableEntityTypeConfiguration<UserToken>
+public class UserTokenConfiguration : AuditableEntityConfiguration<UserToken>
 {
     public override void Configure(EntityTypeBuilder<UserToken> builder)
     {

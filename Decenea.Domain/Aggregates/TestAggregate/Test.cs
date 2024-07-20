@@ -5,7 +5,9 @@ namespace Decenea.Domain.Aggregates.TestAggregate;
 
 public class Test : AuditableAggregateRoot
 {
-    private readonly List<string> _questionIds = new ();
+    private List<TestQuestion> _testQuestions = new ();
+    public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
+
     public string Title { get; set; }
     public string Description { get; set; }
     public string ContactPhone { get; set; }

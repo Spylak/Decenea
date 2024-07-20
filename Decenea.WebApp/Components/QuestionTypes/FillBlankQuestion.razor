@@ -27,7 +27,7 @@
             <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="Reset">Reset</MudButton>
         </MudItem>
         <MudItem xs="12" sm="2" Style="text-align: end">
-            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(QuestionBaseModel.ConvertToNonGenericBaseModel(FillBlankQuestionModel))">Save</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(GenericQuestionModel.ConvertToNonGenericModel(FillBlankQuestionModel))">Save</MudButton>
         </MudItem>
     }
     else

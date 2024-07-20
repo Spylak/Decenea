@@ -139,7 +139,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         try
         {
             var entityList = ChangeTracker.Entries()
-                .Where(x => x.Entity is AuditableEntity
+                .Where(x => x.Entity is IAuditable
                             || x.State == EntityState.Modified
                             || x.State == EntityState.Added
                             || x.State == EntityState.Deleted);
@@ -150,8 +150,8 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             {
                 if (entity.State == EntityState.Added)
                 {
-                    ((AuditableEntity)entity.Entity).CreatedBy = createdBy;
-                    ((AuditableEntity)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
+                    ((IAuditable)entity.Entity).CreatedBy = createdBy;
+                    ((IAuditable)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
                 }
 
                 if (entity.State == EntityState.Added || entity.State == EntityState.Modified)
@@ -159,8 +159,8 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                     ((Entity)entity.Entity).Version = RandomStringGenerator.RandomString(8);
                 }
 
-                ((AuditableEntity)entity.Entity).LastModifiedBy = createdBy;
-                ((AuditableEntity)entity.Entity).LastModifiedByTimestampUtc = dateTimeUtcNow;
+                ((IAuditable)entity.Entity).LastModifiedBy = createdBy;
+                ((IAuditable)entity.Entity).LastModifiedByTimestampUtc = dateTimeUtcNow;
 
                 var auditLog = new AuditLog()
                 {

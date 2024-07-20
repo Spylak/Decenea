@@ -1,9 +1,15 @@
-using Decenea.Common.Constants;
+
+
+using Decenea.Common.Enums;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
-public class MultipleYesOrNo
+public class MultipleYesOrNo : QuestionBase
 {
+    public MultipleYesOrNo() : base(QuestionType.MultipleYesOrNo)
+    {
+        
+    }
     public List<SubQuestion> SubQuestions { get; set; } = new List<SubQuestion>();
     public class SubQuestion
     {

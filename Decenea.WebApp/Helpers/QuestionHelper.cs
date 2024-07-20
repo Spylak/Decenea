@@ -1,4 +1,4 @@
-using Decenea.Common.Constants;
+
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
 
@@ -6,15 +6,15 @@ namespace Decenea.WebApp.Helpers;
 
 public static class QuestionHelper
 {
-    public static QuestionBaseModel<FillBlank> GetFillBlankQuestionModel(this QuestionBaseModel questionBaseModel)
+    public static GenericQuestionModel<FillBlank> GetFillBlankQuestionModel(this GenericQuestionModel genericQuestionModel)
     {
         try
         {
-            return questionBaseModel as QuestionBaseModel<FillBlank>;
+            return genericQuestionModel as GenericQuestionModel<FillBlank>;
         }
         catch (Exception e)
         {
-            return new QuestionBaseModel<FillBlank>(new FillBlank());
+            return new GenericQuestionModel<FillBlank>(new FillBlank());
         }
     }
 }

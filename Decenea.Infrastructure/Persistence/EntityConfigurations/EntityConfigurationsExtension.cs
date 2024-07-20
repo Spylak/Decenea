@@ -1,4 +1,5 @@
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
+using Decenea.Infrastructure.Persistence.EntityConfigurations.Test;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 using Microsoft.EntityFrameworkCore;
 

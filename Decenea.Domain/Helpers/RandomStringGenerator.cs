@@ -4,7 +4,7 @@ namespace Decenea.Domain.Helpers;
 
 public static class RandomStringGenerator
 {
-    private static readonly ThreadLocal<Random> Random = new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref _seed)));
+    private static readonly ThreadLocal<Random> Random = new(() => new Random(Interlocked.Increment(ref _seed)));
     private static int _seed = Environment.TickCount;
     public static string RandomString(int size)
     {
