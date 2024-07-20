@@ -1,4 +1,5 @@
 using Decenea.Common.Common;
+using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
 using Decenea.Domain.Helpers;
 
@@ -6,7 +7,8 @@ namespace Decenea.Domain.Aggregates.UserAggregate;
 
 public class User : AuditableAggregateRoot
 {
-    private readonly List<string> _testIds = new ();
+    private readonly List<TestUser> _testUsers = new ();
+    private IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
     private readonly List<string> _userClaimIds = new ();
     private readonly List<string> _userTokenIds = new ();
     public int? CountryId { get; set; }

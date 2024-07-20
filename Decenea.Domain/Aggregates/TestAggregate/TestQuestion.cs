@@ -3,7 +3,7 @@ using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.TestAggregate;
 
-public class TestQuestion : Auditable
+public class TestQuestion : LinkingTableEntity
 {
     public required string QuestionId { get; set; }
     public required Question Question { get; set; }

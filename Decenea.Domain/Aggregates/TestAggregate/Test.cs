@@ -7,12 +7,14 @@ public class Test : AuditableAggregateRoot
 {
     private List<TestQuestion> _testQuestions = new ();
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
+    
+    private readonly List<TestUser> _testUsers = new ();
+    private IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
 
     public string Title { get; set; }
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
-    public string UserId { get; set; }
     public static Result<Test, Exception> Create(string title, string descripton,
         string userId,
         string contactEmail,
@@ -22,7 +24,6 @@ public class Test : AuditableAggregateRoot
         {
             Title = title,
             Description = descripton,
-            UserId = userId,
             ContactEmail = contactEmail,
             ContactPhone = contactPhone
         };

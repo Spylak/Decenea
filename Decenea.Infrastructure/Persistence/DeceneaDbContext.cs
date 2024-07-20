@@ -10,6 +10,7 @@ using Decenea.Infrastructure.Persistence.DataSeed;
 using Decenea.Infrastructure.Persistence.EntityConfigurations;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Serilog;
 
 
@@ -48,11 +49,12 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         return await SaveChangesAsync(null, cancellationToken);
     }
 
-    public async Task<Result<object,Exception>> SaveChangesAsync(string? createdBy = null, CancellationToken cancellationToken = default)
+    public async Task<Result<object, Exception>> SaveChangesAsync(string? createdBy = null,
+        CancellationToken cancellationToken = default)
     {
         CreatedBy ??= createdBy;
         if (CreatedBy is null)
-            return Result<object,Exception>.Anticipated(null,["Unable to save changes."]);
+            return Result<object, Exception>.Anticipated(null, ["Unable to save changes."]);
 
         DomainEvents ??= GetDomainEvents();
 
@@ -66,14 +68,14 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             catch (DbUpdateConcurrencyException ex)
             {
                 //Handle concurrency exception
-                return Result<object,Exception>.Anticipated(null,["Unable to save changes due to invalid data."]);
+                return Result<object, Exception>.Anticipated(null, ["Unable to save changes due to invalid data."]);
             }
         }
 
         return await HandleDomainEvents(DomainEvents, CreatedBy, cancellationToken);
     }
 
-    private async Task<Result<object,Exception>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
+    private async Task<Result<object, Exception>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
         CancellationToken cancellationToken = default)
     {
         await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
@@ -81,13 +83,13 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         {
             while (domainEvents.TryDequeue(out var nextEvent))
             {
-                await nextEvent.PublishAsync(Mode.WaitForAll,cancellationToken);
+                await nextEvent.PublishAsync(Mode.WaitForAll, cancellationToken);
             }
 
             await base.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
-            return Result<object,Exception>.Anticipated(null,["Successful process."], true);
+            return Result<object, Exception>.Anticipated(null, ["Successful process."], true);
         }
         catch (Exception ex)
         {
@@ -96,7 +98,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",
                 ex.Message);
             await base.SaveChangesAsync(cancellationToken);
-            return Result<object,Exception>.Excepted(null,["Unable to Handle DomainEvents in DbContext."]);
+            return Result<object, Exception>.Excepted(null, ["Unable to Handle DomainEvents in DbContext."]);
         }
     }
 
@@ -130,7 +132,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         }
         catch (Exception ex)
         {
-            Log.Error("There was something wrong while AddDomainEventsAsOutboxMessages : {ex}",ex);
+            Log.Error("There was something wrong while AddDomainEventsAsOutboxMessages : {ex}", ex);
         }
     }
 
@@ -138,45 +140,85 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
     {
         try
         {
-            var entityList = ChangeTracker.Entries()
-                .Where(x => x.Entity is IAuditable
-                            || x.State == EntityState.Modified
-                            || x.State == EntityState.Added
-                            || x.State == EntityState.Deleted);
+            var entityEntryList = ChangeTracker.Entries()
+                .Where(x => x.State is EntityState.Modified or EntityState.Added or EntityState.Deleted);
 
             var dateTimeUtcNow = DateTime.UtcNow;
 
-            foreach (var entity in entityList)
+            foreach (var entityEntry in entityEntryList)
             {
-                if (entity.State == EntityState.Added)
+                if (entityEntry.Entity is AuditableEntity auditable)
                 {
-                    ((IAuditable)entity.Entity).CreatedBy = createdBy;
-                    ((IAuditable)entity.Entity).CreatedByTimestampUtc = dateTimeUtcNow;
+                    if (entityEntry.State == EntityState.Added)
+                    {
+                        auditable.CreatedBy = createdBy;
+                        auditable.CreatedByTimestampUtc = dateTimeUtcNow;
+                    }
+
+                    auditable.LastModifiedBy = createdBy;
+                    auditable.LastModifiedByTimestampUtc = dateTimeUtcNow;
+                    
+                    if (entityEntry.State == EntityState.Modified)
+                    {
+                        auditable.Version = RandomStringGenerator.RandomString(8);
+                    }
                 }
 
-                if (entity.State == EntityState.Added || entity.State == EntityState.Modified)
+                var entityId = GetEntityKeyString(entityEntry);
+                if (!string.IsNullOrWhiteSpace(entityId))
                 {
-                    ((Entity)entity.Entity).Version = RandomStringGenerator.RandomString(8);
+                    var auditLog = new AuditLog()
+                    {
+                        EntityId = entityId,
+                        EntityType = entityEntry.Entity.GetType().ToString(),
+                        ExecutedOperation = (ExecutedOperation)entityEntry.State,
+                        OperationExecutedAt = dateTimeUtcNow,
+                        DataAfterExecutedOperation = JsonSerializer.Serialize(entityEntry.Entity)
+                    };
+
+                    await AddAsync(auditLog);
                 }
-
-                ((IAuditable)entity.Entity).LastModifiedBy = createdBy;
-                ((IAuditable)entity.Entity).LastModifiedByTimestampUtc = dateTimeUtcNow;
-
-                var auditLog = new AuditLog()
+                else
                 {
-                    EntityId = (string)entity.OriginalValues["Id"]!,
-                    EntityType = entity.Entity.GetType().ToString(),
-                    ExecutedOperation = (ExecutedOperation)entity.State,
-                    OperationExecutedAt = dateTimeUtcNow,
-                    DataAfterExecutedOperation = JsonSerializer.Serialize(entity.Entity)
-                };
-
-                await AddAsync(auditLog);
+                    Log.Error("The entityId for: {entityEntry} was not found", entityEntry);
+                }
+                
             }
         }
         catch (Exception ex)
         {
-            Log.Error("There was something wrong while ProcessAuditableEntities : {ex}",ex);
+            Log.Error("There was something wrong while ProcessAuditableEntities : {ex}", ex);
         }
+    }
+    
+    private string GetEntityKeyString(EntityEntry entityEntry)
+    {
+        var keyProperties = entityEntry
+            .Metadata
+            .FindPrimaryKey()?
+            .Properties;
+        
+        if (keyProperties == null || !keyProperties.Any())
+            return string.Empty;
+
+        var keyValues = new List<object>();
+        foreach (var property in keyProperties)
+        {
+            var value = entityEntry.Property(property.Name).CurrentValue 
+                        ?? entityEntry.Property(property.Name).OriginalValue;
+        
+            // For new entities, use the local value if available
+            if (entityEntry.State == EntityState.Added)
+            {
+                value = entityEntry.Property(property.Name).CurrentValue;
+            }
+        
+            keyValues.Add(value ?? "");
+        }
+
+        if (keyValues.Count == 1)
+            return keyValues[0].ToString() ?? string.Empty;
+
+        return JsonSerializer.Serialize(keyValues);
     }
 }

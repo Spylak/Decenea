@@ -1,5 +1,4 @@
 using Decenea.Domain.Aggregates.TestAggregate;
-using Decenea.Domain.Common;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -26,6 +25,6 @@ public class TestQuestionConfiguration : LinkingTableConfiguration<TestQuestion>
         builder.HasOne(tq => tq.Question)
             .WithMany(q => q.TestQuestions)
             .HasForeignKey(tq => tq.QuestionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
