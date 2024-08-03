@@ -1,4 +1,5 @@
-﻿using Decenea.WebApp.Helpers;
+﻿using Decenea.Common.Enums;
+using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
@@ -47,8 +48,11 @@ public partial class OrderingDnDQuestion
     
     private async Task Reset()
     {
-        OrderingDnDQuestionModel = new GenericQuestionModel<OrderingDragAndDrop>(new OrderingDragAndDrop());
-        OrderingDnDQuestionModel.Id = OrderingDnDQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        OrderingDnDQuestionModel = new GenericQuestionModel<OrderingDragAndDrop>(new OrderingDragAndDrop())
+        {
+            Id = OrderingDnDQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            QuestionType = QuestionType.OrderingDragAndDrop
+        };
         await ValueChanged();
     }
 

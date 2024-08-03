@@ -89,7 +89,7 @@
                                ValueChanged="@(async (s) => { item.SubQuestion.Picked = s; await ChoiceChanged(); })">
                     @foreach (var choice in item.SubQuestion.Choices)
                     {
-                        <MudRadio Size="Size.Large" Color="Color.Primary" Option="choice"> @choice </MudRadio>
+                        <MudRadio T="string" Size="Size.Large" Color="Color.Primary" Option="choice"> @choice </MudRadio>
                     }
                 </MudRadioGroup>
             </MudStack>

@@ -1,3 +1,4 @@
+using Decenea.Common.Enums;
 using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Helpers;
@@ -8,6 +9,7 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
         {
+            QuestionType = QuestionType.DragAndDrop,
             Description =
                 "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
 
@@ -35,6 +37,7 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<Dropdown>(new Dropdown())
         {
+            QuestionType = QuestionType.Dropdown,
             Description  = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
             QuestionContent = new Dropdown
             {
@@ -70,6 +73,7 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<Ordering>(new Ordering())
         {
+            QuestionType = QuestionType.Ordering,
             Description = "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
             QuestionContent = new Ordering()
             {
@@ -89,6 +93,7 @@ public static class SampleHelper
     {
         var question = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
         {
+            QuestionType = QuestionType.FillBlankDropdown,
             Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
             QuestionContent = new FillBlankDropdown()
             {
@@ -125,6 +130,7 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<FillBlank>(new FillBlank())
         {
+            QuestionType = QuestionType.FillBlank,
             Description = 
                 "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,  comes from a line in section 1.10.32.The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 fromby Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
         };
@@ -134,10 +140,11 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
         {
+            QuestionType = QuestionType.MultipleChoiceSingle,
             QuestionContent = new MultipleChoiceSingle()
             {
-                SubQuestions = new List<MultipleChoiceSingle.SubQuestion>()
-                {
+                SubQuestions =
+                [
                     new MultipleChoiceSingle.SubQuestion()
                     {
                         Text = "First one here",
@@ -147,6 +154,7 @@ public static class SampleHelper
                             "One!", "Two!", "Three!", "Four!"
                         }
                     },
+
                     new MultipleChoiceSingle.SubQuestion()
                     {
                         Text = "First one here",
@@ -156,7 +164,7 @@ public static class SampleHelper
                             "One", "Two", "Three"
                         }
                     }
-                },
+                ],
             },
             Description = 
                 "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
@@ -167,13 +175,14 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo())
         {
+            QuestionType = QuestionType.MultipleYesOrNo,
             QuestionContent = new MultipleYesOrNo()
             {
-                SubQuestions = new List<MultipleYesOrNo.SubQuestion>()
-                {
+                SubQuestions =
+                [
                     new MultipleYesOrNo.SubQuestion() { Text = "First one", Checked = false },
-                    new MultipleYesOrNo.SubQuestion() { Text = "Second one", Checked = false },
-                },
+                    new MultipleYesOrNo.SubQuestion() { Text = "Second one", Checked = false }
+                ],
             },
             Description = 
                 "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
@@ -184,10 +193,11 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<MultipleChoice>(new MultipleChoice())
         {
+            QuestionType = QuestionType.MultipleChoice,
             QuestionContent = new MultipleChoice()
             {
-                SubQuestions = new List<MultipleChoice.SubQuestion>()
-                {
+                SubQuestions =
+                [
                     new MultipleChoice.SubQuestion()
                     {
                         Text = "Subquestion One",
@@ -199,6 +209,7 @@ public static class SampleHelper
                             new MultipleChoice.Choice() { Text = "Forth Choice", Checked = false }
                         }
                     },
+
                     new MultipleChoice.SubQuestion()
                     {
                         Text = "Subquestion Two",
@@ -208,8 +219,9 @@ public static class SampleHelper
                             new MultipleChoice.Choice() { Text = "Second Choice", Checked = false },
                             new MultipleChoice.Choice() { Text = "Third Choice", Checked = false }
                         }
-                    },
-                },
+                    }
+
+                ],
             },
             Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
         };
@@ -219,16 +231,17 @@ public static class SampleHelper
     {
         return new GenericQuestionModel<OrderingDragAndDrop>(new OrderingDragAndDrop())
         {
+            QuestionType = QuestionType.OrderingDragAndDrop,
             QuestionContent = new OrderingDragAndDrop()
             {
-                Choices = new List<OrderingDragAndDrop.DropItem>()
-                {
+                Choices =
+                [
                     new OrderingDragAndDrop.DropItem(1) { Name = "Item 1", Selector = "0" },
                     new OrderingDragAndDrop.DropItem(2) { Name = "Item 2", Selector = "0" },
                     new OrderingDragAndDrop.DropItem(3) { Name = "Item 3", Selector = "0" },
                     new OrderingDragAndDrop.DropItem(4) { Name = "Item 4", Selector = "0" },
-                    new OrderingDragAndDrop.DropItem(5) { Name = "Item 5", Selector = "0" },
-                },
+                    new OrderingDragAndDrop.DropItem(5) { Name = "Item 5", Selector = "0" }
+                ],
                 AnswerZone = new OrderingDragAndDrop.DropZone()
                 {
                     Identifier = "1", Name = "Answer"

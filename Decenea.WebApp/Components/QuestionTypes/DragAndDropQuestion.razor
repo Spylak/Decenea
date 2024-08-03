@@ -84,7 +84,7 @@
                         <MudGrid>
                             <MudItem xs="6">
                                 <MudPaper Class="ma-4 flex-grow-1">
-                                    <MudList Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
+                                    <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
                                         <MudListSubheader>@DragAndDropQuestionModel?.QuestionContent?.DropZones[0].Name</MudListSubheader>
                                         <MudDropZone T="DragAndDrop.DropItem" Identifier="@($"{DragAndDropQuestionModel?.QuestionContent?.DropZones[0].Identifier}")" Class="flex-grow-1"/>
                                     </MudList>
@@ -99,7 +99,7 @@
                                             {
                                                 <MudItem xs="12">
                                                     <MudPaper Class="ma-4 flex-grow-1">
-                                                        <MudList Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
+                                                        <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
                                                             <MudListSubheader>@itm.Name</MudListSubheader>
                                                             <MudDropZone T="DragAndDrop.DropItem" Identifier="@(itm.Identifier)" Class="flex-grow-1"/>
                                                         </MudList>
@@ -114,7 +114,7 @@
                     }
                 </ChildContent>
                 <ItemRenderer>
-                    <MudListItem Text="@context.Name"/>
+                    <MudListItem T="string" Text="@context.Name"/>
                 </ItemRenderer>
             </MudDropContainer>
         }

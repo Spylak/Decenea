@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 
-public class AuditableEntityConfiguration<TEntity> : BaseEntityConfiguration<TEntity> 
+public class AuditableEntityConfiguration<TEntity> : VersionedEntityConfiguration<TEntity> 
     where TEntity : AuditableEntity
 {
     public override void Configure(EntityTypeBuilder<TEntity> builder)

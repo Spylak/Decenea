@@ -25,7 +25,7 @@
             <Columns>
                 <TemplateColumn Filterable="false"
                                 Sortable="false"
-                                IsEditable="false">
+                                Editable="false">
                     <CellTemplate>
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                        Color="Color.Error"
@@ -37,11 +37,11 @@
                 </TemplateColumn>
                 <PropertyColumn
                     Property="i => i.Id"
-                    IsEditable="false">
+                    Editable="false">
                 </PropertyColumn>
                 <PropertyColumn
                     Property="i => i.Name"
-                    IsEditable="false">
+                    Editable="false">
                 </PropertyColumn>
             </Columns>
             <PagerContent>

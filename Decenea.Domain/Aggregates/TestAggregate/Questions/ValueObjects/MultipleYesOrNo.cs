@@ -1,5 +1,4 @@
 using Decenea.Common.Common;
-using Decenea.Domain.Aggregates.QuestionAggregate.Common;
 
 namespace Decenea.Domain.Aggregates.TestAggregate.Questions.ValueObjects;
 

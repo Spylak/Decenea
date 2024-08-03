@@ -1,4 +1,5 @@
-﻿using Decenea.WebApp.Helpers;
+﻿using Decenea.Common.Enums;
+using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
 
@@ -36,8 +37,11 @@ public partial class DropdownQuestion
     
     private void Reset()
     {
-        DropdownQuestionModel = new GenericQuestionModel<Dropdown>(new Dropdown());
-        DropdownQuestionModel.Id = DropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        DropdownQuestionModel = new GenericQuestionModel<Dropdown>(new Dropdown())
+        {
+            QuestionType = QuestionType.Dropdown,
+            Id = DropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString()
+        };
         ClearFields();
     }
 

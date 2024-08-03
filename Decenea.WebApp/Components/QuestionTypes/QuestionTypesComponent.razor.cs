@@ -21,21 +21,22 @@ public partial class QuestionTypesComponent
     [Parameter] public string Style { get; set; } = "";
 
     [Parameter] public bool PresentationOnly { get; set; } = false;
-    private QuestionType? VisibleQuestionType { get; set; } = QuestionType.MultipleChoiceSingle;
+    private string VisibleQuestionType { get; set; } = nameof(QuestionType.MultipleChoiceSingle);
     private bool PreviewMode { get; set; } = false;
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);
         if (Question is not null)
         {
-            ChangeType(Question.QuestionType);
+            ChangeType(Question.QuestionType.ToString());
         }
     }
 
-    private void ChangeType(QuestionType? type = null)
+    private void ChangeType(string? type = null)
     {
         if (type is null)
             return;
+        
         VisibleQuestionType = type;
         StateHasChanged();
     }

@@ -1,3 +1,4 @@
+using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -77,8 +78,11 @@ public partial class FillBlankQuestion
     
     private void Reset()
     {
-        FillBlankQuestionModel = new GenericQuestionModel<FillBlank>(new FillBlank());
-        FillBlankQuestionModel.Id = FillBlankQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        FillBlankQuestionModel = new GenericQuestionModel<FillBlank>(new FillBlank())
+        {
+            Id = FillBlankQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            QuestionType = QuestionType.FillBlank
+        };
         Fields = FillBlankQuestionModel.QuestionContent.Options;
         UpdateOptions(FillBlankQuestionModel.Description);
         PopulateDynamicQuestion();

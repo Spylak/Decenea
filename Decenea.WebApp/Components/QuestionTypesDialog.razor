@@ -3,7 +3,7 @@
         <QuestionTypesComponent 
             Test="Test"
             Question="GenericQuestion"
-            QuestionChanged="(question) => GenericQuestion = question"></QuestionTypesComponent>
+            QuestionChanged="@(question => GenericQuestion = question)"></QuestionTypesComponent>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>

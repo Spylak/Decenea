@@ -5,7 +5,7 @@ namespace Decenea.WebApp.Models.QuestionTypes;
 
 public class FillBlankDropdown : QuestionBase
 {
-    public FillBlankDropdown() : base(QuestionType.FillBlank)
+    public FillBlankDropdown() : base(QuestionType.FillBlankDropdown)
     {
         
     }

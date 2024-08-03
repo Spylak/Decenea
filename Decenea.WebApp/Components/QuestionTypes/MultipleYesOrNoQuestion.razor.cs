@@ -1,3 +1,4 @@
+using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -48,8 +49,11 @@ public partial class MultipleYesOrNoQuestion
     
     private void Reset()
     {
-        MultipleYesOrNoQuestionModel = new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo());
-        MultipleYesOrNoQuestionModel.Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        MultipleYesOrNoQuestionModel = new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo())
+        {
+            Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            QuestionType = QuestionType.MultipleYesOrNo
+        };
         PopulateFields();
     }
 

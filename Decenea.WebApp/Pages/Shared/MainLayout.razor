@@ -6,10 +6,12 @@
 <MudThemeProvider Theme="currentTheme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+<MudPopoverProvider />
+
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerLeftToggle())"/>
-        <MudFab Icon="@Icons.Filled.Home" Color="Color.Info" Style="color: whitesmoke" Size="Size.Small" OnClick="@(e => OnClick("/"))"></MudFab>
+        <MudFab Icon="@Icons.Material.Filled.Home" Color="Color.Info" Style="color: whitesmoke" Size="Size.Small" OnClick="@(e => OnClick("/"))"></MudFab>
         <MudHidden Breakpoint="Breakpoint.MdAndUp" Invert="true">
             <div style="margin-left:40vw"></div>
         </MudHidden>

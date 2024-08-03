@@ -1,4 +1,5 @@
 
+using Decenea.Common.Enums;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
 
@@ -14,7 +15,10 @@ public static class QuestionHelper
         }
         catch (Exception e)
         {
-            return new GenericQuestionModel<FillBlank>(new FillBlank());
+            return new GenericQuestionModel<FillBlank>(new FillBlank())
+            {
+                QuestionType = QuestionType.FillBlank
+            };
         }
     }
 }

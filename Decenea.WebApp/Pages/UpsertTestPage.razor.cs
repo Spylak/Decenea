@@ -115,12 +115,12 @@ public partial class UpsertTestPage
         };
         var dialogOptions = new DialogOptions()
         {
-            DisableBackdropClick = true,
+            BackdropClick = false,
             CloseOnEscapeKey = true
         };
         if (questionType is not null && questionId is not null)
-            parameters.Add("Question",TestContainer.UpsertTest.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
-        var dialog = DialogService.Show<QuestionTypesDialog>(null, parameters, dialogOptions);
+            parameters.Add("GenericQuestion",TestContainer.UpsertTest.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
+        var dialog = await DialogService.ShowAsync<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
         await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTest);
     }

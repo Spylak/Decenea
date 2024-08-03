@@ -13,9 +13,5 @@ public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity
                 
         builder.Property(p => p.Id)
             .HasMaxLength(26);
-        
-        builder.Property(p => p.Version)
-            .HasMaxLength(8)
-            .IsConcurrencyToken();
     }
 }

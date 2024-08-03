@@ -1,3 +1,4 @@
+using Decenea.Common.Enums;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -74,8 +75,11 @@ public partial class OrderingQuestion
     }
     private void Reset()
     {
-        OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering());
-        OrderingQuestionModel.Id = OrderingQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering())
+        {
+            Id = OrderingQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            QuestionType = QuestionType.Ordering
+        };
     }
     
     private void RemoveChoice(Ordering.Choice choice)
@@ -90,7 +94,10 @@ public partial class OrderingQuestion
     {
         if (OrderingQuestionModel?.QuestionContent is null)
         {
-            OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering());
+            OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering())
+            {
+                QuestionType = QuestionType.Ordering
+            };
         }
         
         var choices = OrderingQuestionModel.QuestionContent!.Choices;

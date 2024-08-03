@@ -7,11 +7,11 @@ public static class Themes
     
     public static MudTheme DarkTheme = new MudTheme()
     {
-        Palette = new Palette()
+        PaletteDark = new PaletteDark()
         {
             Black = "#27272f",
             Background = "#32333d",
-            BackgroundGrey = "#27272f",
+            BackgroundGray = "#27272f",
             Surface = "#373740",
             DrawerBackground = "#27272f",
             DrawerText = "rgba(255,255,255, 0.50)",
@@ -34,7 +34,7 @@ public static class Themes
 
     public static MudTheme DefaultTheme = new MudTheme()
     {
-        Palette = new Palette()
+        PaletteLight = new PaletteLight()
         {
             Black = "#272c34"
         }

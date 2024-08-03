@@ -1,7 +1,6 @@
 <h3>NavMenuRight</h3>
-<MudIconButton Icon="@Icons.Filled.Close"   Color="Color.Inherit" OnClick="@(() => RightDrawerOpen.InvokeAsync())"></MudIconButton>
+<MudIconButton Icon="@Icons.Material.Filled.Close"   Color="Color.Inherit" OnClick="@(() => RightDrawerOpen.InvokeAsync())"></MudIconButton>
 @code {
     [Parameter]
     public EventCallback RightDrawerOpen { get; set; }
-
 }

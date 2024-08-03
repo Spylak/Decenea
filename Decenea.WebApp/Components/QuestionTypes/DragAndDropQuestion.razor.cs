@@ -1,4 +1,5 @@
-﻿using Decenea.WebApp.Helpers;
+﻿using Decenea.Common.Enums;
+using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -42,8 +43,11 @@ public partial class DragAndDropQuestion
     
     private async Task Reset()
     {
-        DragAndDropQuestionModel = new GenericQuestionModel<DragAndDrop>(new DragAndDrop());
-        DragAndDropQuestionModel.Id = DragAndDropQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        DragAndDropQuestionModel = new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
+        {
+            QuestionType = QuestionType.DragAndDrop,
+            Id = DragAndDropQuestionBaseModel?.Id ?? Guid.NewGuid().ToString()
+        };
         await ValueChanged();
     }
     

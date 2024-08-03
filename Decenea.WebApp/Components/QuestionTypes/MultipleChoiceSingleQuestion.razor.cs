@@ -1,3 +1,4 @@
+using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -42,8 +43,11 @@ public partial class MultipleChoiceSingleQuestion
     
     private void Reset()
     {
-        MultipleChoiceSingleQuestionModel = new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle());
-        MultipleChoiceSingleQuestionModel.Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        MultipleChoiceSingleQuestionModel = new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
+            {
+                Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+                QuestionType = QuestionType.MultipleChoiceSingle
+            };
         PopulateFields();
     }
 
