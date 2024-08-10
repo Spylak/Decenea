@@ -40,7 +40,7 @@ public partial class DropdownQuestion
         DropdownQuestionModel = new GenericQuestionModel<Dropdown>(new Dropdown())
         {
             QuestionType = QuestionType.Dropdown,
-            Id = DropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString()
+            Id = DropdownQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString()
         };
         ClearFields();
     }

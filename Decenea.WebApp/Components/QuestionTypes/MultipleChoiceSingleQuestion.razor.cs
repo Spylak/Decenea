@@ -45,7 +45,7 @@ public partial class MultipleChoiceSingleQuestion
     {
         MultipleChoiceSingleQuestionModel = new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
             {
-                Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+                Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
                 QuestionType = QuestionType.MultipleChoiceSingle
             };
         PopulateFields();

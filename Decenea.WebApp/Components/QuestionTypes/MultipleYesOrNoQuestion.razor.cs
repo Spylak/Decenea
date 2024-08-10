@@ -51,7 +51,7 @@ public partial class MultipleYesOrNoQuestion
     {
         MultipleYesOrNoQuestionModel = new GenericQuestionModel<MultipleYesOrNo>(new MultipleYesOrNo())
         {
-            Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            Id = MultipleYesOrNoQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
             QuestionType = QuestionType.MultipleYesOrNo
         };
         PopulateFields();

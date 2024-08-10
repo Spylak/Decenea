@@ -79,6 +79,33 @@ public partial class UpsertTestPage
         NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTest.Id}");
     }
 
+    private async Task SampleTest()
+    {
+        TestContainer.UpsertTest = new Test()
+        {
+            Name = "Sample Test",
+            GenericQuestionModels = new List<GenericQuestionModel>()
+            {
+                SampleHelper.GetOrderingDnDQuestionSample(),
+                SampleHelper.GetDropdownQuestionSample(),
+                SampleHelper.GetOrderingQuestionSample(),
+                SampleHelper.GetDragAndDropQuestionSample(),
+                SampleHelper.GetFillBlankQuestionSample(),
+                SampleHelper.GetFillBlankDropdownQuestionSample(),
+                SampleHelper.GetMultipleChoiceSingleQuestionSample(),
+                SampleHelper.GetMultipleChoiceQuestionSample(),
+                SampleHelper.GetMultipleYesOrNoQuestionSample(),
+            },
+        };
+        
+        TestContainer.UpsertTest.Description = $"Test with id: {TestContainer.UpsertTest.Id}";
+        await GlobalFunctionService.ConsoleLogAsync(TestContainer.UpsertTest);
+        await IndexedDb.UpsertTest.DropTableAsync();
+        await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTest);
+        
+        NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTest.Id}");
+    }
+
     private async Task Update(GenericQuestionModel entity)
     {
     }

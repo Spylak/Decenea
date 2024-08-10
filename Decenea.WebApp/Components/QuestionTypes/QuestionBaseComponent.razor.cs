@@ -11,7 +11,6 @@ public class QuestionBaseComponent : ComponentBase
     [Inject] protected IGlobalFunctionService GlobalFunctionService { get; set; }
     protected async Task Save(GenericQuestionModel genericQuestionModel)
     {
-        await GlobalFunctionService.ConsoleLogAsync(genericQuestionModel);
         await SaveCallback.InvokeAsync(genericQuestionModel);
     }
 }

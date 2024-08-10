@@ -80,7 +80,7 @@ public partial class FillBlankQuestion
     {
         FillBlankQuestionModel = new GenericQuestionModel<FillBlank>(new FillBlank())
         {
-            Id = FillBlankQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            Id = FillBlankQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
             QuestionType = QuestionType.FillBlank
         };
         Fields = FillBlankQuestionModel.QuestionContent.Options;

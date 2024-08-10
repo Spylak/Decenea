@@ -5,26 +5,26 @@ namespace Decenea.WebApp.Models.QuestionTypes;
 
 public class DragAndDrop : QuestionBase
 {
-    public DragAndDrop(List<DropZone>? dropzones = null) : base(QuestionType.DragAndDrop)
+    public DragAndDrop() : base(QuestionType.DragAndDrop)
     {
-        DropZones = new List<DropZone>()
-        {
-            new DropZone(){Identifier = "0",Name = "Choices"}
-        };
-        foreach (var dropzone in dropzones ??= new List<DropZone>())
-        {
-            dropzone.Identifier = (dropzones.IndexOf(dropzone)+1).ToString();
-        }
-        DropZones.AddRange(dropzones);
     }
-    
+
+    private Dictionary<int, string> _choices = new Dictionary<int, string>();
     public List<DropItem> Choices { get; set; } = new List<DropItem>();
-    public List<DropZone> DropZones { get; set; }
-    public class DropZone
+
+    public Dictionary<int, string> DropZones
     {
-        public string Name { get; set; }
-        public string Identifier { get; set; }
+        get
+        {
+            return _choices;
+        }
+        set
+        {
+            _choices = value;
+            _choices.TryAdd(0, "Choices");
+        }
     }
+
     public class DropItem
     {
         public string Name { get; set; }

@@ -48,9 +48,11 @@
     }
     else
     {
+        <MudItem xs="12">
         <MudField Variant="Variant.Outlined" Label="Question">
             @OrderingDnDQuestionModel?.Description
         </MudField>
+        </MudItem>
     }
 </MudGrid>
 @if (Rerender)

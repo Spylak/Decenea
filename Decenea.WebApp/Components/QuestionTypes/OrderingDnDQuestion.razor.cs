@@ -50,7 +50,7 @@ public partial class OrderingDnDQuestion
     {
         OrderingDnDQuestionModel = new GenericQuestionModel<OrderingDragAndDrop>(new OrderingDragAndDrop())
         {
-            Id = OrderingDnDQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            Id = OrderingDnDQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
             QuestionType = QuestionType.OrderingDragAndDrop
         };
         await ValueChanged();

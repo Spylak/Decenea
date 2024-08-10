@@ -111,7 +111,7 @@ public partial class FillBlankDropdownQuestion
     {
         FillBlankDropdownQuestionModel = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
             {
-                Id = FillBlankDropdownQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+                Id = FillBlankDropdownQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
                 QuestionType = QuestionType.FillBlankDropdown
             };
         UpdateOptions(FillBlankDropdownQuestionModel.Description);

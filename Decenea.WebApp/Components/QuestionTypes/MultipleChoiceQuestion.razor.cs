@@ -67,7 +67,7 @@ public partial class MultipleChoiceQuestion
         {
             QuestionType = QuestionType.MultipleChoice
         };
-        MultipleChoiceQuestionModel.Id = MultipleChoiceQuestionBaseModel?.Id ?? Guid.NewGuid().ToString();
+        MultipleChoiceQuestionModel.Id = MultipleChoiceQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString();
         PopulateFields();
     }
     

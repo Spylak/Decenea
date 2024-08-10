@@ -5,11 +5,8 @@ namespace Decenea.WebApp.Models.QuestionTypes;
 
 public class GenericQuestionModel
 { 
-    public GenericQuestionModel()
-    {
-    }
-    
-    public string? Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; } = Ulid.NewUlid().ToString();
+
     public string Description { get; set; } = "";
     public string Title { get; set; } = "";
     public int SecondsToAnswer { get; set; } 

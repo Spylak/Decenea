@@ -10,25 +10,23 @@ public static class SampleHelper
         return new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
         {
             QuestionType = QuestionType.DragAndDrop,
-            Description =
-                "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
-
-            QuestionContent = new DragAndDrop(new List<DragAndDrop.DropZone>()
+            Description = "Match the historical events with their corresponding dates.",
+            QuestionContent = new DragAndDrop()
             {
-                new DragAndDrop.DropZone() { Identifier = "1", Name = "Field 1" },
-                new DragAndDrop.DropZone() { Identifier = "2", Name = "Field 2" },
-                new DragAndDrop.DropZone() { Identifier = "3", Name = "Field 3" },
-                new DragAndDrop.DropZone() { Identifier = "4", Name = "Field 4" },
-            })
-            {
-                Choices = new List<DragAndDrop.DropItem>()
+                DropZones = new Dictionary<int, string>()
                 {
-                    new DragAndDrop.DropItem() { Name = "Item 1", Selector = "0" },
-                    new DragAndDrop.DropItem() { Name = "Item 2", Selector = "0" },
-                    new DragAndDrop.DropItem() { Name = "Item 3", Selector = "0" },
-                    new DragAndDrop.DropItem() { Name = "Item 4", Selector = "0" },
-                    new DragAndDrop.DropItem() { Name = "Item 5", Selector = "0" },
+                    {1,"1776"},
+                    {2,"1492"},
+                    {3,"1969"},
+                    {4,"1914"},
                 },
+                Choices =
+                [
+                    new DragAndDrop.DropItem() { Name = "American Declaration of Independence", Selector = "0" },
+                    new DragAndDrop.DropItem() { Name = "Columbus Discovers America", Selector = "0" },
+                    new DragAndDrop.DropItem() { Name = "First Moon Landing", Selector = "0" },
+                    new DragAndDrop.DropItem() { Name = "Start of World War I", Selector = "0" }
+                ],
             }
         };
     }
@@ -38,30 +36,30 @@ public static class SampleHelper
         return new GenericQuestionModel<Dropdown>(new Dropdown())
         {
             QuestionType = QuestionType.Dropdown,
-            Description  = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
+            Description = "Select the correct answers from the dropdown menus.",
             QuestionContent = new Dropdown
             {
                 SubQuestions = new List<Dropdown.SubQuestion>()
                 {
                     new Dropdown.SubQuestion()
                     {
-                        Text = "First one here",
+                        Text = "Which planet is known as the Red Planet?",
                         Choices = new List<Dropdown.Choice>()
                         {
-                            new Dropdown.Choice() { Text = "One", Checked = false },
-                            new Dropdown.Choice() { Text = "Two!", Checked = false },
-                            new Dropdown.Choice() { Text = "Three!", Checked = false },
-                            new Dropdown.Choice() { Text = "Four!", Checked = false }
+                            new Dropdown.Choice() { Text = "Earth", Checked = false },
+                            new Dropdown.Choice() { Text = "Mars", Checked = false },
+                            new Dropdown.Choice() { Text = "Jupiter", Checked = false },
+                            new Dropdown.Choice() { Text = "Saturn", Checked = false }
                         }
                     },
                     new Dropdown.SubQuestion()
                     {
-                        Text = "Second one here",
+                        Text = "Which element has the chemical symbol 'O'?",
                         Choices = new List<Dropdown.Choice>()
                         {
-                            new Dropdown.Choice() { Text = "One", Checked = false },
-                            new Dropdown.Choice() { Text = "Two", Checked = false },
-                            new Dropdown.Choice() { Text = "Three", Checked = false }
+                            new Dropdown.Choice() { Text = "Oxygen", Checked = false },
+                            new Dropdown.Choice() { Text = "Gold", Checked = false },
+                            new Dropdown.Choice() { Text = "Silver", Checked = false }
                         }
                     }
                 }
@@ -74,16 +72,15 @@ public static class SampleHelper
         return new GenericQuestionModel<Ordering>(new Ordering())
         {
             QuestionType = QuestionType.Ordering,
-            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
+            Description = "Arrange the stages of the water cycle in the correct order.",
             QuestionContent = new Ordering()
             {
                 Choices = new List<Ordering.Choice>()
                 {
-                    new Ordering.Choice() { Text = "First one", Order = 0, Active = false },
-                    new Ordering.Choice() { Text = "Second one", Order = 1, Active = false },
-                    new Ordering.Choice() { Text = "Third one", Order = 2, Active = false },
-                    new Ordering.Choice() { Text = "Forth one", Order = 3, Active = false },
-                    new Ordering.Choice() { Text = "Fifth one", Order = 4, Active = false }
+                    new Ordering.Choice() { Text = "Evaporation", Order = 0, Active = false },
+                    new Ordering.Choice() { Text = "Condensation", Order = 1, Active = false },
+                    new Ordering.Choice() { Text = "Precipitation", Order = 2, Active = false },
+                    new Ordering.Choice() { Text = "Collection", Order = 3, Active = false },
                 },
             }
         };
@@ -94,7 +91,7 @@ public static class SampleHelper
         var question = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
         {
             QuestionType = QuestionType.FillBlankDropdown,
-            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text.",
+            Description = "What is your given and last _____, what is the _____ of your birth?",
             QuestionContent = new FillBlankDropdown()
             {
                 Options = new List<FillBlankDropdown.SpaceOption>
@@ -104,10 +101,10 @@ public static class SampleHelper
                         SpaceNo = 0,
                         Choices = new List<FillBlankDropdown.Choice>()
                         {
-                            new FillBlankDropdown.Choice() { Text = "One", Checked = false },
-                            new FillBlankDropdown.Choice() { Text = "Two!", Checked = false },
-                            new FillBlankDropdown.Choice() { Text = "Three!", Checked = false },
-                            new FillBlankDropdown.Choice() { Text = "Four!", Checked = false }
+                            new FillBlankDropdown.Choice() { Text = "Friend", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "School", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Name", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Meal", Checked = false }
                         }
                     },
                     new FillBlankDropdown.SpaceOption()
@@ -115,9 +112,9 @@ public static class SampleHelper
                         SpaceNo = 1,
                         Choices = new List<FillBlankDropdown.Choice>()
                         {
-                            new FillBlankDropdown.Choice() { Text = "One", Checked = false },
-                            new FillBlankDropdown.Choice() { Text = "Two", Checked = false },
-                            new FillBlankDropdown.Choice() { Text = "Three", Checked = false }
+                            new FillBlankDropdown.Choice() { Text = "Car", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Year", Checked = false },
+                            new FillBlankDropdown.Choice() { Text = "Animal", Checked = false }
                         }
                     }
                 }
@@ -131,8 +128,7 @@ public static class SampleHelper
         return new GenericQuestionModel<FillBlank>(new FillBlank())
         {
             QuestionType = QuestionType.FillBlank,
-            Description = 
-                "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of(The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,  comes from a line in section 1.10.32.The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 fromby Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
+            Description = "The current calendar year is _____."
         };
     }
 
@@ -143,31 +139,30 @@ public static class SampleHelper
             QuestionType = QuestionType.MultipleChoiceSingle,
             QuestionContent = new MultipleChoiceSingle()
             {
-                SubQuestions =
-                [
+                SubQuestions = new List<MultipleChoiceSingle.SubQuestion>()
+                {
                     new MultipleChoiceSingle.SubQuestion()
                     {
-                        Text = "First one here",
-                        Picked = "One!",
+                        Text = "Which is the largest planet in our solar system?",
+                        Picked = "Jupiter",
                         Choices = new List<string>()
                         {
-                            "One!", "Two!", "Three!", "Four!"
+                            "Earth", "Mars", "Jupiter", "Saturn"
                         }
                     },
 
                     new MultipleChoiceSingle.SubQuestion()
                     {
-                        Text = "First one here",
-                        Picked = "One",
+                        Text = "What is the chemical symbol for water?",
+                        Picked = "H2O",
                         Choices = new List<string>()
                         {
-                            "One", "Two", "Three"
+                            "HO2", "H2O", "OH2", "H2"
                         }
                     }
-                ],
+                },
             },
-            Description = 
-                "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
+            Description = "Choose the correct option for each question."
         };
     }
 
@@ -178,14 +173,13 @@ public static class SampleHelper
             QuestionType = QuestionType.MultipleYesOrNo,
             QuestionContent = new MultipleYesOrNo()
             {
-                SubQuestions =
-                [
-                    new MultipleYesOrNo.SubQuestion() { Text = "First one", Checked = false },
-                    new MultipleYesOrNo.SubQuestion() { Text = "Second one", Checked = false }
-                ],
+                SubQuestions = new List<MultipleYesOrNo.SubQuestion>()
+                {
+                    new MultipleYesOrNo.SubQuestion() { Text = "Is the Earth round?", Checked = false },
+                    new MultipleYesOrNo.SubQuestion() { Text = "Is the sky green?", Checked = false }
+                },
             },
-            Description = 
-                "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
+            Description = "Answer with Yes or No."
         };
     }
 
@@ -196,34 +190,34 @@ public static class SampleHelper
             QuestionType = QuestionType.MultipleChoice,
             QuestionContent = new MultipleChoice()
             {
-                SubQuestions =
-                [
+                SubQuestions = new List<MultipleChoice.SubQuestion>()
+                {
                     new MultipleChoice.SubQuestion()
                     {
-                        Text = "Subquestion One",
+                        Text = "Which of the following are programming languages?",
                         Choices = new List<MultipleChoice.Choice>()
                         {
-                            new MultipleChoice.Choice() { Text = "First Choice", Checked = false },
-                            new MultipleChoice.Choice() { Text = "Second Choice", Checked = false },
-                            new MultipleChoice.Choice() { Text = "Third Choice", Checked = false },
-                            new MultipleChoice.Choice() { Text = "Forth Choice", Checked = false }
+                            new MultipleChoice.Choice() { Text = "Python", Checked = false },
+                            new MultipleChoice.Choice() { Text = "HTML", Checked = false },
+                            new MultipleChoice.Choice() { Text = "Java", Checked = false },
+                            new MultipleChoice.Choice() { Text = "Microsoft Word", Checked = false }
                         }
                     },
 
                     new MultipleChoice.SubQuestion()
                     {
-                        Text = "Subquestion Two",
+                        Text = "Which of the following are planets?",
                         Choices = new List<MultipleChoice.Choice>()
                         {
-                            new MultipleChoice.Choice() { Text = "First Choice", Checked = false },
-                            new MultipleChoice.Choice() { Text = "Second Choice", Checked = false },
-                            new MultipleChoice.Choice() { Text = "Third Choice", Checked = false }
+                            new MultipleChoice.Choice() { Text = "Mercury", Checked = false },
+                            new MultipleChoice.Choice() { Text = "Venus", Checked = false },
+                            new MultipleChoice.Choice() { Text = "Pluto", Checked = false },
+                            new MultipleChoice.Choice() { Text = "Sun", Checked = false }
                         }
                     }
-
-                ],
+                },
             },
-            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief, Lorem Ipsum is not simply random text."
+            Description = "Select all the correct options."
         };
     }
 
@@ -234,24 +228,23 @@ public static class SampleHelper
             QuestionType = QuestionType.OrderingDragAndDrop,
             QuestionContent = new OrderingDragAndDrop()
             {
-                Choices =
-                [
-                    new OrderingDragAndDrop.DropItem(1) { Name = "Item 1", Selector = "0" },
-                    new OrderingDragAndDrop.DropItem(2) { Name = "Item 2", Selector = "0" },
-                    new OrderingDragAndDrop.DropItem(3) { Name = "Item 3", Selector = "0" },
-                    new OrderingDragAndDrop.DropItem(4) { Name = "Item 4", Selector = "0" },
-                    new OrderingDragAndDrop.DropItem(5) { Name = "Item 5", Selector = "0" }
-                ],
+                Choices = new List<OrderingDragAndDrop.DropItem>()
+                {
+                    new OrderingDragAndDrop.DropItem(1) { Name = "Gather Ingredients", Selector = "0" },
+                    new OrderingDragAndDrop.DropItem(2) { Name = "Mix Ingredients", Selector = "0" },
+                    new OrderingDragAndDrop.DropItem(3) { Name = "Bake at 350°F", Selector = "0" },
+                    new OrderingDragAndDrop.DropItem(4) { Name = "Serve", Selector = "0" },
+                },
                 AnswerZone = new OrderingDragAndDrop.DropZone()
                 {
-                    Identifier = "1", Name = "Answer"
+                    Identifier = "1", Name = "Ordered Steps"
                 },
                 OptionZone = new OrderingDragAndDrop.DropZone()
                 {
-                    Identifier = "0", Name = "Choices"
+                    Identifier = "0", Name = "Unordered Steps"
                 }
             },
-            Description = "What is your _____ , how old are you _____ ?Contrary to popular belief _____, Lorem Ipsum is not simply random text.",
+            Description = "Arrange the steps to bake a cake in the correct order."
         };
     }
 }

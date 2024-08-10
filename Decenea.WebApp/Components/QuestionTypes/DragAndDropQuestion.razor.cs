@@ -46,7 +46,7 @@ public partial class DragAndDropQuestion
         DragAndDropQuestionModel = new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
         {
             QuestionType = QuestionType.DragAndDrop,
-            Id = DragAndDropQuestionBaseModel?.Id ?? Guid.NewGuid().ToString()
+            Id = DragAndDropQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString()
         };
         await ValueChanged();
     }
@@ -56,26 +56,11 @@ public partial class DragAndDropQuestion
         if (DragAndDropQuestionModel?.QuestionContent is null)
             return;
 
-        var identifier = string.Empty;
-        if (DragAndDropQuestionModel
+        var identifier = DragAndDropQuestionModel
             .QuestionContent
-            .DropZones.Any())
-        {
-            identifier = (DragAndDropQuestionModel
-                    .QuestionContent
-                    .DropZones.Max(i => int.Parse(i.Identifier))+1)
-                .ToString();
-        }
-        else
-        {
-            identifier = "1";
-        }
-        
-        DragAndDropQuestionModel.QuestionContent.DropZones.Add(new DragAndDrop.DropZone()
-        {
-            Identifier = identifier,
-            Name = $"DropZone {identifier}"
-        });
+            .DropZones.Keys.Max() + 1;
+
+        DragAndDropQuestionModel.QuestionContent.DropZones[identifier] = $"DropZone {identifier}";
         await ValueChanged();
     }
 
@@ -90,6 +75,15 @@ public partial class DragAndDropQuestion
             Selector = "0"
         });
         await ValueChanged();
+    }
+
+    private async Task DragAndDropQuestionModelQuestionContentDropZonesChnaged(int key, string newVal)
+    {
+        if (DragAndDropQuestionModel?.QuestionContent is null)
+            return;
+        
+        DragAndDropQuestionModel.QuestionContent.DropZones[key] = newVal; 
+        await ValueChanged(); 
     }
     
     private async Task ValueChanged()
@@ -108,12 +102,12 @@ public partial class DragAndDropQuestion
         await ValueChanged();
     }
     
-    private async Task RemoveItem(DragAndDrop.DropZone item)
+    private async Task RemoveItem(int key)
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)
             return;
-        
-        DragAndDropQuestionModel.QuestionContent.DropZones.Remove(item);
+
+        DragAndDropQuestionModel.QuestionContent.DropZones.Remove(key);
         await ValueChanged();
     }
 }

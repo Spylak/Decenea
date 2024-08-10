@@ -53,14 +53,14 @@
                 {
                     <MudItem xs="12" sm="6">
                         <MudTextField
-                            Value="item.Name"
+                            Value="item.Value"
                             T="string"
-                            ValueChanged="async (s) => { item.Name = s; await ValueChanged(); }"
+                            ValueChanged="@(async s => { await DragAndDropQuestionModelQuestionContentDropZonesChnaged(item.Key,s);})"
                             Variant="Variant.Outlined"
-                            Label="@($"DropZone No.{DragAndDropQuestionModel?.QuestionContent?.DropZones.IndexOf(item) + 1}")"
-                            Adornment="@(ReadOnly || item.Identifier.Equals("0") ? Adornment.None : Adornment.End)"
+                            Label="@($"DropZone No.{item.Key + 1}")"
+                            Adornment="@(ReadOnly || item.Key.Equals(0) ? Adornment.None : Adornment.End)"
                             AdornmentIcon="@Icons.Material.Filled.Close"
-                            OnAdornmentClick="() => RemoveItem(item)"/>
+                            OnAdornmentClick="() => RemoveItem(item.Key)"/>
                     </MudItem>
                 }
             </MudGrid>
@@ -85,29 +85,24 @@
                             <MudItem xs="6">
                                 <MudPaper Class="ma-4 flex-grow-1">
                                     <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
-                                        <MudListSubheader>@DragAndDropQuestionModel?.QuestionContent?.DropZones[0].Name</MudListSubheader>
-                                        <MudDropZone T="DragAndDrop.DropItem" Identifier="@($"{DragAndDropQuestionModel?.QuestionContent?.DropZones[0].Identifier}")" Class="flex-grow-1"/>
+                                        <MudListSubheader>@DragAndDropQuestionModel?.QuestionContent?.DropZones[0]</MudListSubheader>
+                                        <MudDropZone T="DragAndDrop.DropItem" Identifier="@("0")" Class="flex-grow-1"/>
                                     </MudList>
                                 </MudPaper>
                             </MudItem>
                             <MudItem xs="6">
                                 <MudGrid>
-                                    @{
-                                        foreach (var itm in DragAndDropQuestionModel?.QuestionContent?.DropZones ?? [])
+                                        @foreach (var itm in DragAndDropQuestionModel?.QuestionContent?.DropZones.Where(i => i.Key != 0) ?? [])
                                         {
-                                            if (itm.Identifier != "0")
-                                            {
                                                 <MudItem xs="12">
                                                     <MudPaper Class="ma-4 flex-grow-1">
                                                         <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
-                                                            <MudListSubheader>@itm.Name</MudListSubheader>
-                                                            <MudDropZone T="DragAndDrop.DropItem" Identifier="@(itm.Identifier)" Class="flex-grow-1"/>
+                                                            <MudListSubheader>@itm.Value</MudListSubheader>
+                                                            <MudDropZone T="DragAndDrop.DropItem" Identifier="@(itm.Key.ToString())" Class="flex-grow-1"/>
                                                         </MudList>
                                                     </MudPaper>
                                                 </MudItem>
-                                            }
                                         }
-                                    }
                                 </MudGrid>
                             </MudItem>
                         </MudGrid>

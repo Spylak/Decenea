@@ -4,7 +4,7 @@ namespace Decenea.WebApp.Models;
 
 public class Test
 {
-    public string? Id { get; set; } = Guid.NewGuid().ToString();
+    public string? Id { get; set; } = Ulid.NewUlid().ToString();
     public string? Name { get; set; }
     public string? Description { get; set; }
     public int MinutesToComplete { get; set; }

@@ -77,7 +77,7 @@ public partial class OrderingQuestion
     {
         OrderingQuestionModel = new GenericQuestionModel<Ordering>(new Ordering())
         {
-            Id = OrderingQuestionBaseModel?.Id ?? Guid.NewGuid().ToString(),
+            Id = OrderingQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
             QuestionType = QuestionType.Ordering
         };
     }
