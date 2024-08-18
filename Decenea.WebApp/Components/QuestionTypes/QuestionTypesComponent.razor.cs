@@ -22,7 +22,7 @@ public partial class QuestionTypesComponent
 
     [Parameter] public bool PresentationOnly { get; set; } = false;
     private string VisibleQuestionType { get; set; } = nameof(QuestionType.MultipleChoiceSingle);
-    private bool PreviewMode { get; set; } = false;
+    private bool EditMode { get; set; } = false;
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         await base.SetParametersAsync(parameters);

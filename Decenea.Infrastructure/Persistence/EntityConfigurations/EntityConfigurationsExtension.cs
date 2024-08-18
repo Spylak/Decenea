@@ -16,5 +16,6 @@ public static class EntityConfigurationsExtension
         builder.ApplyConfiguration(new UserClaimConfiguration());
         builder.ApplyConfiguration(new UserTokenConfiguration());
         builder.ApplyConfiguration(new TestConfiguration());
+        builder.ApplyConfiguration(new TestQuestionConfiguration());
     }
 }

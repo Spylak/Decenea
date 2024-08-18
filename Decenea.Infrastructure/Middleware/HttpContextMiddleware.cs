@@ -19,7 +19,7 @@ public class HttpContextMiddleware
             .User
             .FindFirstValue("userId");
 
-        dbContext.CreatedBy = userId;
+        dbContext.ModifiedBy = userId;
         await _next(context);
     }
 }

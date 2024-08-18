@@ -37,7 +37,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
             if(user.LockoutEnabled)
                 return Result<LoginUserResponse, Exception>.Anticipated(null,["User is locked."]);
             
-            _dbContext.CreatedBy = user.Id;
+            _dbContext.ModifiedBy = user.Id;
 
             var passCheck = CheckPassword(command.Password, user.PasswordHash);
             

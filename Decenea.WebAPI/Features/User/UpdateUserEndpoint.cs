@@ -28,6 +28,6 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponse<UserDt
             Version = req.Version
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<UserDto>(result.Value,result.IsSuccess,result.Messages);
+        return new ApiResponse<UserDto>(result.SuccessValue,result.IsSuccess,result.Messages);
     }
 }

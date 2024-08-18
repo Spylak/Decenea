@@ -22,6 +22,6 @@ public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponse<IE
             Take = req.Take
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<IEnumerable<TestDto>>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<IEnumerable<TestDto>>(result.SuccessValue, result.IsSuccess, result.Messages);
     }
 }

@@ -8,15 +8,14 @@ public class Test : AuditableAggregateRoot
     private List<TestQuestion> _testQuestions = new ();
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
     
-    private readonly List<TestUser> _testUsers = new ();
-    private IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
+    private List<TestUser> _testUsers = new ();
+    public IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
 
     public string Title { get; set; }
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
     public static Result<Test, Exception> Create(string title, string descripton,
-        string userId,
         string contactEmail,
         string contactPhone)
     {
@@ -41,5 +40,23 @@ public class Test : AuditableAggregateRoot
         test.ContactPhone = contactPhone;
         
         return Result<Test, Exception>.Anticipated(test);
+    }
+
+    public static void AddTestUserToTest(Test test, string userId)
+    {
+        var testUserResult = TestUser.Create(userId, test.Id);
+        if (testUserResult.SuccessValue is not null)
+        {
+            test._testUsers.Add(testUserResult.SuccessValue);
+        }
+    }
+    
+    public static void RemoveTestUserFromTest(Test test, string userId)
+    {
+        var index = test._testUsers.FindIndex(i => i.UserId == userId);
+        if (index != -1)
+        {
+            test._testUsers.RemoveAt(index);
+        }
     }
 }

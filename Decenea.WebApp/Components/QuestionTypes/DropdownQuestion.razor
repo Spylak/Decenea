@@ -3,7 +3,7 @@
 @inherits QuestionBaseComponent
 
 <MudGrid>
-    @if (!ReadOnly)
+    @if (EditMode)
     {
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
@@ -46,11 +46,11 @@
                           @bind-Value="item.SubQuestion.Text"
                           Variant="Variant.Outlined"
                           Label="Question"
-                          ReadOnly="ReadOnly"/>
+                          ReadOnly="@(!EditMode)"/>
         </MudItem>
         <MudItem xs="12" sm="6">
             <MudStack Spacing="1">
-                @if (!ReadOnly)
+                @if (EditMode)
                 {
                     <MudButton FullWidth="true"
                                Color="Color.Error"

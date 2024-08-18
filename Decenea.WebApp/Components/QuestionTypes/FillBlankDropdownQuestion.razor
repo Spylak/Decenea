@@ -1,7 +1,7 @@
 @using Decenea.WebApp.Models.QuestionTypes
 @inherits QuestionBaseComponent
 <MudGrid>
-    @if (!ReadOnly)
+    @if (EditMode)
     {
         <MudItem xs="12">
             <MudText>You need to add @SpecialChars to create a blank space option.</MudText>
@@ -43,7 +43,7 @@
     {
         <MudItem xs="12" sm="4">
             <MudStack Spacing="1">
-                @if (!ReadOnly)
+                @if (EditMode)
                 {
                     <MudButton FullWidth="true"
                                Color="@(Fields.IndexOf(item) >= QuestionText.Count() - 1 ? Color.Error : Color.Warning)"

@@ -4,7 +4,8 @@ namespace Decenea.Domain.Aggregates.GroupAggregate;
 
 public class Group : AuditableAggregateRoot
 {
-    private readonly List<GroupUser> _groupUsers = new ();
-    public IReadOnlyCollection<GroupUser> GroupUsers => _groupUsers.AsReadOnly();
+    public required string Name { get; set; }
+    private readonly List<GroupMember> _groupMembers = new ();
+    public IReadOnlyCollection<GroupMember> GroupUsers => _groupMembers.AsReadOnly();
 
 }

@@ -28,16 +28,16 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
     {
         var claims = command.AccessToken.GetTokenClaimJwts();
 
-        if (claims.Value is null)
+        if (claims.SuccessValue is null)
         {
             return Result<RegenerateAuthTokensResponse, Exception>
-                .Excepted(claims.Exception);
+                .Excepted(claims.ErrorValue);
         }
 
-        var username = claims.Value
+        var username = claims.SuccessValue
             .GetUserNameClaimValue();
 
-        var email = claims.Value
+        var email = claims.SuccessValue
             .GetEmailClaimValue();
 
         if (email is null)

@@ -24,7 +24,7 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object
 
         var claims = accessToken.GetTokenClaimJwts();;
 
-        var userId = claims.Value?.GetClaimValueByKey("userId");
+        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
         
         if(userId is null)
             return new ApiResponse<object>(null, false, "Invalid JWT.");
@@ -39,6 +39,6 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object
             Version = req.Version
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<object>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<object>(result.SuccessValue, result.IsSuccess, result.Messages);
     }
 }

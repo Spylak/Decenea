@@ -33,7 +33,7 @@ public static class ClaimJwtExtension
         if (!listClaims.IsSuccess)
             return Result<string,Exception>.Anticipated(null, listClaims.Messages);
         
-        var claim = listClaims.Value?.FirstOrDefault(c => c.Key == key);
+        var claim = listClaims.SuccessValue?.FirstOrDefault(c => c.Key == key);
         if(claim is null)
             return Result<string,Exception>.Anticipated(null, [$"No value found for key {key}"]);
  
@@ -47,7 +47,7 @@ public static class ClaimJwtExtension
         {
             return Result<bool?, Exception>.Anticipated(null, expDate.Messages);
         }
-        var expirationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expDate.Value)).UtcDateTime;
+        var expirationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expDate.SuccessValue)).UtcDateTime;
 
         return Result<bool?, Exception>.Anticipated(expirationDate < DateTime.UtcNow);
     }
@@ -74,7 +74,7 @@ public static class ClaimJwtExtension
             
             var claimJwts = new List<ClaimJwt>();
             
-            foreach (var claim in claims.Value)
+            foreach (var claim in claims.SuccessValue)
             {
                 claimJwts.Add(new ClaimJwt(claim.Type,claim.Value));
             }

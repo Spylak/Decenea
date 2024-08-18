@@ -18,7 +18,7 @@ namespace Decenea.Infrastructure.Persistence;
 
 internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 {
-    public string? CreatedBy { get; set; }
+    public string? ModifiedBy { get; set; }
     private Queue<IDomainEvent>? DomainEvents { get; set; }
 
     public DeceneaDbContext(DbContextOptions<DeceneaDbContext> options) : base(options)
@@ -49,18 +49,18 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         return await SaveChangesAsync(null, cancellationToken);
     }
 
-    public async Task<Result<object, Exception>> SaveChangesAsync(string? createdBy = null,
+    public async Task<Result<object, Exception>> SaveChangesAsync(string? modifiedBy = null,
         CancellationToken cancellationToken = default)
     {
-        CreatedBy ??= createdBy;
-        if (CreatedBy is null)
+        modifiedBy ??= ModifiedBy;
+        if (modifiedBy is null)
             return Result<object, Exception>.Anticipated(null, ["Unable to save changes."]);
 
         DomainEvents ??= GetDomainEvents();
 
         if (DomainEvents.Count == 0)
         {
-            await ProcessAuditableEntities(CreatedBy);
+            await ProcessAuditableEntities(modifiedBy);
             try
             {
                 await base.SaveChangesAsync(cancellationToken);
@@ -72,7 +72,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             }
         }
 
-        return await HandleDomainEvents(DomainEvents, CreatedBy, cancellationToken);
+        return await HandleDomainEvents(DomainEvents, modifiedBy, cancellationToken);
     }
 
     private async Task<Result<object, Exception>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
@@ -147,7 +147,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 
             foreach (var entityEntry in entityEntryList)
             {
-                if (entityEntry.Entity is AuditableEntity auditable)
+                if (entityEntry.Entity is IAuditableEntity auditable)
                 {
                     if (entityEntry.State == EntityState.Added)
                     {

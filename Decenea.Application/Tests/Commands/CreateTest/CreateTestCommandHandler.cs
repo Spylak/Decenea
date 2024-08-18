@@ -23,16 +23,16 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Resul
         {
             var createResult = Test.Create(command.Title,
                 command.Description,
-                command.UserId,
                 command.ContactEmail,
                 command.ContactPhone);
             
-            if(!createResult.IsSuccess || createResult.Value is null)
+            if(!createResult.IsSuccess || createResult.SuccessValue is null)
                 return Result<TestDto, Exception>.Anticipated(null, createResult.Messages);
-
-            await _dbContext.Set<Test>().AddAsync(createResult.Value, cancellationToken);
+            
+            _dbContext.ModifiedBy = command.UserId;
+            await _dbContext.Set<Test>().AddAsync(createResult.SuccessValue, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result<TestDto, Exception>.Anticipated(createResult.Value.TestToTestDto(),["Successfully created!"], true);
+            return Result<TestDto, Exception>.Anticipated(createResult.SuccessValue.TestToTestDto(),["Successfully created!"], true);
         }
         catch (Exception ex)
         {

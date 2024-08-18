@@ -12,6 +12,7 @@ public class VersionedEntityConfiguration<TEntity> : BaseEntityConfiguration<TEn
         base.Configure(builder);
         
         builder.Property(p => p.Version)
+            .IsRequired()
             .HasMaxLength(8)
             .IsConcurrencyToken();
     }

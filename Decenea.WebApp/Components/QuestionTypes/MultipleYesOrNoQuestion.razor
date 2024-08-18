@@ -2,7 +2,7 @@
 @inherits QuestionBaseComponent
 
 <MudGrid>
-    @if (!ReadOnly)
+    @if (EditMode)
     {
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
@@ -39,7 +39,7 @@
 
     @foreach (var item in Fields)
     {
-        if (!ReadOnly)
+        if (EditMode)
         {
             <MudItem xs="12" sm="2">
                 <MudButton FullWidth="true"
@@ -56,7 +56,7 @@
                           @bind-Value="item.SubQuestion.Text"
                           Variant="Variant.Outlined"
                           Label="Question"
-                          ReadOnly="ReadOnly"/>
+                          ReadOnly="@(!EditMode)"/>
         </MudItem>
         <MudItem xs="0" sm="2"></MudItem>
         <MudItem xs="12" sm="10">

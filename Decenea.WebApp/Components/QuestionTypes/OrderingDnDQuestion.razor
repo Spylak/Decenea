@@ -3,7 +3,7 @@
 @inherits QuestionBaseComponent
 
 <MudGrid>
-    @if (!ReadOnly)
+    @if (EditMode)
     {
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
@@ -39,7 +39,7 @@
                         ValueChanged="async (s) => { item.Name = s; await ValueChanged(); }"
                         Variant="Variant.Outlined"
                         Label="@($"Choice No.{OrderingDnDQuestionModel.QuestionContent.Choices.IndexOf(item) + 1}")"
-                        Adornment="@(!ReadOnly ? Adornment.End : Adornment.None)"
+                        Adornment="@(EditMode ? Adornment.End : Adornment.None)"
                         AdornmentIcon="@Icons.Material.Filled.Close"
                         OnAdornmentClick="() => RemoveItem(item)"/>
                 </MudItem>

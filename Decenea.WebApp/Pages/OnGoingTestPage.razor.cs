@@ -46,6 +46,7 @@ public partial class OnGoingTestPage
                         if (result.IsSuccess)
                         {
                             await IndexedDb.OngoingTest.DropTableAsync();
+                            return;
                         }
                     }
                     else

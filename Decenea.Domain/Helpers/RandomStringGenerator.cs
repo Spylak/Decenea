@@ -8,6 +8,9 @@ public static class RandomStringGenerator
     private static int _seed = Environment.TickCount;
     public static string RandomString(int size)
     {
+        if (size <= 0)
+            return string.Empty;
+        
         char[] result = new char[size];
         Random.Value ??= new Random(_seed);
         for (int i = 0; i < size; i++)

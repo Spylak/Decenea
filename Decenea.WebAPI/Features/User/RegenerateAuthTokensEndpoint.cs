@@ -20,6 +20,6 @@ public class RegenerateAuthTokensEndpoint : Endpoint<EmptyRequest, ApiResponse<R
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
         var refreshToken = HttpContext.Request.Headers["RefreshToken"].ToString();
         var result = await new RegenerateAuthTokensCommand(accessToken, refreshToken).ExecuteAsync(ct);
-        return new ApiResponse<RegenerateAuthTokensResponse>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<RegenerateAuthTokensResponse>(result.SuccessValue, result.IsSuccess, result.Messages);
     }
 }

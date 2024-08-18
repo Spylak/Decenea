@@ -26,7 +26,7 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
 
         var claims = accessToken.GetTokenClaimJwts();
 
-        var userId = claims.Value?.GetClaimValueByKey("userId");
+        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
         
         if(userId is null)
             return new ApiResponse<TestDto>(null, false, "Invalid JWT.");
@@ -40,6 +40,6 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
             Description = req.Description
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<TestDto>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<TestDto>(result.SuccessValue, result.IsSuccess, result.Messages);
     }
 }

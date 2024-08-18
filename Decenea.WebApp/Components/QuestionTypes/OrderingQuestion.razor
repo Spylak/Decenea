@@ -2,7 +2,7 @@
 @inherits QuestionBaseComponent
 
 <MudGrid>
-    @if (!ReadOnly)
+    @if (EditMode)
     {
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"

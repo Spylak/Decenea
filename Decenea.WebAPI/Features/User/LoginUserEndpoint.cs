@@ -20,6 +20,6 @@ public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponse<LoginUse
     {
         var result = await new LoginUserCommand(req.Email,req.Password,req.RememberMe ?? false)
             .ExecuteAsync(ct);
-        return new ApiResponse<LoginUserResponse>(result.Value, result.IsSuccess, result.Messages);
+        return new ApiResponse<LoginUserResponse>(result.SuccessValue, result.IsSuccess, result.Messages);
     }
 }

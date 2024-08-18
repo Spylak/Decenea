@@ -40,20 +40,20 @@ public class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, Resul
                 command.MiddleName,
                 command.PhoneNumber);
 
-            if (!user.IsSuccess || user.Value is null)
+            if (!user.IsSuccess || user.SuccessValue is null)
                 return Result<UserDto, Exception>.Anticipated(null, user.Messages);;
             
-            _dbContext.CreatedBy = user.Value.Id;
+            _dbContext.ModifiedBy = user.SuccessValue.Id;
 
             await _dbContext.Set<User>()
-                .AddAsync(user.Value, cancellationToken);
+                .AddAsync(user.SuccessValue, cancellationToken);
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             
             if (!result.IsSuccess)
                 return Result<UserDto, Exception>.Anticipated(null, result.Messages);
             
-            var userDto = user.Value.UserToUserDto();
+            var userDto = user.SuccessValue.UserToUserDto();
             
             return Result<UserDto, Exception>.Anticipated(userDto,["Successfully updated user info."]);
         }

@@ -9,5 +9,9 @@ public class LinkingTableConfiguration<TEntity> : IEntityTypeConfiguration<TEnti
 {
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
+        builder.Property(p => p.Version)
+            .IsRequired()
+            .HasMaxLength(8)
+            .IsConcurrencyToken();
     }
 }
