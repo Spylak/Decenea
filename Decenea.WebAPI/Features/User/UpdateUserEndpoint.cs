@@ -11,7 +11,7 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponse<UserDt
 {
     public override void Configure()
     {
-        Post("/User/Update");
+        Post("/users/update");
     }
 
     public override async Task<ApiResponse<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)

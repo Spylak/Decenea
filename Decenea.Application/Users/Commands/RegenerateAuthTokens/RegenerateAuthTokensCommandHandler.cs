@@ -62,16 +62,14 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
 
             if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
                 return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, ["Expired refresh token."]);
-
-            var userRole = Role.RoleName(user.RoleId);
-
+            
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
                 signingKey: _configuration["Auth:JWTSigningKey"],
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
-                    u.Roles.Add(userRole);
+                    u.Roles.Add(nameof(user.Role));
 
                     u.Permissions.AddRange(new[] { "Browse", "Edit" });
 

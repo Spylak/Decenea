@@ -4,7 +4,7 @@ using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.TestAggregate;
 
-public class TestUser : LinkingTableEntity
+public class TestUser : LinkingTable
 {
     public required string UserId { get; set; }
     public User? User { get; set; }

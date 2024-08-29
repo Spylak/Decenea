@@ -2,7 +2,7 @@
 
 namespace Decenea.Infrastructure.Outbox;
 
-public sealed class OutboxMessage : VersionedEntity
+public sealed class OutboxMessage : Entity
 {
     public string CreatedBy { get; init; }
 

@@ -22,10 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Extensions\Messaging\" />
-      <Folder Include="Groups\Commands\CreateGroup\" />
-      <Folder Include="Groups\Commands\UpdateGroup\" />
-      <Folder Include="Groups\Queries\GetGroups\" />
-      <Folder Include="Groups\Queries\GetGroup\" />
       <Folder Include="Tests\Events\" />
       <Folder Include="Tests\IntegrationEvents\" />
       <Folder Include="Users\Events\" />

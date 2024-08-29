@@ -1,5 +1,6 @@
 using Decenea.Application.Tests.Commands.UpdateTest;
 using Decenea.Common.Common;
+using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -12,10 +13,10 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object
 {
     public override void Configure()
     {
-        Put("/Test/Update");
-        Roles(Role.RoleName(Role.SuperAdmin),
-            Role.RoleName(Role.Admin),
-            Role.RoleName(Role.Member));
+        Put("/tests/update");
+        Roles(nameof(UserRole.SuperAdmin),
+            nameof(UserRole.Admin),
+            nameof(UserRole.Member));
     }
     
     public override async Task<ApiResponse<object>> ExecuteAsync(UpdateTestRequest req, CancellationToken ct)

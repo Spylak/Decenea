@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Common;
 using Decenea.Domain.Common;
@@ -39,7 +40,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         builder.ApplyConfigurations();
     }
 
-    public new DbSet<T> Set<T>() where T : Entity
+    public new DbSet<T> Set<T>() where T : Versioned
     {
         return base.Set<T>();
     }
@@ -141,7 +142,8 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         try
         {
             var entityEntryList = ChangeTracker.Entries()
-                .Where(x => x.State is EntityState.Modified or EntityState.Added or EntityState.Deleted);
+                .Where(x => x.State is EntityState.Modified or EntityState.Added or EntityState.Deleted)
+                .ToList();
 
             var dateTimeUtcNow = DateTime.UtcNow;
 
@@ -173,7 +175,11 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                         EntityType = entityEntry.Entity.GetType().ToString(),
                         ExecutedOperation = (ExecutedOperation)entityEntry.State,
                         OperationExecutedAt = dateTimeUtcNow,
-                        DataAfterExecutedOperation = JsonSerializer.Serialize(entityEntry.Entity)
+                        DataAfterExecutedOperation = JsonSerializer.Serialize(entityEntry.Entity, new JsonSerializerOptions
+                        {
+                            ReferenceHandler = ReferenceHandler.Preserve,
+                            MaxDepth = 64
+                        })
                     };
 
                     await AddAsync(auditLog);

@@ -1,6 +1,7 @@
 using Decenea.Application.Tests.Commands.CreateTest;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -13,16 +14,18 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
 {
     public override void Configure()
     {
-        Post("/Test/Create");
-        Roles(Role.RoleName(Role.SuperAdmin),
-            Role.RoleName(Role.Admin),
-            Role.RoleName(Role.Member));
+        Post("/tests/create");
+        Roles(nameof(UserRole.SuperAdmin),
+            nameof(UserRole.Admin),
+            nameof(UserRole.Member));
     }
     
     public override async Task<ApiResponse<TestDto>> ExecuteAsync(CreateTestRequest req, CancellationToken ct)
     {
 
-        var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
+        var accessToken = HttpContext.Request.Headers["Authorization"]
+            .ToString()
+            .Replace("Bearer ","");
 
         var claims = accessToken.GetTokenClaimJwts();
 

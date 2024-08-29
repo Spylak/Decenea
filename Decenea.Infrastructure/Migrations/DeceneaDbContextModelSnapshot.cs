@@ -22,6 +22,84 @@ namespace Decenea.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.Group", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.GroupMember", b =>
+                {
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("GroupRole")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("UserEmail", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupMembers", (string)null);
+                });
+
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Questions.Question", b =>
                 {
                     b.Property<string>("Id")
@@ -141,11 +219,59 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedByTimestampUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
                     b.HasKey("TestId", "QuestionId");
 
                     b.HasIndex("QuestionId");
 
                     b.ToTable("TestQuestions", (string)null);
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.TestUser", b =>
+                {
+                    b.Property<string>("TestId")
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastModifiedByTimestampUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.HasKey("TestId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TestUsers", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.UserAggregate.User", b =>
@@ -232,7 +358,7 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Role")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
@@ -422,6 +548,17 @@ namespace Decenea.Infrastructure.Migrations
                     b.ToTable("OutboxMessage");
                 });
 
+            modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.GroupMember", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.GroupAggregate.Group", "Group")
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.TestQuestion", b =>
                 {
                     b.HasOne("Decenea.Domain.Aggregates.TestAggregate.Questions.Question", "Question")
@@ -441,6 +578,30 @@ namespace Decenea.Infrastructure.Migrations
                     b.Navigation("Test");
                 });
 
+            modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.TestUser", b =>
+                {
+                    b.HasOne("Decenea.Domain.Aggregates.TestAggregate.Test", "Test")
+                        .WithMany("TestUsers")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Decenea.Domain.Aggregates.UserAggregate.User", "User")
+                        .WithMany("TestUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Test");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.Group", b =>
+                {
+                    b.Navigation("GroupMembers");
+                });
+
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Questions.Question", b =>
                 {
                     b.Navigation("TestQuestions");
@@ -449,6 +610,13 @@ namespace Decenea.Infrastructure.Migrations
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Test", b =>
                 {
                     b.Navigation("TestQuestions");
+
+                    b.Navigation("TestUsers");
+                });
+
+            modelBuilder.Entity("Decenea.Domain.Aggregates.UserAggregate.User", b =>
+                {
+                    b.Navigation("TestUsers");
                 });
 #pragma warning restore 612, 618
         }

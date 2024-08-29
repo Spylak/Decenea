@@ -1,6 +1,6 @@
 namespace Decenea.Domain.Common;
 
-public abstract class AuditableEntity : VersionedEntity, IAuditableEntity
+public abstract class AuditableEntity : Entity, IAuditableEntity
 {
     public DateTime LastModifiedByTimestampUtc { get; set; }
     public DateTime CreatedByTimestampUtc { get; set; }

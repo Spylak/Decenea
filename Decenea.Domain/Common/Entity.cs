@@ -2,7 +2,7 @@ using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Common;
 
-public abstract class Entity
+public abstract class Entity : Versioned
 {
     public string Id { get; set; } =  Ulid.NewUlid().ToString()!;
     public override bool Equals(object? other)

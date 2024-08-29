@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 
 public class LinkingTableConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> 
-    where TEntity : LinkingTableEntity
+    where TEntity : LinkingTable
 {
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {

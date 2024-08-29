@@ -8,7 +8,7 @@ namespace Decenea.Application.Abstractions.Persistance;
 public interface IDeceneaDbContext
 {
     DatabaseFacade Database { get; } 
-    DbSet<T> Set<T>() where T : Entity;
+    DbSet<T> Set<T>() where T : Versioned;
     Task<Result<object,Exception>> SaveChangesAsync(string? createdBy = null, CancellationToken cancellationToken = default);
     Task<Result<object,Exception>> SaveChangesAsync(CancellationToken cancellationToken = default);
     string? ModifiedBy { get; set; }

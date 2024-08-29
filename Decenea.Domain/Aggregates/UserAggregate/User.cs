@@ -1,4 +1,5 @@
 using Decenea.Common.Common;
+using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
 
@@ -7,11 +8,11 @@ namespace Decenea.Domain.Aggregates.UserAggregate;
 public class User : AuditableAggregateRoot
 {
     private readonly List<TestUser> _testUsers = new ();
-    private IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
+    public IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
     private readonly List<string> _userClaimIds = new ();
     private readonly List<string> _userTokenIds = new ();
     public int? CountryId { get; set; }
-    public int RoleId { get; set; }
+    public required UserRole Role { get; set; }
     public required string Email { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
@@ -51,7 +52,7 @@ public class User : AuditableAggregateRoot
             LastName = lastName,
             MiddleName = middleName,
             PhoneNumber = phoneNumber,
-            RoleId = Role.Guest,
+            Role = UserRole.Guest,
             PasswordHash = passHash
         };
         

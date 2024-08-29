@@ -5,6 +5,24 @@ namespace Decenea.Common.Extensions;
 
 public static class EnumExtensions
 {
+    public static string[] GetNames<T>() where T : Enum
+    {
+        return Enum.GetNames(typeof(T));
+    }
+
+    public static T[] GetValues<T>() where T : Enum
+    {
+        return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
+    }
+
+    public static (string Name, int Value)[] GetNameValuePairs<T>() where T : Enum
+    {
+        return Enum.GetValues(typeof(T))
+            .Cast<T>()
+            .Select(e => (Enum.GetName(typeof(T), e), Convert.ToInt32(e)))
+            .ToArray();
+    }
+    
     public static string GetDescription<T>(this T @enum) where T : Enum
     {
         FieldInfo fi = @enum.GetType().GetField(@enum.ToString());

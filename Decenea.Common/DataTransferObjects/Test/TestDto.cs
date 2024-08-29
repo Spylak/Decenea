@@ -2,6 +2,7 @@ namespace Decenea.Common.DataTransferObjects.Test;
 
 public class TestDto
 {
+    public string Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string ContactPhone { get; set; }

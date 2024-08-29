@@ -11,7 +11,7 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponse<TestDto>>
 {
     public override void Configure()
     {
-        Get("/Test/Get");
+        Get("/tests/get");
         AllowAnonymous();
     }
     

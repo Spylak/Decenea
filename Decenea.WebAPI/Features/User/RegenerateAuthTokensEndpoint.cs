@@ -1,6 +1,8 @@
 using Decenea.Application.Users.Commands.RegenerateAuthTokens;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Auth;
+using Decenea.Common.Enums;
+using Decenea.Common.Extensions;
 using Decenea.Domain.Aggregates.UserAggregate;
 
 
@@ -10,8 +12,8 @@ public class RegenerateAuthTokensEndpoint : Endpoint<EmptyRequest, ApiResponse<R
 {
     public override void Configure()
     {
-        Put("/User/RegenerateAuthTokens");
-        Roles(Role.AllowAny());
+        Put("/users/regenerate-auth-tokens");
+        Roles(EnumExtensions.GetNames<UserRole>());
     }
 
     public override async Task<ApiResponse<RegenerateAuthTokensResponse>> ExecuteAsync(EmptyRequest emptyRequest,

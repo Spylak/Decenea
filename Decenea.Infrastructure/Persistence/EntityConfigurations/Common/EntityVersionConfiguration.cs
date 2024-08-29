@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 
-public class EntityVersionConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> 
+public class EntityVersionConfiguration<TEntity> : BaseEntityConfiguration<TEntity> 
     where TEntity : EntityVersion
 {
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)

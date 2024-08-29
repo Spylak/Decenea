@@ -52,7 +52,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
                 expireAt: accessTokenExpiryTime,
                 privileges: u =>
                 {
-                    u.Roles.Add(Role.RoleName(user.RoleId));
+                    u.Roles.Add(user.Role.ToString());
                     
                     u.Permissions.AddRange(new[] { "Browse" });
                     

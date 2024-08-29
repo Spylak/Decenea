@@ -10,7 +10,7 @@ public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponse<IE
 {
     public override void Configure()
     {
-        Get("/Test/GetMany");
+        Get("/tests/get-many");
         AllowAnonymous();
     }
     

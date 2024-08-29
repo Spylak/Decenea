@@ -11,7 +11,7 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponse<Us
 { 
     public override void Configure()
     {
-        Post("/User/Register");
+        Post("/users/register");
         AllowAnonymous();
     }
 

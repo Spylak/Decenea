@@ -11,7 +11,7 @@ public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponse<LoginUse
 { 
     public override void Configure()
     {
-        Put("/User/Login");
+        Put("/users/login");
         AllowAnonymous();
     }
 
