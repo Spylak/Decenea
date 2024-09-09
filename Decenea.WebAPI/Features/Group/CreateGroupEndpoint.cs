@@ -4,11 +4,10 @@ using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Group;
-using Decenea.Domain.Aggregates.UserAggregate;
 
 namespace Decenea.WebAPI.Features.Group;
 
-public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<GroupDto>>
+public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponseResult<GroupDto>>
 {
     public override void Configure()
     {
@@ -18,7 +17,7 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<Grou
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponse<GroupDto>> ExecuteAsync(CreateGroupRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<GroupDto>> ExecuteAsync(CreateGroupRequest req, CancellationToken ct)
     {
 
         var accessToken = HttpContext.Request.Headers["Authorization"]
@@ -27,10 +26,10 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<Grou
 
         var claims = accessToken.GetTokenClaimJwts();
 
-        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");
         
         if(userId is null)
-            return new ApiResponse<GroupDto>(null, false, "Invalid JWT.");
+            return new ApiResponseResult<GroupDto>(null, false, "Invalid JWT.");
         
         var result = await new CreateGroupCommand()
         {
@@ -38,6 +37,6 @@ public class CreateGroupEndpoint : Endpoint<CreateGroupRequest, ApiResponse<Grou
             Name = req.Name
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<GroupDto>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<GroupDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

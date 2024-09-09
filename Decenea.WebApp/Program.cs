@@ -4,18 +4,29 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using Decenea.WebApp;
+using Decenea.WebApp.Abstractions;
+using Decenea.WebApp.Apis;
 using Decenea.WebApp.Database;
+using Decenea.WebApp.Extensions;
 using Decenea.WebApp.Services;
-using Decenea.WebApp.Services.IService;
 using Decenea.WebApp.State;
+using Microsoft.AspNetCore.Components.Authorization;
+using Refit;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddSingleton<AuthStateProvider>();
+builder.Services.AddSingleton<AuthenticationStateProvider>(provider =>
+    provider.GetRequiredService<AuthStateProvider>());
+builder.Services.AddSingleton<AuthenticationStateProvider, AuthStateProvider>();
+builder.Services.AddSingleton<IAuthStateProvider>(provider => provider.GetRequiredService<AuthStateProvider>());
+
+builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<IndexedDb>();
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddTransient<IUserService,UserService>();
 builder.Services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
 builder.Services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
@@ -34,4 +45,13 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
 
+builder.Services.AddRefitClient<IAuthApi>()
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri("https://api.example.com"))
+    .AddTokenHandler();
+
+builder.Services.AddRefitClient<IUserApi>()
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri("https://api.example.com"))
+    .AddTokenHandler();
+
 await builder.Build().RunAsync();
+

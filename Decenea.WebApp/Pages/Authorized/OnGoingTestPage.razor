@@ -1,4 +1,6 @@
 @attribute [Route($"/{Routes.OnGoingTest}/{{testId}}")]
+@attribute [Authorize]
+
 @using Decenea.WebApp.Components.Countdown
 <PageTitle>OnGoingTestPage</PageTitle>
 

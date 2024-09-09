@@ -1,12 +1,12 @@
 using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
+using Decenea.WebApp.Abstractions;
 using Decenea.WebApp.Database;
 using Decenea.WebApp.Models;
-using Decenea.WebApp.Services.IService;
 using Decenea.WebApp.State;
+using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
-namespace Decenea.WebApp.Pages;
+namespace Decenea.WebApp.Pages.Authorized;
 
 public partial class MyTests
 {

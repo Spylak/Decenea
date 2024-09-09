@@ -1,10 +1,7 @@
 ﻿using Decenea.Application.Abstractions.Persistance;
 using Decenea.Domain.Common;
-using Decenea.Infrastructure.Persistence;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Quartz;
 using Serilog;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -14,18 +11,11 @@ namespace Decenea.Infrastructure.Outbox;
 [DisallowConcurrentExecution]
 internal sealed class ProcessOutboxMessagesJob : IJob
 {
-    private static readonly JsonSerializerSettings JsonSerializerSettings = new ()
-    {
-        TypeNameHandling = TypeNameHandling.All
-    };
-    
-    private readonly OutboxOptions _outboxOptions;
     private readonly IDeceneaDbContext _dbContext;
 
-    public ProcessOutboxMessagesJob(IOptions<OutboxOptions> outboxOptions, IDeceneaDbContext dbContext)
+    public ProcessOutboxMessagesJob(IDeceneaDbContext dbContext)
     {
         _dbContext = dbContext;
-        _outboxOptions = outboxOptions.Value;
     }
 
     public async Task Execute(IJobExecutionContext context)

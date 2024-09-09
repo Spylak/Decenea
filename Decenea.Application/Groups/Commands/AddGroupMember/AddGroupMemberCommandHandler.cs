@@ -1,5 +1,5 @@
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.Enums;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Group = Decenea.Domain.Aggregates.GroupAggregate.Group;
 
 namespace Decenea.Application.Groups.Commands.AddGroupMember;
 
-public class AddGroupMemberCommandHandler : ICommandHandler<AddGroupMemberCommand, Result<bool,Exception>>
+public class AddGroupMemberCommandHandler : ICommandHandler<AddGroupMemberCommand, ErrorOr<bool>>
 {    
     private readonly IDeceneaDbContext _dbContext;
 
@@ -17,7 +17,7 @@ public class AddGroupMemberCommandHandler : ICommandHandler<AddGroupMemberComman
         _dbContext = dbContext;
     }
 
-    public async Task<Result<bool, Exception>> ExecuteAsync(AddGroupMemberCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<bool>> ExecuteAsync(AddGroupMemberCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -26,18 +26,18 @@ public class AddGroupMemberCommandHandler : ICommandHandler<AddGroupMemberComman
                 .FirstOrDefaultAsync(i => i.Id == command.GroupId && i.GroupMembers.Any(j => j.GroupUserEmail == command.GroupUserEmail && j.GroupRole == GroupRole.Owner), cancellationToken);
             
             if(group is null)
-                return Result<bool, Exception>.Anticipated(false, ["Group not found."]);
+                return Error.NotFound(description: "Group not found.");
             
             _dbContext.ModifiedBy = command.UserId;
             group.AddNewGroupMember(command.GroupUserEmail, command.GroupId, command.GroupRole);
             _dbContext.Set<Group>().Update(group);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result<bool, Exception>.Anticipated(false, ["Successfully created!"], true);
+            return true;
         }
         catch (Exception ex)
         {
             Log.Error("Failed to AddGroupMember from request: {command} with error: {ex}", command, ex);
-            return Result<bool, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 }

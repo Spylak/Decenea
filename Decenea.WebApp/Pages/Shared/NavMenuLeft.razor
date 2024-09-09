@@ -1,9 +1,13 @@
 @inject NavigationManager navMan
 
 <MudNavMenu>
-    <MudNavLink Href="/mytests" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountBalanceWallet" IconColor="Color.Default">
-        My Tests
-    </MudNavLink>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="/mytests" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AccountBalanceWallet" IconColor="Color.Default">
+                My Tests
+            </MudNavLink>
+        </Authorized>
+    </AuthorizeView>
     <MudNavLink Href="/questiontypes" Icon="@Icons.Material.Filled.ListAlt" IconColor="Color.Default">
         Question Types
     </MudNavLink>

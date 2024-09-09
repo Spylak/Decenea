@@ -1,9 +1,9 @@
-namespace Decenea.WebApp.Services.IService;
+namespace Decenea.WebApp.Abstractions;
 
 public interface IGlobalFunctionService
 {
     Task ConsoleLogAsync<T>(T obj) where T : class;
     Task ReloadAsync();
     void Reload();
-    HttpClient CreateClient(string subDomain="");
+    HttpClient CreateClient(string subDomain = "");
 }

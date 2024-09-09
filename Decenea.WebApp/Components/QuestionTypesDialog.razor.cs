@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
-using Microsoft.JSInterop;
 
 namespace Decenea.WebApp.Components;
 

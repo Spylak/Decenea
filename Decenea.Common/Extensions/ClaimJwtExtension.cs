@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Auth;
 
 namespace Decenea.Common.Extensions;
@@ -16,7 +16,7 @@ public static class ClaimJwtExtension
     public static string? GetEmailClaimValue(this List<ClaimJwt> listClaims)
     {
         return listClaims
-            .FirstOrDefault(i => i.Key == "email")?
+            .FirstOrDefault(i => i.Key == ClaimTypes.Email)?
             .Value;
     }
     
@@ -27,64 +27,61 @@ public static class ClaimJwtExtension
             .Value;
     }
     
-    public static Result<string,Exception> GetClaimValueByKey(this string jwtString, string key)
+    public static ErrorOr<string> GetClaimValueByKey(this string jwtString, string key)
     {
         var listClaims = jwtString.GetTokenClaimJwts();
-        if (!listClaims.IsSuccess)
-            return Result<string,Exception>.Anticipated(null, listClaims.Messages);
+        if (listClaims.IsError)
+            return listClaims.Errors;
         
-        var claim = listClaims.SuccessValue?.FirstOrDefault(c => c.Key == key);
-        if(claim is null)
-            return Result<string,Exception>.Anticipated(null, [$"No value found for key {key}"]);
- 
-        return Result<string,Exception>.Anticipated(claim.Value);
+        var claim = listClaims.Value.FirstOrDefault(c => c.Key == key);
+
+        return claim is null ? Error.NotFound(description: $"No value found for key {key}") : claim.Value;
     }
 
-    public static Result<bool?,Exception> IsJwtTokenExpired(this string jwtString)
+    public static ErrorOr<bool?> IsJwtTokenExpired(this string jwtString)
     {
         var expDate = jwtString.GetClaimValueByKey("exp");
-        if (!expDate.IsSuccess)
+        if (expDate.IsError)
         {
-            return Result<bool?, Exception>.Anticipated(null, expDate.Messages);
+            return expDate.Errors;
         }
-        var expirationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expDate.SuccessValue)).UtcDateTime;
+        var expirationDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expDate.Value)).UtcDateTime;
 
-        return Result<bool?, Exception>.Anticipated(expirationDate < DateTime.UtcNow);
+        return expirationDate < DateTime.UtcNow;
     }
 
-    public static Result<IEnumerable<Claim>, Exception> GetTokenClaims(this string jwtString)
+    public static ErrorOr<List<Claim>> GetTokenClaims(this string jwtString)
     {
         if (string.IsNullOrWhiteSpace(jwtString))
-            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, ["The given token string is empty or null."]);
+            return Error.NotFound(description: "The given token string is empty or null.");
             
         var handler = new JwtSecurityTokenHandler();
         if (!handler.CanReadToken(jwtString))
-            return Result<IEnumerable<Claim>, Exception>.Anticipated(null, ["The given token string cannot be read"]);
+            return Error.Failure(description: "The given token string cannot be read");
 
         var jwtToken = handler.ReadJwtToken(jwtString);
-        return Result<IEnumerable<Claim>, Exception>.Anticipated(jwtToken.Claims);
+        return jwtToken.Claims.ToList();
     }
-    public static Result<List<ClaimJwt>,Exception> GetTokenClaimJwts(this string jwtString)
+    public static ErrorOr<List<ClaimJwt>?> GetTokenClaimJwts(this string jwtString)
     {
         try
         {
             var claims = jwtString.GetTokenClaims();
-            if(!claims.IsSuccess)
-                return Result<List<ClaimJwt>,Exception>.Anticipated(null, claims.Messages);
+            if (claims.IsError)
+                return claims.Errors;
             
             var claimJwts = new List<ClaimJwt>();
             
-            foreach (var claim in claims.SuccessValue)
+            foreach (var claim in claims.Value)
             {
                 claimJwts.Add(new ClaimJwt(claim.Type,claim.Value));
             }
 
-            return Result<List<ClaimJwt>,Exception>.Anticipated(claimJwts);
+            return claimJwts;
         }
         catch (Exception e)
         {
-            return Result<List<ClaimJwt>,Exception>
-                .Excepted(e,[$"Didn't manage to get values from token: {jwtString}"]);
+            return Error.Unexpected(description: $"Didn't manage to get values from token: {jwtString}");
         }
     }
 }

@@ -9,14 +9,14 @@ public class Group : AuditableAggregateRoot
     public required string Name { get; set; }
     private readonly List<GroupMember> _groupMembers = new ();
     public IReadOnlyCollection<GroupMember> GroupMembers => _groupMembers.AsReadOnly();
-    public static Result<Group, Exception> Create(string name)
+    public static Group Create(string name)
     {
         var test = new Group()
         {
             Name = name
         };
-        
-        return Result<Group, Exception>.Anticipated(test);
+
+        return test;
     }
     
     public void AddNewGroupMember(string userEmail, string groupId, GroupRole groupRole)

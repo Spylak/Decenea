@@ -1,13 +1,13 @@
-using Decenea.Application.Tests.Queries.GetManyTests;
 using Decenea.Application.Tests.Queries.GetTest;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
 
 
 namespace Decenea.WebAPI.Features.Test;
 
-public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponse<TestDto>>
+public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponseResult<TestDto>>
 {
     public override void Configure()
     {
@@ -15,13 +15,13 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponse<TestDto>>
         AllowAnonymous();
     }
     
-    public override async Task<ApiResponse<TestDto>> ExecuteAsync(GetTestRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<TestDto>> ExecuteAsync(GetTestRequest req, CancellationToken ct)
     {
         var result = await new GetTestQuery()
         {
             Id = req.Id
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<TestDto>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

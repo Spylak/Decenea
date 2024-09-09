@@ -1,25 +1,25 @@
-using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.LoginUser;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Auth;
+using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
 
 
 namespace Decenea.WebAPI.Features.User;
 
-public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponse<LoginUserResponse>>
+public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponseResult<LoginUserResponse>>
 { 
     public override void Configure()
     {
-        Put("/users/login");
+        Put("/auth/login");
         AllowAnonymous();
     }
 
-    public override async Task<ApiResponse<LoginUserResponse>> ExecuteAsync(LoginUserRequest req,
+    public override async Task<ApiResponseResult<LoginUserResponse>> ExecuteAsync(LoginUserRequest req,
         CancellationToken ct)
     {
         var result = await new LoginUserCommand(req.Email,req.Password,req.RememberMe ?? false)
             .ExecuteAsync(ct);
-        return new ApiResponse<LoginUserResponse>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<LoginUserResponse>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

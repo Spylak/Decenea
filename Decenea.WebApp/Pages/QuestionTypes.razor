@@ -29,39 +29,39 @@
     <MudItem xs="12" sm="9">
         @if (Visibility[nameof(QuestionType.FillBlank)])
         {
-            <FillBlankQuestion ReadOnly="true" FillBlankQuestionBaseModel="FillBlank"></FillBlankQuestion>
+            <FillBlankQuestion EditMode="false" FillBlankQuestionBaseModel="FillBlank"></FillBlankQuestion>
         }
         else if (Visibility[nameof(QuestionType.FillBlankDropdown)])
         {
-            <FillBlankDropdownQuestion ReadOnly="true" FillBlankDropdownQuestionBaseModel="FillBlankDropdownGenericQuestion"></FillBlankDropdownQuestion>
+            <FillBlankDropdownQuestion EditMode="false" FillBlankDropdownQuestionBaseModel="FillBlankDropdownGenericQuestion"></FillBlankDropdownQuestion>
         }
         else if (Visibility[nameof(QuestionType.DragAndDrop)])
         {
-            <DragAndDropQuestion ReadOnly="true" DragAndDropQuestionBaseModel="DragAndDrop"></DragAndDropQuestion>
+            <DragAndDropQuestion EditMode="false" DragAndDropQuestionBaseModel="DragAndDrop"></DragAndDropQuestion>
         }
         else if (Visibility[nameof(QuestionType.Dropdown)])
         {
-            <DropdownQuestion ReadOnly="true" DropdownQuestionBaseModel="Dropdown"></DropdownQuestion>
+            <DropdownQuestion EditMode="false" DropdownQuestionBaseModel="Dropdown"></DropdownQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleChoice)])
         {
-            <MultipleChoiceQuestion ReadOnly="true" MultipleChoiceQuestionBaseModel="MultipleChoice"></MultipleChoiceQuestion>
+            <MultipleChoiceQuestion EditMode="false" MultipleChoiceQuestionBaseModel="MultipleChoice"></MultipleChoiceQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleYesOrNo)])
         {
-            <MultipleYesOrNoQuestion ReadOnly="true" MultipleYesOrNoQuestionBaseModel="MultipleYesOrNo"></MultipleYesOrNoQuestion>
+            <MultipleYesOrNoQuestion EditMode="false" MultipleYesOrNoQuestionBaseModel="MultipleYesOrNo"></MultipleYesOrNoQuestion>
         }
         else if (Visibility[nameof(QuestionType.Ordering)])
         {
-            <OrderingQuestion ReadOnly="true" OrderingQuestionBaseModel="OrderingGenericQuestionModel"></OrderingQuestion>
+            <OrderingQuestion EditMode="false" OrderingQuestionBaseModel="OrderingGenericQuestionModel"></OrderingQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleChoiceSingle)])
         {
-            <MultipleChoiceSingleQuestion ReadOnly="true" MultipleChoiceSingleQuestionBaseModel="MultipleChoiceSingle"></MultipleChoiceSingleQuestion>
+            <MultipleChoiceSingleQuestion EditMode="false" MultipleChoiceSingleQuestionBaseModel="MultipleChoiceSingle"></MultipleChoiceSingleQuestion>
         }
         else if (Visibility[nameof(QuestionType.OrderingDragAndDrop)])
         {
-            <OrderingDnDQuestion ReadOnly="true" OrderingDnDQuestionBaseModel="OrderingDnDGenericQuestionModel"></OrderingDnDQuestion>
+            <OrderingDnDQuestion EditMode="false" OrderingDnDQuestionBaseModel="OrderingDnDGenericQuestionModel"></OrderingDnDQuestion>
         }
 
     </MudItem>

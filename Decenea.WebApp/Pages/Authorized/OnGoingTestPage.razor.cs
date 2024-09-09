@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Components;
+using Decenea.WebApp.Abstractions;
 using Decenea.WebApp.Database;
 using Decenea.WebApp.Models.QuestionTypes;
-using Decenea.WebApp.Services.IService;
 using Decenea.WebApp.State;
+using Microsoft.AspNetCore.Components;
 
-namespace Decenea.WebApp.Pages;
+namespace Decenea.WebApp.Pages.Authorized;
 
 public partial class OnGoingTestPage
 {

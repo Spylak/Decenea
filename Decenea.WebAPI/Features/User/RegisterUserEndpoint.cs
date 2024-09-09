@@ -1,13 +1,13 @@
-using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.RegisterUser;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
+using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
 
 
 namespace Decenea.WebAPI.Features.User;
 
-public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponse<UserDto>>
+public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponseResult<UserDto>>
 { 
     public override void Configure()
     {
@@ -15,7 +15,7 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponse<Us
         AllowAnonymous();
     }
 
-    public override async Task<ApiResponse<UserDto>> ExecuteAsync(RegisterUserRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<UserDto>> ExecuteAsync(RegisterUserRequest req, CancellationToken ct)
     {
         var result = await new RegisterUserCommand(req.Email,
             req.UserName,
@@ -25,6 +25,6 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponse<Us
             req.PhoneNumber,
             req.Password).ExecuteAsync(ct);
         
-        return new ApiResponse<UserDto>(result.SuccessValue,result.IsSuccess,result.Messages);
+        return new ApiResponseResult<UserDto>(result.Value,result.IsError,result.Errors.ToErrorDictionary());
     }
 }

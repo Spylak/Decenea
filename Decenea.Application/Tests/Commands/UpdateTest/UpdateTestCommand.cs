@@ -1,12 +1,12 @@
 using Decenea.Application.Abstractions.Messaging;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Test;
 using FastEndpoints;
 
 
 namespace Decenea.Application.Tests.Commands.UpdateTest;
 
-public class UpdateTestCommand : UpdateCommand , ICommand<Result<TestDto, Exception>>
+public class UpdateTestCommand : UpdateCommand , ICommand<ErrorOr<TestDto>>
 {
     public string Id { get; set; }
     public string Title { get; set; }

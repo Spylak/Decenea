@@ -1,5 +1,3 @@
-using Decenea.Domain.Helpers;
-
 namespace Decenea.Domain.Common;
 
 public abstract class LinkingTable : Versioned, IAuditableEntity

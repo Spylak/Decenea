@@ -1,4 +1,5 @@
 using Decenea.Common.Common;
+using ErrorOr;
 
 namespace Decenea.Domain.Common.ValueObjects;
 
@@ -15,15 +16,14 @@ public class TimeRange : ValueObject
         End = end;
     }
 
-    public static Result<TimeRange, Exception> FromDateTimes(DateTime start, DateTime end)
+    public static ErrorOr<TimeRange> FromDateTimes(DateTime start, DateTime end)
     {
         if (start.Date != end.Date || start >= end)
         {
-            return Result<TimeRange, Exception>.Anticipated(null, ["Start date is greater than end date."]);
+            return Error.Validation(description: "Start date is greater than end date.");
         }
 
-        return Result<TimeRange, Exception>.Anticipated(new TimeRange(TimeOnly.FromDateTime(start),
-            TimeOnly.FromDateTime(end)));
+        return new TimeRange(TimeOnly.FromDateTime(start), TimeOnly.FromDateTime(end));
     }
 
     public bool OverlapsWith(TimeRange other)

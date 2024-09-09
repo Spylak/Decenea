@@ -1,4 +1,4 @@
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Common;
 
@@ -11,14 +11,14 @@ public class TestUser : LinkingTable
     public required string TestId { get; set; }
     public Test? Test { get; set; }
 
-    public static Result<TestUser, Exception> Create(string userId, string testId)
+    public static TestUser Create(string userId, string testId)
     {
         var testUser = new TestUser()
         {
             UserId = userId,
             TestId = testId
         };
-        
-        return Result<TestUser, Exception>.Anticipated(testUser);
+
+        return testUser;
     } 
 }

@@ -6,7 +6,7 @@ using Decenea.Common.Requests.Group;
 
 namespace Decenea.WebAPI.Features.Group;
 
-public class AddGroupMemberEndpoint : Endpoint<AddGroupMemberRequest, ApiResponse<object>>
+public class AddGroupMemberEndpoint : Endpoint<AddGroupMemberRequest, ApiResponseResult<object>>
 {
     public override void Configure()
     {
@@ -16,7 +16,7 @@ public class AddGroupMemberEndpoint : Endpoint<AddGroupMemberRequest, ApiRespons
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponse<object>> ExecuteAsync(AddGroupMemberRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<object>> ExecuteAsync(AddGroupMemberRequest req, CancellationToken ct)
     {
 
         var accessToken = HttpContext.Request.Headers["Authorization"]
@@ -25,10 +25,10 @@ public class AddGroupMemberEndpoint : Endpoint<AddGroupMemberRequest, ApiRespons
 
         var claims = accessToken.GetTokenClaimJwts();
 
-        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");
         
         if(userId is null)
-            return new ApiResponse<object>(null, false, "Invalid JWT.");
+            return new ApiResponseResult<object>(null, false, "Invalid JWT.");
         
         var result = await new AddGroupMemberCommand()
         {
@@ -38,6 +38,6 @@ public class AddGroupMemberEndpoint : Endpoint<AddGroupMemberRequest, ApiRespons
             GroupRole = req.GroupRole
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<object>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<object>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

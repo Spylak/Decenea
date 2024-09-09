@@ -149,7 +149,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Question");
+                    b.ToTable("Question", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Test", b =>
@@ -545,7 +545,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutboxMessage");
+                    b.ToTable("OutboxMessage", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.GroupMember", b =>

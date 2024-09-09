@@ -1,15 +1,13 @@
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Common.Common;
-using Decenea.Common.Enums;
+using ErrorOr;
 using Decenea.Domain.Aggregates.GroupAggregate;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Group = Decenea.Domain.Aggregates.GroupAggregate.Group;
 
 namespace Decenea.Application.Groups.Commands.RemoveGroupMember;
 
-public class RemoveGroupMemberCommandHandler : ICommandHandler<RemoveGroupMemberCommand, Result<bool,Exception>>
+public class RemoveGroupMemberCommandHandler : ICommandHandler<RemoveGroupMemberCommand, ErrorOr<bool>>
 {
     private readonly IDeceneaDbContext _dbContext;
 
@@ -17,7 +15,7 @@ public class RemoveGroupMemberCommandHandler : ICommandHandler<RemoveGroupMember
     {
         _dbContext = dbContext;
     }
-    public async Task<Result<bool, Exception>> ExecuteAsync(RemoveGroupMemberCommand command, CancellationToken ct)
+    public async Task<ErrorOr<bool>> ExecuteAsync(RemoveGroupMemberCommand command, CancellationToken ct)
     {
         try
         {
@@ -27,27 +25,26 @@ public class RemoveGroupMemberCommandHandler : ICommandHandler<RemoveGroupMember
                                                              || command.GroupUserEmail == j.GroupUserEmail))
                 .ToListAsync(ct);
             
-            
             if (groupMembers.Count == 1)
             {
-                return Result<bool, Exception>.Anticipated(false, ["Last group member."]);
+                return Error.Conflict(description: "Last group member.");
             }
 
             var groupMember = groupMembers.FirstOrDefault(i => i.GroupUserEmail == command.GroupUserEmail);
             if (groupMember is null)
             {
-                return Result<bool, Exception>.Anticipated(false, ["No group member found."]);
+                return Error.NotFound(description: "No group member found.");
             }
             
             _dbContext.ModifiedBy = command.UserId;
             _dbContext.Set<GroupMember>().Remove(groupMember);
             await _dbContext.SaveChangesAsync(ct);
-            return Result<bool, Exception>.Anticipated(false ,["Successfully removed group member!"], true);
+            return true;
         }
         catch (Exception ex)
         {
             Log.Error("Failed to RemoveGroupMember from request: {command} with error: {ex}", command, ex);
-            return Result<bool, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 }

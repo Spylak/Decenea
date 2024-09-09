@@ -4,13 +4,11 @@ using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
-using Decenea.Domain.Aggregates.UserAggregate;
-using Decenea.Domain.Helpers;
 
 
 namespace Decenea.WebAPI.Features.Test;
 
-public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDto>>
+public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<TestDto>>
 {
     public override void Configure()
     {
@@ -20,7 +18,7 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponse<TestDto>> ExecuteAsync(CreateTestRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<TestDto>> ExecuteAsync(CreateTestRequest req, CancellationToken ct)
     {
 
         var accessToken = HttpContext.Request.Headers["Authorization"]
@@ -29,10 +27,10 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
 
         var claims = accessToken.GetTokenClaimJwts();
 
-        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");
         
         if(userId is null)
-            return new ApiResponse<TestDto>(null, false, "Invalid JWT.");
+            return new ApiResponseResult<TestDto>(null, false, "Invalid JWT.");
         
         var result = await new CreateTestCommand()
         {
@@ -43,6 +41,6 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponse<TestDt
             Description = req.Description
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<TestDto>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

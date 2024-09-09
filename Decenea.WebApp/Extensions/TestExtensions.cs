@@ -1,11 +1,8 @@
-
-using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models;
-using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Extensions;
 
-public static class TestExtension
+public static class TestExtensions
 {
     public static ResponseAPI<dynamic?> RemoveQuestionById(this Test test, string questionId)
     {

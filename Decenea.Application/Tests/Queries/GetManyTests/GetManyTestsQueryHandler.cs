@@ -1,15 +1,15 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
-using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Domain.Aggregates.TestAggregate;
+using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Decenea.Application.Tests.Queries.GetManyTests;
 
-public class GetManyTestsQueryHandler : ICommandHandler<GetManyTestsQuery, Result<IEnumerable<TestDto>, Exception>>
+public class GetManyTestsQueryHandler : ICommandHandler<GetManyTestsQuery, ErrorOr<IEnumerable<TestDto>>>
 {
     private readonly IDeceneaDbContext _dbContext;
 
@@ -18,7 +18,7 @@ public class GetManyTestsQueryHandler : ICommandHandler<GetManyTestsQuery, Resul
         _dbContext = dbContext;
     }
 
-    public async Task<Result<IEnumerable<TestDto>, Exception>> ExecuteAsync(GetManyTestsQuery query,
+    public async Task<ErrorOr<IEnumerable<TestDto>>> ExecuteAsync(GetManyTestsQuery query,
         CancellationToken cancellationToken)
     {
         try
@@ -39,12 +39,11 @@ public class GetManyTestsQueryHandler : ICommandHandler<GetManyTestsQuery, Resul
                 .Select(i => i.TestToTestDto(null))
                 .ToListAsync(cancellationToken);
             
-            return Result<IEnumerable<TestDto>, Exception>.Anticipated(testDtos);
+            return testDtos;
         }
         catch (Exception ex)
         {
-            return Result<IEnumerable<TestDto>, Exception>
-                .Excepted(ex, ["Didn't manage to get list of Micro Ads."]);
+            return Error.Unexpected(description: "Didn't manage to get list of tests.");
         }
     }
 }

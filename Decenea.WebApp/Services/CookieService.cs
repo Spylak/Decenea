@@ -1,5 +1,6 @@
 using Decenea.Common.Common;
-using Decenea.WebApp.Services.IService;
+using Decenea.WebApp.Abstractions;
+using ErrorOr;
 using Microsoft.JSInterop;
 
 namespace Decenea.WebApp.Services;
@@ -13,43 +14,43 @@ public class CookieService : ICookieService
         _jsRuntime = jsRuntime;
     }
 
-    public async Task<Result<string, Exception>> SetCookieAsync(string name, string value)
+    public async Task<ErrorOr<string>> SetCookieAsync(string name, string value)
     {
         try
         {
             var response = await _jsRuntime.InvokeAsync<string>("Methods.SetCookie", name, value, 3);
-            return Result<string, Exception>.Anticipated(response);
+            return response;
         }
         catch (Exception ex)
         {
-            return Result<string, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 
 
-    public async Task<Result<string, Exception>> GetCookieAsync(string name)
+    public async Task<ErrorOr<string>> GetCookieAsync(string name)
     {
         try
         {
             var response = await _jsRuntime.InvokeAsync<string>("Methods.GetCookie", name);
-            return Result<string, Exception>.Anticipated(response);
+            return response;
         }
         catch (Exception ex)
         {
-            return Result<string, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 
-    public async Task<Result<string, Exception>> DeleteCookieAsync(string name)
+    public async Task<ErrorOr<string>> DeleteCookieAsync(string name)
     {
         try
         {
             var response = await _jsRuntime.InvokeAsync<string>("Methods.DeleteCookie", name);
-            return Result<string, Exception>.Anticipated(response);
+            return response;
         }
         catch (Exception ex)
         {
-            return Result<string, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 }

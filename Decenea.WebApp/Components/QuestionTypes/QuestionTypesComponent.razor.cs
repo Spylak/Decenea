@@ -1,4 +1,5 @@
 using Decenea.Common.Enums;
+using Decenea.WebApp.Abstractions;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -6,7 +7,6 @@ using Decenea.WebApp.Constants;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
-using Decenea.WebApp.Services.IService;
 
 namespace Decenea.WebApp.Components.QuestionTypes;
 

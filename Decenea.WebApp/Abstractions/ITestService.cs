@@ -1,6 +1,6 @@
 using Decenea.WebApp.Models;
 
-namespace Decenea.WebApp.Services.IService;
+namespace Decenea.WebApp.Abstractions;
 
 public interface ITestService
 {

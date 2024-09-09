@@ -1,11 +1,10 @@
-using Decenea.Application.Abstractions.Messaging;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Test;
 using FastEndpoints;
 
 namespace Decenea.Application.Tests.Commands.CreateTest;
 
-public class CreateTestCommand : ICommand<Result<TestDto, Exception>>
+public class CreateTestCommand : ICommand<ErrorOr<TestDto>>
 {
     public string Title { get; set; }
     public string Description { get; set; }

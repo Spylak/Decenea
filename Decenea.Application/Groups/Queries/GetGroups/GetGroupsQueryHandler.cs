@@ -1,6 +1,6 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Group;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Group = Decenea.Domain.Aggregates.GroupAggregate.Group;
 
 namespace Decenea.Application.Groups.Queries.GetGroups;
 
-public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, Result<List<GroupDto>, Exception>>
+public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, ErrorOr<List<GroupDto>>>
 {
     private readonly IDeceneaDbContext _dbContext;
 
@@ -17,7 +17,7 @@ public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, Result<List
         _dbContext = dbContext;
     }
     
-    public async Task<Result<List<GroupDto>, Exception>> ExecuteAsync(GetGroupsQuery command, CancellationToken ct)
+    public async Task<ErrorOr<List<GroupDto>>> ExecuteAsync(GetGroupsQuery command, CancellationToken ct)
     {
         var group = await _dbContext
             .Set<Group>()
@@ -25,6 +25,6 @@ public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, Result<List
             .Select(i => i.GroupToGroupDto())
             .ToListAsync(ct);
             
-        return Result<List<GroupDto>, Exception>.Anticipated(group);
+        return group;
     }
 }

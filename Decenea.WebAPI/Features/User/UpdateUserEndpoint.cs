@@ -1,20 +1,20 @@
-using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Users.Commands.UpdateUser;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.User;
+using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
 
 
 namespace Decenea.WebAPI.Features.User;
 
-public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponse<UserDto>>
+public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponseResult<UserDto>>
 {
     public override void Configure()
     {
         Post("/users/update");
     }
 
-    public override async Task<ApiResponse<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)
     {
         var result = await new UpdateUserCommand()
         {
@@ -28,6 +28,6 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponse<UserDt
             Version = req.Version
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<UserDto>(result.SuccessValue,result.IsSuccess,result.Messages);
+        return new ApiResponseResult<UserDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

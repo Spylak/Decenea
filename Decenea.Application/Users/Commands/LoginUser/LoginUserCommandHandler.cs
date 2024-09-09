@@ -1,7 +1,7 @@
+using System.Security.Claims;
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Helpers;
-using Decenea.Application.Mappers;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Helpers;
@@ -13,7 +13,7 @@ using Serilog;
 
 namespace Decenea.Application.Users.Commands.LoginUser;
 
-public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<LoginUserResponse, Exception>>
+public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, ErrorOr<LoginUserResponse>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -22,7 +22,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
         _dbContext = dbContext;
         _configuration = configuration;
     }
-    public async Task<Result<LoginUserResponse, Exception>> ExecuteAsync(LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<LoginUserResponse>> ExecuteAsync(LoginUserCommand command, CancellationToken cancellationToken)
     {
         try
         {
@@ -32,18 +32,18 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
                 .FirstOrDefaultAsync(i=> i.Email == command.Email, cancellationToken);
             
             if(user is null)
-                return Result<LoginUserResponse, Exception>.Anticipated(null,["User not found."]);
+                return Error.NotFound(description: "User not found.");
 
             if(user.LockoutEnabled)
-                return Result<LoginUserResponse, Exception>.Anticipated(null,["User is locked."]);
+                return Error.Failure(description: "User is locked.");
             
             _dbContext.ModifiedBy = user.Id;
 
             var passCheck = CheckPassword(command.Password, user.PasswordHash);
             
-            if (!passCheck.IsSuccess)
+            if (passCheck.IsError)
             {
-                return Result<LoginUserResponse, Exception>.Anticipated(null, passCheck.Messages);
+                return passCheck.Errors;
             }
 
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
@@ -57,7 +57,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
                     u.Permissions.AddRange(new[] { "Browse" });
                     
                     u.Claims.Add(new("userName", user.UserName));
-                    u.Claims.Add(new("email", user.Email));
+                    u.Claims.Add(new(ClaimTypes.Email, user.Email));
                     
                     u["userId"] = user.Id; //indexer based claim setting
                 });
@@ -74,33 +74,31 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, Result<
             
             loginUserResponse.AccessToken = jwtToken;
             loginUserResponse.AccessTokenExpiryTime = accessTokenExpiryTime;
-            user.UserToLoginUserDto(loginUserResponse);
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
+
+            if (result.IsError)
+                return result.Errors;
             
-            if (!result.IsSuccess)
-                return Result<LoginUserResponse, Exception>.Anticipated(null, result.Messages);
-            
-            return Result<LoginUserResponse, Exception>.Anticipated(loginUserResponse);
+            return loginUserResponse;
         }
         catch (Exception ex)
         {
             Log.Error("Didn't manage to login user: {email} : {ex}",command.Email,ex);
-            return Result<LoginUserResponse, Exception>
-                .Excepted(ex,[$"Didn't manage to login user: {command.Email}"]);
+            return Error.Unexpected(description: $"Didn't manage to login user: {command.Email}");
         }
     }
     
-    private Result<LoginUserResponse, Exception> CheckPassword(string password,
+    private ErrorOr<bool> CheckPassword(string password,
         string passwordHash)
     {
         var passwordHelper = new PasswordHelper(Convert.FromBase64String(_configuration["Auth:Pepper"]));
-
-            
+        
         if (!passwordHelper.VerifyPassword(password, passwordHash))
         {
-            return Result<LoginUserResponse, Exception>.Anticipated(null,["Credentials don't match."]);
+            return Error.Failure(description: "Credentials don't match.");
         }
-        return Result<LoginUserResponse, Exception>.Anticipated(null,["Credentials match."],true);
+
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Domain.Common;
 using Decenea.Domain.Common.Enums;
 using Decenea.Domain.Helpers;
@@ -45,17 +45,17 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
         return base.Set<T>();
     }
 
-    public new async Task<Result<object, Exception>> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public new async Task<ErrorOr<object>> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await SaveChangesAsync(null, cancellationToken);
     }
 
-    public async Task<Result<object, Exception>> SaveChangesAsync(string? modifiedBy = null,
+    public async Task<ErrorOr<object>> SaveChangesAsync(string? modifiedBy = null,
         CancellationToken cancellationToken = default)
     {
         modifiedBy ??= ModifiedBy;
         if (modifiedBy is null)
-            return Result<object, Exception>.Anticipated(null, ["Unable to save changes."]);
+            return Error.Failure(description: "Unable to save changes.");
 
         DomainEvents ??= GetDomainEvents();
 
@@ -69,14 +69,14 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             catch (DbUpdateConcurrencyException ex)
             {
                 //Handle concurrency exception
-                return Result<object, Exception>.Anticipated(null, ["Unable to save changes due to invalid data."]);
+                return Error.Conflict(description: "Unable to save changes due to invalid data.");
             }
         }
 
         return await HandleDomainEvents(DomainEvents, modifiedBy, cancellationToken);
     }
 
-    private async Task<Result<object, Exception>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
+    private async Task<ErrorOr<object>> HandleDomainEvents(Queue<IDomainEvent> domainEvents, string userId,
         CancellationToken cancellationToken = default)
     {
         await using var transaction = await Database.BeginTransactionAsync(cancellationToken);
@@ -90,7 +90,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             await base.SaveChangesAsync(cancellationToken);
 
             await transaction.CommitAsync(cancellationToken);
-            return Result<object, Exception>.Anticipated(null, ["Successful process."], true);
+            return "Successful process.";
         }
         catch (Exception ex)
         {
@@ -99,7 +99,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             Log.Error("Something went wrong while publishing events: {message} . Adding them to the outbox.",
                 ex.Message);
             await base.SaveChangesAsync(cancellationToken);
-            return Result<object, Exception>.Excepted(null, ["Unable to Handle DomainEvents in DbContext."]);
+            return Error.Unexpected(description: "Unable to Handle DomainEvents in DbContext.");
         }
     }
 
@@ -120,7 +120,6 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             var outboxMessages = domainEvents
                 .Select(domainEvent => new OutboxMessage()
                 {
-                    Id = Ulid.NewUlid().ToString()!,
                     OccurredOnUtc = dateTime,
                     Type = domainEvent.GetType().Name,
                     DomainEvent = JsonSerializer.Serialize(domainEvent),

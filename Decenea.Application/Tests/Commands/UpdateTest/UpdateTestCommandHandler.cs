@@ -2,14 +2,16 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Extensions;
 using Decenea.Domain.Aggregates.TestAggregate;
+using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Tests.Commands.UpdateTest;
 
-public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Result<TestDto,Exception>>
+public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, ErrorOr<TestDto>>
 {
     private readonly IDeceneaDbContext _dbContext;
 
@@ -18,7 +20,7 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Resul
         _dbContext = dbContext;
     }
 
-    public async Task<Result<TestDto, Exception>> ExecuteAsync(UpdateTestCommand command,
+    public async Task<ErrorOr<TestDto>> ExecuteAsync(UpdateTestCommand command,
         CancellationToken cancellationToken)
     {
         try
@@ -28,32 +30,29 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Resul
                 .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
 
             if (existingTest is null)
-                return Result<TestDto, Exception>.Anticipated(null, ["Test not found."]);
+                return Error.NotFound(description: "Test not found.");
 
             if (existingTest.Version != command.Version)
             {
-                return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), ["Concurrency issue."], false);
+                return ErrorOrExt.ConcurrencyError(existingTest.TestToTestDto());
             }
 
-            var updateResult = Test.Update(existingTest, command.Title,
+            Test.Update(existingTest, command.Title,
                 command.Description,
                 command.ContactEmail,
                 command.ContactPhone);
 
-            if (!updateResult.IsSuccess)
-                return Result<TestDto, Exception>.Anticipated(null, updateResult.Messages);
-
             _dbContext.Set<Test>().Update(existingTest);
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
-            if(!result.IsSuccess)
-                return Result<TestDto, Exception>.Anticipated(null, result.Messages);
+            if (result.IsError)
+                return result.Errors;
                 
-            return Result<TestDto, Exception>.Anticipated(existingTest.TestToTestDto(), ["Successfully updated entity."], true);
+            return existingTest.TestToTestDto();
         }
         catch (Exception ex)
         {
             Log.Error("Failed to UpdateTest from request: {command} with error: {ex}", command, ex);
-            return Result<TestDto, Exception>.Excepted(ex);
+            return Error.Unexpected(description: ex.Message);
         }
     }
 }

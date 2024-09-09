@@ -1,5 +1,6 @@
 @attribute [Route($"/{Routes.UpsertTest}")]
 @attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
+@attribute [Authorize]
 
 @using Decenea.WebApp.Models.QuestionTypes
 @using Decenea.WebApp.Components.TestComponents

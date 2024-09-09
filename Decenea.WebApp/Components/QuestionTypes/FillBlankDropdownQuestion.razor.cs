@@ -2,7 +2,6 @@
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
-using Decenea.WebApp.Services.IService;
 
 namespace Decenea.WebApp.Components.QuestionTypes;
 

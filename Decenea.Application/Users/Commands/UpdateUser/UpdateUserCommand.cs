@@ -1,12 +1,12 @@
 using Decenea.Application.Abstractions.Messaging;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.User;
 using FastEndpoints;
 
 
 namespace Decenea.Application.Users.Commands.UpdateUser;
 
-public class UpdateUserCommand: UpdateCommand, ICommand<Result<UserDto, Exception>>
+public class UpdateUserCommand: UpdateCommand, ICommand<ErrorOr<UserDto>>
 {
     public string Id { get; init; }
     public string Email { get; init; }

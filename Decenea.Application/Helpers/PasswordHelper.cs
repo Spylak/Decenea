@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
-using Decenea.Common.Common;
+using ErrorOr;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.Application.Helpers;
@@ -88,30 +88,30 @@ public class PasswordHelper
             _keySize);
     }
 
-    public Result<object, Exception> ValidatePassword(string password)
+    public ErrorOr<object> ValidatePassword(string password)
     {
         if (string.IsNullOrWhiteSpace(password))
-            return Result<object, Exception>.Anticipated(null, ["Password cannot be empty or whitespace."]);
+            return Error.Failure(description: "Password cannot be empty or whitespace.");
 
         if (password.Length < _passwordOptions.RequiredLength)
-            return Result<object, Exception>.Anticipated(null, [$"Password must be at least {_passwordOptions.RequiredLength} characters long."]);
+            return Error.Failure(description: $"Password must be at least {_passwordOptions.RequiredLength} characters long.");
 
         if (password.Distinct().Count() < _passwordOptions.RequiredUniqueChars)
-            return Result<object, Exception>.Anticipated(null, [$"Password must have at least {_passwordOptions.RequiredUniqueChars} unique characters."]);
+            return Error.Failure(description: $"Password must have at least {_passwordOptions.RequiredUniqueChars} unique characters.");
 
         if (_passwordOptions.RequireDigit && !password.Any(char.IsDigit))
-            return Result<object, Exception>.Anticipated(null, ["Password must contain at least one digit."]);
+            return Error.Failure(description: "Password must contain at least one digit.");
 
         if (_passwordOptions.RequireLowercase && !password.Any(char.IsLower))
-            return Result<object, Exception>.Anticipated(null, ["Password must contain at least one lowercase letter."]);
+            return Error.Failure(description: "Password must contain at least one lowercase letter.");
 
         if (_passwordOptions.RequireUppercase && !password.Any(char.IsUpper))
-            return Result<object, Exception>.Anticipated(null, ["Password must contain at least one uppercase letter."]);
+            return Error.Failure(description: "Password must contain at least one uppercase letter.");
 
         if (_passwordOptions.RequireNonAlphanumeric && password.All(char.IsLetterOrDigit))
-            return Result<object, Exception>.Anticipated(null, ["Password must contain at least one non-alphanumeric character."]);
+            return Error.Failure(description: "Password must contain at least one non-alphanumeric character.");
 
-        return Result<object, Exception>.Anticipated(true, ["Password is valid."]);
+        return "Password is valid.";
     }
 
     public string GenerateRandomPassword()

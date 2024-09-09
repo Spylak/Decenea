@@ -1,5 +1,4 @@
-﻿using Decenea.Domain.Common;
-using Decenea.Common.Common;
+﻿using Decenea.Common.Common;
 
 namespace Decenea.Domain.Aggregates.UserAggregate;
 

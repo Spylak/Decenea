@@ -3,13 +3,11 @@ using Decenea.Common.Common;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
-using Decenea.Domain.Aggregates.UserAggregate;
-using Decenea.Domain.Helpers;
 
 
 namespace Decenea.WebAPI.Features.Test;
 
-public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object>>
+public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponseResult<object>>
 {
     public override void Configure()
     {
@@ -19,16 +17,16 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponse<object>> ExecuteAsync(UpdateTestRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<object>> ExecuteAsync(UpdateTestRequest req, CancellationToken ct)
     {
         var accessToken = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ","");
 
         var claims = accessToken.GetTokenClaimJwts();;
 
-        var userId = claims.SuccessValue?.GetClaimValueByKey("userId");
+        var userId = claims.Value?.GetClaimValueByKey("userId");
         
         if(userId is null)
-            return new ApiResponse<object>(null, false, "Invalid JWT.");
+            return new ApiResponseResult<object>(null, false, "Invalid JWT.");
         
         var result = await new UpdateTestCommand()
         {
@@ -40,6 +38,6 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponse<object
             Version = req.Version
         }.ExecuteAsync(ct);
         
-        return new ApiResponse<object>(result.SuccessValue, result.IsSuccess, result.Messages);
+        return new ApiResponseResult<object>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
     }
 }

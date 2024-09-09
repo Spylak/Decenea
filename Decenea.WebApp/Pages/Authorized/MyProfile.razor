@@ -1,0 +1,35 @@
+@* @page "/Profile" *@
+@* *@
+@* <PageTitle>Profile</PageTitle> *@
+@* <EditForm Model="@User" OnValidSubmit="EmailChange"> *@
+@*     <DataAnnotationsValidator/> *@
+@*     <MudCard Style="width: 400px;margin: auto"> *@
+@*         <MudCardContent> *@
+@*             <MudTextField Label="New Email" Class="mt-3" *@
+@*                           @bind-Value="User.Email" For="@(() => User.Email)"/> *@
+@*             <MudTextField Label="Confirm New Email" HelperText="Repeat the email" Class="mt-3" *@
+@*                           @bind-Value="User.ConfirmEmail" For="@(() => User.ConfirmEmail)"/> *@
+@*         </MudCardContent> *@
+@*         <MudCardActions> *@
+@*             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Submit</MudButton> *@
+@*         </MudCardActions> *@
+@*     </MudCard> *@
+@* </EditForm> *@
+@* *@
+@* <EditForm Model="@User" OnValidSubmit="PasswordChange"> *@
+@*     <DataAnnotationsValidator/> *@
+@*     <MudCard Style="width: 400px;margin: 5% auto auto"> *@
+@*         <MudCardContent> *@
+@*             <MudTextField Label="New Password" HelperText="Choose a strong password" Class="mt-3" *@
+@*                           @bind-Value="User.Password" For="@(() => User.Password)" InputType="InputType.Password" /> *@
+@*             <MudTextField Label="Confirm New Password" HelperText="Repeat the password" Class="mt-3" *@
+@*                           @bind-Value="User.ConfirmPassword" For="@(() => User.ConfirmPassword)" InputType="InputType.Password"/> *@
+@*         </MudCardContent> *@
+@*         <MudCardActions> *@
+@*             <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Submit</MudButton> *@
+@*         </MudCardActions> *@
+@*     </MudCard> *@
+@* </EditForm> *@
+@* @code { *@
+@*      *@
+@* } *@

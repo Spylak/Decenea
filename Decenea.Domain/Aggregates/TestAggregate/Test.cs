@@ -1,4 +1,4 @@
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.TestAggregate;
@@ -15,7 +15,7 @@ public class Test : AuditableAggregateRoot
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
-    public static Result<Test, Exception> Create(string title, string descripton,
+    public static Test Create(string title, string descripton,
         string contactEmail,
         string contactPhone)
     {
@@ -26,11 +26,11 @@ public class Test : AuditableAggregateRoot
             ContactEmail = contactEmail,
             ContactPhone = contactPhone
         };
-        
-        return Result<Test, Exception>.Anticipated(test);
+
+        return test;
     }
     
-    public static Result<Test, Exception> Update(Test test, string title, string descripton,
+    public static Test Update(Test test, string title, string descripton,
         string contactEmail,
         string contactPhone)
     {
@@ -38,17 +38,14 @@ public class Test : AuditableAggregateRoot
         test.Description = descripton;
         test.ContactEmail = contactEmail;
         test.ContactPhone = contactPhone;
-        
-        return Result<Test, Exception>.Anticipated(test);
+
+        return test;
     }
 
     public static void AddTestUserToTest(Test test, string userId)
     {
         var testUserResult = TestUser.Create(userId, test.Id);
-        if (testUserResult.SuccessValue is not null)
-        {
-            test._testUsers.Add(testUserResult.SuccessValue);
-        }
+        test._testUsers.Add(testUserResult);
     }
     
     public static void RemoveTestUserFromTest(Test test, string userId)

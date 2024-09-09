@@ -1,0 +1,30 @@
+@page "/Login"
+@using Decenea.WebApp.Apis
+@inherits Decenea.WebApp.Components.BaseComponent
+@inject NavigationManager NavigationManager
+@inject IAuthApi AuthApi
+
+<PageTitle>Login</PageTitle>
+@authMessage
+<MudCard>
+    <MudForm Model="@Request" @ref="@form" Validation="@(() => { })" ValidationDelay="0">
+        <MudCardContent>
+            <MudTextField Label="Email" Class="mt-3"
+                          @bind-Value="Request.Email" For="@(() => Request.Email)"/>
+            <MudTextField Label="Password" Class="mt-3"
+                          @bind-Value="Request.Password" For="@(() => Request.Password)" InputType="InputType.Password"/>
+            <MudCheckBox Label="RememberMe" Class="mt-3"
+                          @bind-Value="Request.RememberMe" For="@(() => Request.RememberMe)"/>
+        </MudCardContent>
+    <MudCardActions>
+        <div style="display: inline-grid">
+            <a style="color: #0d6efd" href="/reset-password">Forgot your password? Click here.</a>
+            <a style="color: #0d6efd" href="/register">No account? Register here.</a>
+        </div>
+        <MudSpacer/>
+        <MudButton ButtonType="ButtonType.Submit" 
+                   Variant="Variant.Filled" 
+                   Color="Color.Primary" Class="ml-auto">Log In</MudButton>
+    </MudCardActions>
+    </MudForm>
+</MudCard>

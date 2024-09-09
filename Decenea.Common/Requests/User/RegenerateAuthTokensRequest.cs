@@ -1,3 +1,3 @@
 namespace Decenea.Common.Requests.User;
 
-public record RegenerateAuthTokensRequest(string AccessToken, string RefreshToken);
+public record RegenerateAuthTokensRequest(string RefreshToken);

@@ -1,4 +1,4 @@
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
@@ -36,7 +36,7 @@ public class User : AuditableAggregateRoot
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }
     public DateTime? DateVerified { get; set; }
-    public static Result<User,Exception> Create(string firstName,
+    public static ErrorOr<User> Create(string firstName,
         string email,
         string userName,
         string lastName,
@@ -56,10 +56,10 @@ public class User : AuditableAggregateRoot
             PasswordHash = passHash
         };
         
-        return Result<User,Exception>.Anticipated(user);
+        return user;
     }
     
-    public static Result<User,Exception> Update(User user, string firstName,
+    public static ErrorOr<User> Update(User user, string firstName,
         string email,
         string userName,
         string lastName,
@@ -73,6 +73,6 @@ public class User : AuditableAggregateRoot
         user.MiddleName = middleName;
         user.PhoneNumber = phoneNumber;
         
-        return Result<User,Exception>.Anticipated(user);
+        return user;
     }
 }   

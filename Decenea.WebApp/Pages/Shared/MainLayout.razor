@@ -1,4 +1,4 @@
-﻿@using Decenea.WebApp.Services.IService
+﻿@using Decenea.WebApp.Abstractions
 @inherits LayoutComponentBase
 @inject NavigationManager _navMan
 @inject IUserService _userService
@@ -6,7 +6,7 @@
 <MudThemeProvider Theme="currentTheme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-<MudPopoverProvider />
+<MudPopoverProvider/>
 
 <MudLayout>
     <MudAppBar Elevation="1">
@@ -19,9 +19,9 @@
         <MudFab OnClick="@((e) => DarkMode())" StartIcon="@Icons.Material.Filled.WbSunny" Style="color:whitesmoke;margin: 2px;" Color="Color.Info" Size="Size.Small"></MudFab>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerLeftOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenuLeft/>    
+        <NavMenuLeft/>
     </MudDrawer>
-    <MudDrawer  @bind-Open="_drawerRightOpen" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Temporary" DisableOverlay="false" Anchor="Anchor.End" Elevation="2">
+    <MudDrawer @bind-Open="_drawerRightOpen" ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Temporary" DisableOverlay="false" Anchor="Anchor.End" Elevation="2">
         <MudDrawerHeader>
             <MudText Typo="Typo.h5" Class="mt-1">Application</MudText>
         </MudDrawerHeader>
@@ -29,12 +29,12 @@
     </MudDrawer>
     <MudMainContent>
         <CascadingValue Value="drawerRightOpen">
-                    @Body
+            @Body
         </CascadingValue>
     </MudMainContent>
 </MudLayout>
 
 
 @code {
-   
+
 }

@@ -1,0 +1,33 @@
+@page "/register"
+@inherits Decenea.WebApp.Components.BaseComponent
+
+<PageTitle>Register</PageTitle>
+
+<MudCard>
+    <MudForm Model="@Request" @ref="@form" Validation="@(() => { })" ValidationDelay="0">
+        <MudCardContent>
+            <MudTextField Label="UserName" Class="mt-3"
+                          @bind-Value="Request.UserName" For="@(() => Request.UserName)"/>
+            <MudTextField Label="FirstName" Class="mt-3"
+                          @bind-Value="Request.FirstName" For="@(() => Request.FirstName)"/>
+            <MudTextField Label="MiddleName" Class="mt-3"
+                          @bind-Value="Request.MiddleName" For="@(() => Request.MiddleName)"/>
+            <MudTextField Label="LastName" Class="mt-3"
+                          @bind-Value="Request.LastName" For="@(() => Request.LastName)"/>
+            <MudTextField Label="Phone Number" Class="mt-3"
+                          @bind-Value="Request.PhoneNumber" For="@(() => Request.PhoneNumber)"/>
+            <MudTextField Label="Email" Class="mt-3"
+                          @bind-Value="Request.Email" For="@(() => Request.Email)"/>
+            <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                          @bind-Value="Request.Password" For="@(() => Request.Password)" InputType="InputType.Password"/>
+            <MudTextField Label="Confirm Password" HelperText="Repeat the password" Class="mt-3"
+                          Validation="@(() => ConfirmPassword == Request.Password)"
+                          @bind-Value="ConfirmPassword" InputType="InputType.Password"/>
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton OnClick="@(() => NavigationManager.NavigateTo("/"))" Variant="Variant.Filled" Color="Color.Default" Class="ml-auto">Back</MudButton>
+        <MudSpacer/>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Register</MudButton>
+    </MudCardActions>
+</MudCard>

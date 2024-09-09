@@ -1,5 +1,6 @@
+using System.Security.Claims;
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Common.Common;
+using ErrorOr;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Extensions;
 using Decenea.Domain.Aggregates.UserAggregate;
@@ -12,7 +13,7 @@ using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
 
-public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand, Result<RegenerateAuthTokensResponse, Exception>>
+public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand, ErrorOr<RegenerateAuthTokensResponse>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -23,27 +24,23 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
         _configuration = configuration;
     }
 
-    public async Task<Result<RegenerateAuthTokensResponse, Exception>> ExecuteAsync(RegenerateAuthTokensCommand command,
+    public async Task<ErrorOr<RegenerateAuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensCommand command,
         CancellationToken cancellationToken)
     {
         var claims = command.AccessToken.GetTokenClaimJwts();
 
-        if (claims.SuccessValue is null)
+        if (claims.IsError)
         {
-            return Result<RegenerateAuthTokensResponse, Exception>
-                .Excepted(claims.ErrorValue);
+            return claims.Errors;
         }
 
-        var username = claims.SuccessValue
-            .GetUserNameClaimValue();
+        var username = claims.Value?.GetUserNameClaimValue();
 
-        var email = claims.SuccessValue
-            .GetEmailClaimValue();
+        var email = claims.Value?.GetEmailClaimValue();
 
         if (email is null)
         {
-            return Result<RegenerateAuthTokensResponse, Exception>
-                .Anticipated(null, ["Email not found."]);
+            return Error.NotFound(description: "Email not found.");
         }
 
         try
@@ -52,16 +49,16 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
                 .FirstOrDefaultAsync(i => i.Email == email, cancellationToken);
 
             if (user is null)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, ["User not found."]);
+                return Error.NotFound(description: "User not found.");
 
             if (user.LockoutEnabled)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, ["User is locked."]);
+                return Error.Forbidden(description: "User is locked.");
 
             if (user.RefreshToken != command.RefreshToken)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, ["Invalid refresh token."]);
+                return Error.Unauthorized(description: "Invalid refresh token.");
 
             if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, ["Expired refresh token."]);
+                return Error.Failure(description: "Expired refresh token.");
             
             var accessTokenExpiryTime = DateTime.UtcNow.AddDays(1);
             var jwtToken = JWTBearer.CreateToken(
@@ -74,7 +71,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
                     u.Permissions.AddRange(new[] { "Browse", "Edit" });
 
                     u.Claims.Add(new("userName", username));
-                    u.Claims.Add(new("email", email));
+                    u.Claims.Add(new(ClaimTypes.Email, email));
 
                     u["userId"] = user.Id; //indexer based claim setting
                 });
@@ -85,18 +82,16 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
 
-            if (!result.IsSuccess)
-                return Result<RegenerateAuthTokensResponse, Exception>.Anticipated(null, result.Messages);
+            if (result.IsError)
+                return result.Errors;
 
-            return Result<RegenerateAuthTokensResponse, Exception>
-                .Anticipated(new RegenerateAuthTokensResponse(jwtToken, refreshToken.RefreshToken,
-                    refreshToken.RefreshTokenExpiryTime, accessTokenExpiryTime));
+            return new RegenerateAuthTokensResponse(jwtToken, refreshToken.RefreshToken,
+                    refreshToken.RefreshTokenExpiryTime, accessTokenExpiryTime);
         }
         catch (Exception e)
         {
             Log.Error("Failed to RegenerateAuthTokens for {user}, with error : {ex}", email, e);
-            return Result<RegenerateAuthTokensResponse, Exception>
-                .Excepted(e, [$"Didn't manage to RegenerateAuthTokens user: {email}"]);
+            return Error.Unexpected(description: $"Didn't manage to RegenerateAuthTokens user: {email}");
         }
     }
 }

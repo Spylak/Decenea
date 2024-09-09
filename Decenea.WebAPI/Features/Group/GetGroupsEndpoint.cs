@@ -1,14 +1,13 @@
+using System.Security.Claims;
 using Decenea.Application.Groups.Queries.GetGroups;
-using Decenea.Application.Users.Queries.GetManyUsers;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Group;
-using Decenea.Common.DataTransferObjects.User;
 using Decenea.Common.Enums;
-using Decenea.Domain.Aggregates.UserAggregate;
+using Decenea.Common.Extensions;
 
 namespace Decenea.WebAPI.Features.Group;
 
-public class GetGroupsEndpoint : Endpoint<EmptyRequest, ApiResponse<List<GroupDto>>>
+public class GetGroupsEndpoint : Endpoint<EmptyRequest, ApiResponseResult<List<GroupDto>>>
 {
     public override void Configure()
     {
@@ -16,12 +15,12 @@ public class GetGroupsEndpoint : Endpoint<EmptyRequest, ApiResponse<List<GroupDt
         Roles(UserRoleExtensions.GetAuthorizesRoles());
     }
 
-    public override async Task<ApiResponse<List<GroupDto>>> ExecuteAsync(EmptyRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<List<GroupDto>>> ExecuteAsync(EmptyRequest req, CancellationToken ct)
     {
         var result = await new GetGroupsQuery()
         {
-            UserEmail = HttpContext.User.FindFirst("email")?.Value ?? ""
+            UserEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? ""
         }.ExecuteAsync(ct);
-        return new ApiResponse<List<GroupDto>>(result.SuccessValue , result.IsSuccess, result.Messages);
+        return new ApiResponseResult<List<GroupDto>>(result.Value , result.IsError, result.Errors.ToErrorDictionary());
     }
 }
