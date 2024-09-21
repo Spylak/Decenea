@@ -21,7 +21,8 @@ public class Test : AuditableAggregateRoot
     public static Test Create(string title, string descripton,
         string contactEmail,
         string contactPhone,
-        string userId)
+        string userId,
+        List<string> questionIds)
     {
         var test = new Test()
         {
@@ -31,19 +32,35 @@ public class Test : AuditableAggregateRoot
             ContactEmail = contactEmail,
             ContactPhone = contactPhone
         };
+        
+        foreach (var questionId in questionIds)
+        {
+            test.AddQuestion(questionId);
+        }
 
         return test;
     }
     
     public static Test Update(Test test, string title, string descripton,
         string contactEmail,
-        string contactPhone)
+        string contactPhone,
+        List<string>? questionIds = null)
     {
         test.Title = title;
         test.Description = descripton;
         test.ContactEmail = contactEmail;
         test.ContactPhone = contactPhone;
 
+        if (questionIds is not null)
+        {
+            test._testQuestions.Clear();
+        
+            foreach (var questionId in questionIds)
+            {
+                test.AddQuestion(questionId);
+            }
+        }
+        
         return test;
     }
 

@@ -12,5 +12,5 @@ public class CreateTestCommand : ICommand<ErrorOr<TestDto>>
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
     public required string UserId { get; set; }
-    public List<QuestionDto> Questions { get; set; } = [];
+    public List<string> QuestionIds { get; set; } = [];
 }

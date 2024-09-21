@@ -24,10 +24,12 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Error
                 command.Description,
                 command.ContactEmail,
                 command.ContactPhone,
-                command.UserId);
+                command.UserId,
+                command.QuestionIds);
             
             _dbContext.ModifiedBy = command.UserId;
-            await _dbContext.Set<Domain.Aggregates.TestAggregate.Test>().AddAsync(createResult, cancellationToken);
+            await _dbContext.Set<Domain.Aggregates.TestAggregate.Test>()
+                .AddAsync(createResult, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return createResult.TestToTestDto();
         }

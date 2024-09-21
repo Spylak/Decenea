@@ -31,7 +31,8 @@ public class UpdateGroupCommandHandler : ICommandHandler<UpdateGroupCommand, Err
             
             _dbContext.ModifiedBy = command.UserId;
             group.Name = command.Name;
-            _dbContext.Set<Domain.Aggregates.GroupAggregate.Group>().Update(group);
+            _dbContext.Set<Domain.Aggregates.GroupAggregate.Group>()
+                .Update(group);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return group.GroupToGroupDto(false);
         }

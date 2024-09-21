@@ -1,8 +1,7 @@
-using Decenea.Common.Requests.Common;
 
 namespace Decenea.Common.Requests.User;
 
-public class UpdateUserRequest : UpdateRequest
+public class UpdateUserRequest
 {
     public string Id { get; set; }
     public string Email { get; set; }
@@ -11,4 +10,5 @@ public class UpdateUserRequest : UpdateRequest
     public string LastName { get; set; }
     public string MiddleName { get; set; }
     public string PhoneNumber { get; set; }
+    public string Version { get; set; }
 }
