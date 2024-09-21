@@ -31,6 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Endpoints\Question\" />
       <Folder Include="logs\" />
     </ItemGroup>
 

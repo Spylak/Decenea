@@ -22,15 +22,7 @@
 
     <ItemGroup>
       <Folder Include="Extensions\Messaging\" />
-      <Folder Include="Questions\Commands\CreateQuestion\" />
-      <Folder Include="Questions\Commands\DeleteQuestion\" />
-      <Folder Include="Questions\Commands\UpdateQuestion\" />
-      <Folder Include="Questions\Queries\GetManyQuestions\" />
-      <Folder Include="Questions\Queries\GetQuestion\" />
-      <Folder Include="Tests\Events\" />
-      <Folder Include="Tests\IntegrationEvents\" />
-      <Folder Include="Users\Events\" />
-      <Folder Include="Users\IntegrationEvents\" />
+      <Folder Include="Features\" />
     </ItemGroup>
 
 </Project>
