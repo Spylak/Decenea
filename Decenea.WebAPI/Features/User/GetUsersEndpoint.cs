@@ -18,6 +18,6 @@ public class GetManyUsersEndpoint : Endpoint<EmptyRequest, ApiResponseResult<Lis
     public override async Task<ApiResponseResult<List<UserDto>>> ExecuteAsync(EmptyRequest req, CancellationToken ct)
     {
         var result = await new GetManyUsersQuery().ExecuteAsync(ct);
-        return new ApiResponseResult<List<UserDto>>(result.Value , result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<List<UserDto>>(result.Value , result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Decenea.Application.Groups.Commands.UpdateGroup;
 using Decenea.Common.Common;
 using Decenea.Common.DataTransferObjects.Group;
@@ -28,17 +29,20 @@ public class UpdateGroupEndpoint : Endpoint<UpdateGroupRequest, ApiResponseResul
 
         var userId = claims.Value?.GetClaimValueByKey("userId");
         
-        if(userId is null)
-            return new ApiResponseResult<GroupDto>(null, false, "Invalid JWT.");
+        var userEmail = claims.Value?.GetClaimValueByKey(ClaimTypes.Email);
+        
+        if(userId is null || userEmail is null)
+            return new ApiResponseResult<GroupDto>(null, true, "Invalid JWT.");
         
         var result = await new UpdateGroupCommand()
         {
             UserId = userId,
+            UserEmail = userEmail,
             GroupId = req.Id,
             Name = req.Name,
             Version = req.Version
         }.ExecuteAsync(ct);
         
-        return new ApiResponseResult<GroupDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<GroupDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

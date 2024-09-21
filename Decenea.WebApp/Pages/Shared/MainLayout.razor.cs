@@ -19,22 +19,22 @@ public partial class MainLayout
 
     protected override async Task OnInitializedAsync()
     {
-        var lsTheme = await _userService.GetThemeLocalStorage();
+        var lsTheme = await UserService.GetThemeLocalStorage();
         {
             
             switch (lsTheme)
             {
                 case SD.DarkTheme:
                     currentTheme = Themes.DarkTheme;
-                    await _userService.SetThemeLocalStorage(lsTheme);
+                    await UserService.SetThemeLocalStorage(lsTheme);
                     break;
                 case SD.DefaultTheme:
                     currentTheme = Themes.DefaultTheme;
-                    await _userService.SetThemeLocalStorage(lsTheme);
+                    await UserService.SetThemeLocalStorage(lsTheme);
                     break;
                 default:
                     currentTheme = Themes.DarkTheme;
-                    await _userService.SetThemeLocalStorage(SD.DarkTheme);
+                    await UserService.SetThemeLocalStorage(SD.DarkTheme);
                     break;
             }
         }
@@ -60,7 +60,7 @@ public partial class MainLayout
 
     private async Task OnClick(string buttonName)
     {
-        _navMan.NavigateTo($"{buttonName}");
+        NavigationManager.NavigateTo($"{buttonName}");
     }
    
 
@@ -78,13 +78,13 @@ public partial class MainLayout
         if (currentTheme==Themes.DefaultTheme)
         {
             currentTheme = Themes.DarkTheme;
-            _userService.SetThemeLocalStorage("darkTheme");
+            UserService.SetThemeLocalStorage("darkTheme");
             StateHasChanged();
         }
         else
         {
             currentTheme = Themes.DefaultTheme;
-            _userService.SetThemeLocalStorage("defaultTheme");
+            UserService.SetThemeLocalStorage("defaultTheme");
             StateHasChanged();
         }
     }

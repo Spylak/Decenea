@@ -2,7 +2,7 @@ namespace Decenea.Domain.Common;
 
 public abstract class Entity : Versioned
 {
-    public string Id { get; } =  Ulid.NewUlid().ToString();
+    public string Id { get; init; } =  Ulid.NewUlid().ToString();
     public override bool Equals(object? other)
     {
         if (other is null || other.GetType() != GetType())

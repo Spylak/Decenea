@@ -25,6 +25,6 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponseRes
             req.PhoneNumber,
             req.Password).ExecuteAsync(ct);
         
-        return new ApiResponseResult<UserDto>(result.Value,result.IsError,result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<UserDto>(result.Value,result.IsError,result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

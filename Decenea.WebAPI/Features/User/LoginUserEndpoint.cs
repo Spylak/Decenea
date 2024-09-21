@@ -20,6 +20,6 @@ public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponseResult<Lo
     {
         var result = await new LoginUserCommand(req.Email,req.Password,req.RememberMe ?? false)
             .ExecuteAsync(ct);
-        return new ApiResponseResult<LoginUserResponse>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<LoginUserResponse>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

@@ -1,10 +1,14 @@
-@page "/Logout"
+@page "/logout"
+@using Decenea.WebApp.Abstractions
+@inject NavigationManager NavigationManager
+@inject IAuthService AuthService
+
 <PageTitle>Logout</PageTitle>
 <MudCard Outlined="true" Style="width: 400px;margin: 20% auto auto">
     <MudCardContent>
         <MudText>Are you sure you want to logout?</MudText>
     </MudCardContent>
     <MudCardActions>
-        <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(() => Yes())">Yes</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="@(async () => await Yes())">Yes</MudButton>
     </MudCardActions>
 </MudCard>

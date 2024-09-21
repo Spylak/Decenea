@@ -10,7 +10,7 @@ public class GlobalFunctionService : IGlobalFunctionService
     {
         _jsRuntime = jsRuntime;
     }
-    public async Task ConsoleLogAsync<T>(T obj) where  T : class
+    public async Task ConsoleLogAsync(object obj)
     {
         await _jsRuntime.InvokeVoidAsync("blazorExtensions.Log", obj);
     }

@@ -1,7 +1,12 @@
+using Decenea.Common.DataTransferObjects.Auth;
+
 namespace Decenea.WebApp.Abstractions;
 
 public interface IAuthStateProvider
 {
-    string? AccessToken { get; }
+    AuthTokensResponse AuthTokensResponse { get; }
     void NotifyAuthenticationStateChanged();
+    Task NotifyUserLogin(AuthTokensResponse loginUserResponse);
+
+    Task NotifyUserLogout();
 }

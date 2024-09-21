@@ -1,9 +1,6 @@
-﻿using Blazored.LocalStorage;
-using Decenea.Common.Enums;
-using Decenea.WebApp.Abstractions;
+﻿using Decenea.Common.Enums;
 using Decenea.WebApp.Components;
 using Decenea.WebApp.Constants;
-using Decenea.WebApp.Database;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
@@ -16,20 +13,7 @@ namespace Decenea.WebApp.Pages.Authorized;
 public partial class UpsertTestPage
 {
     [Inject] private TestContainer TestContainer { get; set; }
-    [Inject] private IndexedDb IndexedDb { get; set; }
-    [Inject] private NavigationManager NavigationManager { get; set; }
-    [Inject] private ILocalStorageService LocalStorageService { get; set; }
-    [Inject] private IDialogService DialogService { get; set; }
-    [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     [Parameter] public string? TestId { get; set; }
-    [CascadingParameter] public EventCallback DrawerRightOpen { get; set; }
-    private bool TestNameEdit { get; set; } = false;
-
-    public override async Task SetParametersAsync(ParameterView parameters)
-    {
-        base.SetParametersAsync(parameters);
-    }
-
     protected override async Task OnInitializedAsync()
     {
         var keys = await IndexedDb.GetKeysAsync();

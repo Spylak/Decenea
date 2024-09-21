@@ -21,11 +21,14 @@ public class GetGroupQueryHandler : ICommandHandler<GetGroupQuery, ErrorOr<Group
     {
         var group = await _dbContext
             .Set<Group>()
-            .FirstOrDefaultAsync(i => i.Id == command.GroupId && i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail), ct);
+            .AsSplitQuery()
+            .Include(i => i.GroupMembers)
+            .FirstOrDefaultAsync(i => i.Id == command.GroupId 
+                                      && i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail), ct);
             
         if(group is null)
             return Error.NotFound(description: "Group not found.");
         
-        return group.GroupToGroupDto();
+        return group.GroupToGroupDto(true);
     }
 }

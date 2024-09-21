@@ -5,4 +5,4 @@ using FastEndpoints;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
 
-public record RegenerateAuthTokensCommand(string AccessToken, string RefreshToken) : ICommand<ErrorOr<RegenerateAuthTokensResponse>>;
+public record RegenerateAuthTokensCommand(string AccessToken, string RefreshToken) : ICommand<ErrorOr<AuthTokensResponse>>;

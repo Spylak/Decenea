@@ -12,9 +12,8 @@ public static class ServiceCollectionExtensions
         httpClientBuilder.AddHttpMessageHandler(sp =>
         {
             var authApi = sp.GetRequiredService<IAuthApi>();
-            var localStorage = sp.GetRequiredService<ILocalStorageService>();
             var authStateProvider = sp.GetRequiredService<AuthStateProvider>();
-            return new TokenHandler(authApi, localStorage, authStateProvider);
+            return new TokenHandler(authApi, authStateProvider);
         });
         return httpClientBuilder;
     }

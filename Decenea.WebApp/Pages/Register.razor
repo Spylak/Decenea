@@ -28,6 +28,8 @@
     <MudCardActions>
         <MudButton OnClick="@(() => NavigationManager.NavigateTo("/"))" Variant="Variant.Filled" Color="Color.Default" Class="ml-auto">Back</MudButton>
         <MudSpacer/>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Register</MudButton>
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" Class="ml-auto" 
+                   OnClick="@(async () => await Submit())">Register</MudButton>
     </MudCardActions>
 </MudCard>

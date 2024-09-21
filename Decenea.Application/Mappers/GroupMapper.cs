@@ -5,19 +5,26 @@ namespace Decenea.Application.Mappers;
 
 public static class GroupMapper
 {
-    public static GroupDto GroupToGroupDto(this Group group, GroupDto? groupDto = null)
-    {
-        groupDto ??= new GroupDto();
-        groupDto.Name = group.Name;
-        return groupDto;
-    }
-    
-    public static GroupDto GroupToGroupDto(this Group group)
+    public static GroupDto GroupToGroupDto(this Group group, bool includeMembers)
     {
         return new GroupDto()
         {
             Id = group.Id,
-            Name = group.Name
+            Name = group.Name,
+            Version = group.Version,
+            GroupMembers = group.GroupMembers.Select(i=>i.GroupMemberToGroupMemberDto()).ToList()
+        };
+    }
+    
+    public static GroupMemberDto GroupMemberToGroupMemberDto(this GroupMember groupMember)
+    {
+        return new GroupMemberDto()
+        {
+            GroupUserEmail = groupMember.GroupUserEmail,
+            Alias = groupMember.Alias,
+            Version = groupMember.Version,
+            GroupId = groupMember.GroupId,
+            GroupRole = groupMember.GroupRole
         };
     }
 }

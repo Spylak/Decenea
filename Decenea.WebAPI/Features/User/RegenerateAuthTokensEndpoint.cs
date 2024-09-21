@@ -8,7 +8,7 @@ using Decenea.Common.Requests.User;
 
 namespace Decenea.WebAPI.Features.User;
 
-public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest, ApiResponseResult<RegenerateAuthTokensResponse>>
+public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest, ApiResponseResult<AuthTokensResponse>>
 {
     public override void Configure()
     {
@@ -16,12 +16,12 @@ public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest
         Roles(EnumExtensions.GetNames<UserRole>());
     }
 
-    public override async Task<ApiResponseResult<RegenerateAuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensRequest req,
+    public override async Task<ApiResponseResult<AuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensRequest req,
         CancellationToken ct)
     {
         var accessToken = HttpContext.Request.Headers["Authorization"]
             .ToString().Replace("Bearer ","");
         var result = await new RegenerateAuthTokensCommand(accessToken, req.RefreshToken).ExecuteAsync(ct);
-        return new ApiResponseResult<RegenerateAuthTokensResponse>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<AuthTokensResponse>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

@@ -14,7 +14,12 @@ public class TestConfiguration : AuditableAggregateConfiguration<Domain.Aggregat
                 builder.Property(t => t.Title).HasMaxLength(500).IsRequired();
                 builder.Property(t => t.ContactPhone).HasMaxLength(20);
                 builder.Property(t => t.ContactEmail).HasMaxLength(100);
-
+                
+                builder.HasOne(tq => tq.User)
+                        .WithMany(t => t.Tests)
+                        .HasForeignKey(tq => tq.UserId)
+                        .OnDelete(DeleteBehavior.SetNull);
+                
                 builder.HasMany(t => t.TestQuestions)
                         .WithOne(tq => tq.Test)
                         .HasForeignKey(tq => tq.TestId)

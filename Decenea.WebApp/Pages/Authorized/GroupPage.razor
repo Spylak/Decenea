@@ -1,0 +1,91 @@
+@attribute [Route($"/{Routes.Group}")]
+@attribute [Route($"/{Routes.Group}/{{groupId}}")]
+@attribute [Authorize]
+@using Decenea.WebApp.Apis
+@using Decenea.Common.DataTransferObjects.Group
+@inherits Decenea.WebApp.Pages.Shared.BasePage
+@inject IGroupApi GroupApi
+@if (Group is not null)
+{
+    <h3>GroupPage</h3>
+    <MudGrid Style="margin: auto;max-width: 90%">
+        <MudItem xs="2">
+        </MudItem>
+        <MudItem xs="8">
+            <MudForm>
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudTextField T="string" @bind-Value="Group.Id"
+                                      Variant="Variant.Outlined"
+                                      ReadOnly="@true"
+                                      Label="Group Id"/>
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudTextField T="string" @bind-Value="Group.Name"
+                                      Variant="Variant.Outlined"
+                                      ReadOnly="@true"
+                                      Label="Group Name"/>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
+        </MudItem>
+        <MudItem xs="2">
+        </MudItem>
+        <MudItem xs="12">
+            <MudDataGrid T="GroupMemberDto" Items="@Group.GroupMembers"
+                         Bordered="true"
+                         EditTrigger="DataGridEditTrigger.Manual"
+                         EditMode="DataGridEditMode.Form"
+                         ReadOnly="false"
+                         Dense="true"
+                         Hover="true"
+                         CommittedItemChanges="@(async item => await UpdateGroupMember(item))"
+                         FilterMode="DataGridFilterMode.ColumnFilterRow"
+                         Filterable="true"
+                         FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                         Striped="true">
+                <ToolBarContent>
+                    <MudSpacer/>
+                    <MudIconButton
+                        Icon="@Icons.Material.Filled.Settings"
+                        Color="Color.Warning"
+                        OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))">
+                    </MudIconButton>
+                    <MudIconButton
+                        OnClick="@(() => AddGroupMember())"
+                        Icon="@Icons.Material.Filled.Add"
+                        Style="margin:-2px 5px 0"
+                        Color="Color.Tertiary"
+                        Variant="Variant.Filled"/>
+                </ToolBarContent>
+                <Columns>
+                    <TemplateColumn Filterable="false"
+                                    Sortable="false"
+                                    Editable="false">
+                        <CellTemplate>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error"
+                                           OnClick="@(() => RemoveGroupMember(context.Item.GroupUserEmail))"/>
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <PropertyColumn
+                        Property="i => i.GroupUserEmail">
+                    </PropertyColumn>
+                    <PropertyColumn
+                        Property="i => i.Alias">
+                    </PropertyColumn>
+                    <TemplateColumn CellClass="d-flex justify-end">
+                        <CellTemplate>
+                            <MudIconButton Size="@Size.Small"
+                                           Icon="@Icons.Material.Outlined.Edit"
+                                           OnClick="@context.Actions.StartEditingItemAsync"/>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="GroupMemberDto"/>
+                </PagerContent>
+            </MudDataGrid>
+        </MudItem>
+    </MudGrid>
+}

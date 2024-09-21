@@ -12,7 +12,7 @@ public static class TestMapper
         testDto.Description = test.Description;
         testDto.ContactPhone = test.ContactPhone;
         testDto.ContactEmail = test.ContactEmail;
-        // microAdDto.ApplicationUserName = microAd.ApplicationUser.FullName;
+        
         return testDto;
     }
 }

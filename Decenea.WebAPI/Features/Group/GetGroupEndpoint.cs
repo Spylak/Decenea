@@ -23,6 +23,6 @@ public class GetGroupEndpoint : Endpoint<GetGroupRequest, ApiResponseResult<Grou
             UserEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? "",
             GroupId = req.Id
         }.ExecuteAsync(ct);
-        return new ApiResponseResult<GroupDto>(result.Value , result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<GroupDto>(result.Value , result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

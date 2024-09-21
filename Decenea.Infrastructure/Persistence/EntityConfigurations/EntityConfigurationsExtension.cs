@@ -1,5 +1,6 @@
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Group;
+using Decenea.Infrastructure.Persistence.EntityConfigurations.Question;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Test;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.User;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ public static class EntityConfigurationsExtension
         builder.ApplyConfiguration(new UserClaimConfiguration());
         builder.ApplyConfiguration(new UserTokenConfiguration());
         builder.ApplyConfiguration(new TestConfiguration());
+        builder.ApplyConfiguration(new QuestionConfiguration());
         builder.ApplyConfiguration(new TestQuestionConfiguration());
         builder.ApplyConfiguration(new TestUserConfiguration());
         

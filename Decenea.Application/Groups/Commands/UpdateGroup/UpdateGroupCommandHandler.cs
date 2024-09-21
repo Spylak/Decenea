@@ -25,7 +25,7 @@ public class UpdateGroupCommandHandler : ICommandHandler<UpdateGroupCommand, Err
         {
             var group = await _dbContext
                 .Set<Group>()
-                .FirstOrDefaultAsync(i => i.Id == command.GroupId && i.GroupMembers.Any(j => j.GroupUserEmail == command.UserId && j.GroupRole == GroupRole.Owner), cancellationToken);
+                .FirstOrDefaultAsync(i => i.Id == command.GroupId && i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail && j.GroupRole == GroupRole.Owner), cancellationToken);
             
             if(group is null)
                 return Error.NotFound(description: "Group not found.");
@@ -34,7 +34,7 @@ public class UpdateGroupCommandHandler : ICommandHandler<UpdateGroupCommand, Err
             group.Name = command.Name;
             _dbContext.Set<Group>().Update(group);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return group.GroupToGroupDto();
+            return group.GroupToGroupDto(false);
         }
         catch (Exception ex)
         {

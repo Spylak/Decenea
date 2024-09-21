@@ -22,6 +22,6 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponseResult<TestDt
             Id = req.Id
         }.ExecuteAsync(ct);
         
-        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

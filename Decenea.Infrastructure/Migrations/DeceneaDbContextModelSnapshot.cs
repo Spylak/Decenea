@@ -17,7 +17,7 @@ namespace Decenea.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -61,7 +61,7 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.GroupAggregate.GroupMember", b =>
                 {
-                    b.Property<string>("UserEmail")
+                    b.Property<string>("GroupUserEmail")
                         .HasColumnType("text");
 
                     b.Property<string>("GroupId")
@@ -93,7 +93,7 @@ namespace Decenea.Infrastructure.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
-                    b.HasKey("UserEmail", "GroupId");
+                    b.HasKey("GroupUserEmail", "GroupId");
 
                     b.HasIndex("GroupId");
 
@@ -103,11 +103,13 @@ namespace Decenea.Infrastructure.Migrations
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Questions.Question", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedByTimestampUtc")
                         .HasColumnType("timestamp with time zone");
@@ -118,7 +120,8 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("LastModifiedByTimestampUtc")
                         .HasColumnType("timestamp with time zone");
@@ -138,18 +141,21 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Version")
+                        .IsConcurrencyToken()
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.Property<double>("Weight")
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.Test", b =>
@@ -210,7 +216,7 @@ namespace Decenea.Infrastructure.Migrations
                         .HasColumnType("character varying(26)");
 
                     b.Property<string>("QuestionId")
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(26)");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -503,6 +509,12 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<DateTime>("OperationExecutedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.HasKey("Id");
 

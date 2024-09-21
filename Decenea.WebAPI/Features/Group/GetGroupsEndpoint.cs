@@ -21,6 +21,6 @@ public class GetGroupsEndpoint : Endpoint<EmptyRequest, ApiResponseResult<List<G
         {
             UserEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? ""
         }.ExecuteAsync(ct);
-        return new ApiResponseResult<List<GroupDto>>(result.Value , result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<List<GroupDto>>(result.Value , result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

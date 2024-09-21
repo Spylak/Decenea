@@ -1,7 +1,10 @@
 ﻿@using Decenea.WebApp.Abstractions
 @inherits LayoutComponentBase
-@inject NavigationManager _navMan
-@inject IUserService _userService
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+@inject IAuthService AuthService
+@inject IGlobalFunctionService GlobalFunctionService
+@inject ISnackbar Snackbar
 
 <MudThemeProvider Theme="currentTheme"/>
 <MudDialogProvider/>

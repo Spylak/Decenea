@@ -21,6 +21,8 @@ public class GetTestQueryHandler : ICommandHandler<GetTestQuery, ErrorOr<TestDto
         try
         {
             var test = await _dbContext.Set<Test>()
+                .Include(i => i.TestQuestions)
+                .ThenInclude(i => i.Question)
                 .FirstOrDefaultAsync(i => i.Id.Equals(query.Id), cancellationToken);
             
             if(test is null)

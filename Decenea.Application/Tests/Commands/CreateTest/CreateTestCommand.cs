@@ -1,3 +1,4 @@
+using Decenea.Common.DataTransferObjects.Question;
 using ErrorOr;
 using Decenea.Common.DataTransferObjects.Test;
 using FastEndpoints;
@@ -10,5 +11,6 @@ public class CreateTestCommand : ICommand<ErrorOr<TestDto>>
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
+    public List<QuestionDto> Questions { get; set; } = [];
 }

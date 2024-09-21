@@ -22,7 +22,7 @@ public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, ErrorOr<Lis
         var group = await _dbContext
             .Set<Group>()
             .Where(i => i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail))
-            .Select(i => i.GroupToGroupDto())
+            .Select(i => i.GroupToGroupDto(false))
             .ToListAsync(ct);
             
         return group;

@@ -9,5 +9,6 @@ public class UpdateGroupCommand : UpdateCommand, ICommand<ErrorOr<GroupDto>>
 {
     public string Name { get; set; }
     public required string GroupId { get; set; }
+    public required string UserEmail { get; set; }
     public required string UserId { get; set; }
 }

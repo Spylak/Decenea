@@ -1,3 +1,4 @@
+using Decenea.Domain.Aggregates.UserAggregate;
 using ErrorOr;
 using Decenea.Domain.Common;
 
@@ -5,6 +6,8 @@ namespace Decenea.Domain.Aggregates.TestAggregate;
 
 public class Test : AuditableAggregateRoot
 {
+    public required string UserId { get; set; }
+    public User User { get; set; }
     private List<TestQuestion> _testQuestions = new ();
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
     
@@ -17,11 +20,13 @@ public class Test : AuditableAggregateRoot
     public string ContactEmail { get; set; }
     public static Test Create(string title, string descripton,
         string contactEmail,
-        string contactPhone)
+        string contactPhone,
+        string userId)
     {
         var test = new Test()
         {
             Title = title,
+            UserId = userId,
             Description = descripton,
             ContactEmail = contactEmail,
             ContactPhone = contactPhone
@@ -40,6 +45,20 @@ public class Test : AuditableAggregateRoot
         test.ContactPhone = contactPhone;
 
         return test;
+    }
+
+    public void AddQuestion(string questionId)
+    {
+        _testQuestions.Add(new TestQuestion()
+        {
+            TestId = Id,
+            QuestionId = questionId
+        });
+    }
+    
+    public void RemoveQuestion(string questionId)
+    {
+        _testQuestions = _testQuestions.Where(i => i.QuestionId != questionId).ToList();
     }
 
     public static void AddTestUserToTest(Test test, string userId)

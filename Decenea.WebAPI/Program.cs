@@ -25,8 +25,20 @@ builder.Services
     .AddApplication();
 
 builder.Services.SwaggerDocument();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        b =>
+        {
+            b.AllowAnyHeader()
+                .AllowAnyMethod()
+                .SetIsOriginAllowed(host => true)
+                .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 await app.ExecuteInfrastructureOnStartup();
 if (!app.Environment.IsDevelopment())
 {

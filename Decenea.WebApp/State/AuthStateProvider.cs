@@ -10,7 +10,7 @@ namespace Decenea.WebApp.State;
 public class AuthStateProvider : AuthenticationStateProvider, IAuthStateProvider
 {
     private readonly ILocalStorageService _localStorage;
-    public string? AccessToken { get; private set; }
+    public AuthTokensResponse AuthTokensResponse { get; private set; } = new ();
     public AuthStateProvider(ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
@@ -18,22 +18,33 @@ public class AuthStateProvider : AuthenticationStateProvider, IAuthStateProvider
     
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var response = await _localStorage.GetItemAsync<LoginUserResponse>("session");
+        var response = await _localStorage.GetItemAsync<AuthTokensResponse>("session");
         if (response is not { AccessToken: not null })
         {
             return new(new(new ClaimsIdentity()));
         }
 
-        AccessToken = response.AccessToken;
-
+        AuthTokensResponse = response;
         var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(response.AccessToken);
         var userIdentity = new ClaimsIdentity(jwtToken.Claims, "Basic");
         var principal = new ClaimsPrincipal(userIdentity);
         return new AuthenticationState(principal);
     }
-
+    
     public void NotifyAuthenticationStateChanged()
     {
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
+
+    public async Task NotifyUserLogin(AuthTokensResponse loginUserResponse)
+    {
+        await _localStorage.SetItemAsync("session", loginUserResponse);
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
+
+    public async Task NotifyUserLogout()
+    {
+        await _localStorage.RemoveItemAsync("session");
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 }

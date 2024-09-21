@@ -25,7 +25,8 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Error
             var createResult = Test.Create(command.Title,
                 command.Description,
                 command.ContactEmail,
-                command.ContactPhone);
+                command.ContactPhone,
+                command.UserId);
             
             _dbContext.ModifiedBy = command.UserId;
             await _dbContext.Set<Test>().AddAsync(createResult, cancellationToken);

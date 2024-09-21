@@ -1,0 +1,83 @@
+@attribute [Route($"/{Routes.Groups}")]
+
+@using Decenea.WebApp.Models
+@using Decenea.WebApp.Abstractions
+@using Decenea.WebApp.Apis
+@using Decenea.Common.DataTransferObjects.Group
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject IGlobalFunctionService GlobalFunctionService
+@inject IGroupApi GroupApi
+<PageTitle>My Groups</PageTitle>
+
+<h3 style="text-align: center">My Groups</h3>
+<MudGrid Style="margin: auto;max-width: 90%">
+    <MudItem xs="4">
+            <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await SaveGroups())">Save Groups</MudButton>
+        </MudItem>
+        <MudItem xs="4">
+        </MudItem>
+        <MudItem xs="4">
+            <MudButton Color="Color.Warning" Variant="Variant.Filled">Save Groups</MudButton>
+        </MudItem>
+    <MudItem xs="12">
+        <MudDataGrid T="GroupDto" Items="@Groups"
+                     Bordered="true"
+                     EditTrigger="DataGridEditTrigger.Manual"
+                     EditMode="DataGridEditMode.Form"
+                     CommittedItemChanges="@(async item => await UpdateGroup(item.Id, item.Name, item.Version))"
+                     ReadOnly="false"
+                     Dense="true"
+                     Hover="true"
+                     Striped="true"
+                     RowClick="@(itm => NavigationManager.NavigateTo($"{Routes.Group}/{itm.Item.Id}"))"
+                     ColumnResizeMode="ResizeMode.Column">
+            <ToolBarContent>
+                <MudSpacer/>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.Settings"
+                    Color="Color.Warning"
+                    OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))">
+                </MudIconButton>
+                <MudIconButton
+                    OnClick="@(() => AddGroup())"
+                    Icon="@Icons.Material.Filled.Add"
+                    Style="margin:-2px 5px 0"
+                    Color="Color.Tertiary"
+                    Variant="Variant.Filled"/>
+            </ToolBarContent>
+            <Columns>
+                <TemplateColumn Filterable="false"
+                                Sortable="false"
+                                Editable="false">
+                    <CellTemplate>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       OnClick="@(() => RemoveGroup(context.Item.Id))"/>
+                    </CellTemplate>
+                </TemplateColumn>
+                <PropertyColumn
+                    Property="i => i.Id"
+                    Editable="false">
+                </PropertyColumn>
+                <PropertyColumn
+                    Property="i => i.Name">
+                </PropertyColumn>
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudIconButton Size="@Size.Small"
+                                       Icon="@Icons.Material.Outlined.Edit"
+                                       OnClick="@context.Actions.StartEditingItemAsync"/>
+                    </CellTemplate>
+                </TemplateColumn>
+            </Columns>
+            <PagerContent>
+                <MudDataGridPager T="GroupDto"/>
+            </PagerContent>
+        </MudDataGrid>
+
+    </MudItem>
+</MudGrid>
+@code {
+    
+}

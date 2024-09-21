@@ -1,11 +1,14 @@
 @page "/Login"
 @using Decenea.WebApp.Apis
-@inherits Decenea.WebApp.Components.BaseComponent
+@using Decenea.WebApp.Abstractions
+
 @inject NavigationManager NavigationManager
-@inject IAuthApi AuthApi
+@inject IAuthService AuthService
+@inject IGlobalFunctionService GlobalFunctionService
+@inject ISnackbar Snackbar
 
 <PageTitle>Login</PageTitle>
-@authMessage
+
 <MudCard>
     <MudForm Model="@Request" @ref="@form" Validation="@(() => { })" ValidationDelay="0">
         <MudCardContent>
@@ -22,9 +25,10 @@
             <a style="color: #0d6efd" href="/register">No account? Register here.</a>
         </div>
         <MudSpacer/>
-        <MudButton ButtonType="ButtonType.Submit" 
+        <MudButton
                    Variant="Variant.Filled" 
-                   Color="Color.Primary" Class="ml-auto">Log In</MudButton>
+                   Color="Color.Primary" Class="ml-auto"
+                   OnClick="@(async () => await Submit())">Log In</MudButton>
     </MudCardActions>
     </MudForm>
 </MudCard>

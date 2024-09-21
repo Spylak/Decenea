@@ -27,7 +27,8 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Error
         {
             var existingTest = await _dbContext
                 .Set<Test>()
-                .FirstOrDefaultAsync(i => i.Id == command.Id, cancellationToken);
+                .FirstOrDefaultAsync(i => i.Id == command.Id && 
+                                          i.UserId == command.UserId, cancellationToken);
 
             if (existingTest is null)
                 return Error.NotFound(description: "Test not found.");

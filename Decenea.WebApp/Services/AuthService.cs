@@ -1,8 +1,14 @@
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using Blazored.LocalStorage;
+using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Requests.User;
 using Decenea.WebApp.Abstractions;
 using Decenea.WebApp.Apis;
 using ErrorOr;
+using Refit;
 
 namespace Decenea.WebApp.Services;
 
@@ -11,23 +17,30 @@ public class AuthService : IAuthService
     private readonly IAuthApi _authApi;
     private readonly ILocalStorageService _localStorageService;
     private readonly IAuthStateProvider _authStateProvider;
+    private readonly IGlobalFunctionService _globalFunctionService;
     public AuthService(IAuthApi authApi, ILocalStorageService localStorageService,
-        IAuthStateProvider authStateProvider)
+        IAuthStateProvider authStateProvider, IGlobalFunctionService globalFunctionService)
     {
         _authApi = authApi;
         _localStorageService = localStorageService;
         _authStateProvider = authStateProvider;
+        _globalFunctionService = globalFunctionService;
     }
+    
     public async Task<ErrorOr<object>> Login(LoginUserRequest request)
     {
         try
         {
             var response = await _authApi.Login(request);
-            await _localStorageService.SetItemAsync("session", response.Data);
-            _authStateProvider.NotifyAuthenticationStateChanged();
-            return true;
+            if (response.Data is not  null)
+            {
+                await _authStateProvider.NotifyUserLogin(response.Data.AuthTokensResponse);
+                return true;
+            }
+
+            return Error.Failure(description: "Couldn't login.");
         }
-        catch (Exception ex)
+        catch (ApiException ex)
         {
             return Error.Unexpected(description: ex.Message);
         }
@@ -37,8 +50,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            await _localStorageService.RemoveItemAsync("session");
-            _authStateProvider.NotifyAuthenticationStateChanged();
+            await _authStateProvider.NotifyUserLogout();
             return true;
         }
         catch (Exception e)
@@ -99,9 +111,9 @@ public class AuthService : IAuthService
     // {
     //     try
     //     {
-    //         var gyxiToken=await _authService.GetCookie(GenericConstants.GyxiToken);
+    //         var Token=await _authService.GetCookie(GenericConstants.Token);
     //         var client = _globalFunctionService.CreateClient();
-    //         client.DefaultRequestHeaders.Add("Gyxi-TokenKey",gyxiToken.Data);
+    //         client.DefaultRequestHeaders.Add("-TokenKey",Token.Data);
     //         var dictionary = new Dictionary<string, string>();
     //         dictionary["email"] = email;
     //         dictionary["password"] = password;

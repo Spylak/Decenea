@@ -30,7 +30,7 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<
         var userId = claims.Value?.GetClaimValueByKey("userId");
         
         if(userId is null)
-            return new ApiResponseResult<TestDto>(null, false, "Invalid JWT.");
+            return new ApiResponseResult<TestDto>(null, true, "Invalid JWT.");
         
         var result = await new CreateTestCommand()
         {
@@ -41,6 +41,6 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<
             Description = req.Description
         }.ExecuteAsync(ct);
         
-        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

@@ -1,5 +1,6 @@
 using Decenea.Common.Requests.User;
 using Decenea.WebApp.Components;
+using Decenea.WebApp.Constants;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -9,9 +10,8 @@ namespace Decenea.WebApp.Pages;
 
 public partial class Login
 {
-    private LoginUserRequest Request { get; init; }
+    private LoginUserRequest Request { get; init; } = new ();
     private MudForm form;
-    private string authMessage = "The user is NOT authenticated.";
 
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -21,11 +21,11 @@ public partial class Login
         if (AuthenticationState is not null)
         {
             var authState = await AuthenticationState;
-            var user = authState?.User;
+            var user = authState.User;
 
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            if (user.Identity is not null && user.Identity.IsAuthenticated)
             {
-                NavigationManager.NavigateTo("/mytests");
+                NavigationManager.NavigateTo(Routes.Tests);
             }
         }
     }
@@ -33,13 +33,13 @@ public partial class Login
     private async Task Submit()
     {
         await form.Validate();
-
         if (form.IsValid)
         {
-            var result = await AuthApi.Login(Request);
-            if (result.IsError)
+            var result = await AuthService.Login(Request);
+            if (!result.IsError)
             {
                 Snackbar.Add("Submitted!");
+                StateHasChanged();
             }
         }
     }

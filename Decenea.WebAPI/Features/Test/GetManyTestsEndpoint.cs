@@ -23,6 +23,6 @@ public class GetManyTestsEndpoint : Endpoint<GetManyTestsRequest, ApiResponseRes
             Take = req.Take
         }.ExecuteAsync(ct);
         
-        return new ApiResponseResult<IEnumerable<TestDto>>(result.Value, result.IsError, result.Errors.ToErrorDictionary());
+        return new ApiResponseResult<IEnumerable<TestDto>>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

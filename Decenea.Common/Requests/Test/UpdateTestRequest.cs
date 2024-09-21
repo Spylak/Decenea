@@ -1,3 +1,4 @@
+using Decenea.Common.DataTransferObjects.Question;
 using Decenea.Common.Requests.Common;
 
 namespace Decenea.Common.Requests.Test;
@@ -9,4 +10,5 @@ public class UpdateTestRequest : UpdateRequest
     public string Description { get; set; }
     public string ContactPhone { get; set; }
     public string ContactEmail { get; set; }
+    public List<QuestionDto> Questions { get; set; }
 }

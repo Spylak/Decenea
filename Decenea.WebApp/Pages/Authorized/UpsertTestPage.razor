@@ -1,6 +1,7 @@
 @attribute [Route($"/{Routes.UpsertTest}")]
 @attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
 @attribute [Authorize]
+@inherits Decenea.WebApp.Pages.Shared.BasePage
 
 @using Decenea.WebApp.Models.QuestionTypes
 @using Decenea.WebApp.Components.TestComponents
@@ -8,7 +9,6 @@
 
 <h3 style="text-align: center">@(string.IsNullOrWhiteSpace(TestId) ? "Test Creation" : "Modify test")</h3>
 <MudGrid Style="margin: auto;max-width: 90%">
-
     <MudItem xs="4">
         <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await TestContainer.UpsertTestToIndexedDb(TestContainer.UpsertTest))">Save Test</MudButton>
     </MudItem>

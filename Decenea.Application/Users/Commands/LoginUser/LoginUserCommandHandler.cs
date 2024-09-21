@@ -65,15 +65,15 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, ErrorOr
             if (command.RememberMe)
             {
                 var refreshToken = AuthTokenHelper.GenerateRefreshToken();
-                loginUserResponse.RefreshToken = refreshToken.RefreshToken;
-                loginUserResponse.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
+                loginUserResponse.AuthTokensResponse.RefreshToken = refreshToken.RefreshToken;
+                loginUserResponse.AuthTokensResponse.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
                 user.RefreshToken = refreshToken.RefreshToken;
                 user.RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime;
                 _dbContext.Set<User>().Update(user);
             }
             
-            loginUserResponse.AccessToken = jwtToken;
-            loginUserResponse.AccessTokenExpiryTime = accessTokenExpiryTime;
+            loginUserResponse.AuthTokensResponse.AccessToken = jwtToken;
+            loginUserResponse.AuthTokensResponse.AccessTokenExpiryTime = accessTokenExpiryTime;
             
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
 

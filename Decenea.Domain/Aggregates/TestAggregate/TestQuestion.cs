@@ -1,4 +1,4 @@
-using Decenea.Domain.Aggregates.TestAggregate.Questions;
+using Decenea.Domain.Aggregates.QuestionAggregate;
 using Decenea.Domain.Common;
 
 namespace Decenea.Domain.Aggregates.TestAggregate;
@@ -6,7 +6,7 @@ namespace Decenea.Domain.Aggregates.TestAggregate;
 public class TestQuestion : LinkingTable
 {
     public required string QuestionId { get; set; }
-    public required Question Question { get; set; }
+    public Question? Question { get; set; }
     public required string TestId { get; set; }
-    public required Test Test { get; set; }
+    public Test? Test { get; set; }
 }

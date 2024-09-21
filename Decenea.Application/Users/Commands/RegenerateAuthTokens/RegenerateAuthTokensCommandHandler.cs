@@ -13,7 +13,7 @@ using Serilog;
 
 namespace Decenea.Application.Users.Commands.RegenerateAuthTokens;
 
-public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand, ErrorOr<RegenerateAuthTokensResponse>>
+public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuthTokensCommand, ErrorOr<AuthTokensResponse>>
 {
     private readonly IDeceneaDbContext _dbContext;
     private readonly IConfiguration _configuration;
@@ -24,7 +24,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
         _configuration = configuration;
     }
 
-    public async Task<ErrorOr<RegenerateAuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensCommand command,
+    public async Task<ErrorOr<AuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensCommand command,
         CancellationToken cancellationToken)
     {
         var claims = command.AccessToken.GetTokenClaimJwts();
@@ -85,8 +85,13 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
             if (result.IsError)
                 return result.Errors;
 
-            return new RegenerateAuthTokensResponse(jwtToken, refreshToken.RefreshToken,
-                    refreshToken.RefreshTokenExpiryTime, accessTokenExpiryTime);
+            return new AuthTokensResponse()
+            {
+                AccessToken = jwtToken,
+                RefreshToken = refreshToken.RefreshToken,
+                RefreshTokenExpiryTime = refreshToken.RefreshTokenExpiryTime,
+                AccessTokenExpiryTime = accessTokenExpiryTime
+            };
         }
         catch (Exception e)
         {
