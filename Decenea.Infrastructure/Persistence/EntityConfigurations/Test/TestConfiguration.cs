@@ -12,8 +12,6 @@ public class TestConfiguration : AuditableAggregateConfiguration<Domain.Aggregat
                 builder.ToTable(name: "Tests");
 
                 builder.Property(t => t.Title).HasMaxLength(500).IsRequired();
-                builder.Property(t => t.ContactPhone).HasMaxLength(20);
-                builder.Property(t => t.ContactEmail).HasMaxLength(100);
                 
                 builder.HasOne(tq => tq.User)
                         .WithMany(t => t.Tests)

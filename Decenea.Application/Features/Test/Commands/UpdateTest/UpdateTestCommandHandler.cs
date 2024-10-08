@@ -37,10 +37,7 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Error
             }
 
             Domain.Aggregates.TestAggregate.Test.Update(existingTest, command.Title,
-                command.Description,
-                command.ContactEmail,
-                command.ContactPhone,
-                command.QuestionIds);
+                command.Description);
 
             _dbContext.Set<Domain.Aggregates.TestAggregate.Test>().Update(existingTest);
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

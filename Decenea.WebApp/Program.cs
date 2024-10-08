@@ -56,5 +56,9 @@ builder.Services.AddRefitClient<IGroupApi>(RefitHelper.GetSettings())
     .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"))
     .AddTokenHandler();
 
+builder.Services.AddRefitClient<ITestApi>(RefitHelper.GetSettings())
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"))
+    .AddTokenHandler();
+
 await builder.Build().RunAsync();
 

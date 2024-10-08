@@ -4,9 +4,10 @@ namespace Decenea.WebApp.Models;
 
 public class Test
 {
-    public string? Id { get; set; } = Ulid.NewUlid().ToString();
-    public string? Name { get; set; }
-    public string? Description { get; set; }
+    public string Id { get; set; } = Ulid.NewUlid().ToString();
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Version { get; set; } = string.Empty;
     public int MinutesToComplete { get; set; }
     public DateTime StartingTime { get; set; }
     public DateTime FinishTime => StartingTime.AddMinutes(MinutesToComplete);

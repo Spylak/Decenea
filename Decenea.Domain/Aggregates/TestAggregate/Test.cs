@@ -1,6 +1,8 @@
+using Decenea.Domain.Aggregates.QuestionAggregate;
 using Decenea.Domain.Aggregates.UserAggregate;
 using ErrorOr;
 using Decenea.Domain.Common;
+using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Aggregates.TestAggregate;
 
@@ -16,40 +18,43 @@ public class Test : AuditableAggregateRoot
 
     public string Title { get; set; }
     public string Description { get; set; }
-    public string ContactPhone { get; set; }
-    public string ContactEmail { get; set; }
     public static Test Create(string title, string descripton,
-        string contactEmail,
-        string contactPhone,
         string userId,
-        List<string> questionIds)
+        List<Question>? testQuestions = null,
+        List<TestUser>? testUsers = null)
     {
         var test = new Test()
         {
             Title = title,
             UserId = userId,
             Description = descripton,
-            ContactEmail = contactEmail,
-            ContactPhone = contactPhone
+            Version = RandomStringGenerator.RandomString(8)
         };
         
-        foreach (var questionId in questionIds)
+        if (testQuestions is not null)
         {
-            test.AddQuestion(questionId);
+            test._testQuestions = testQuestions.Select(i => new TestQuestion()
+            {
+                Question = i,
+                QuestionId = i.Id,
+                Test = test,
+                TestId = test.Id
+            }).ToList();
+        }
+        
+        if (testUsers is not null)
+        {
+            test._testUsers = testUsers;
         }
 
         return test;
     }
     
     public static Test Update(Test test, string title, string descripton,
-        string contactEmail,
-        string contactPhone,
         List<string>? questionIds = null)
     {
         test.Title = title;
         test.Description = descripton;
-        test.ContactEmail = contactEmail;
-        test.ContactPhone = contactPhone;
 
         if (questionIds is not null)
         {
@@ -69,7 +74,8 @@ public class Test : AuditableAggregateRoot
         _testQuestions.Add(new TestQuestion()
         {
             TestId = Id,
-            QuestionId = questionId
+            QuestionId = questionId,
+            Version = RandomStringGenerator.RandomString(8)
         });
     }
     

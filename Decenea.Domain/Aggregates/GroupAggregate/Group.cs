@@ -1,6 +1,7 @@
 using Decenea.Common.Common;
 using Decenea.Common.Enums;
 using Decenea.Domain.Common;
+using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Aggregates.GroupAggregate;
 
@@ -17,7 +18,8 @@ public class Group : AuditableAggregateRoot
     {
         var test = new Group(id)
         {
-            Name = name
+            Name = name,
+            Version = RandomStringGenerator.RandomString(8)
         };
 
         return test;
@@ -30,7 +32,8 @@ public class Group : AuditableAggregateRoot
             GroupRole = groupRole,
             GroupUserEmail = userEmail,
             GroupId = groupId,
-            Alias = alias
+            Alias = alias,
+            Version = RandomStringGenerator.RandomString(8)
         });
     }
 }

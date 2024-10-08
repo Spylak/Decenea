@@ -6,13 +6,13 @@
 <MudCard>
     <MudForm Model="@Request" @ref="@form" Validation="@(() => { })" ValidationDelay="0">
         <MudCardContent>
-            <MudTextField Label="UserName" Class="mt-3"
+            <MudTextField Label="UserTitle" Class="mt-3"
                           @bind-Value="Request.UserName" For="@(() => Request.UserName)"/>
-            <MudTextField Label="FirstName" Class="mt-3"
+            <MudTextField Label="FirstTitle" Class="mt-3"
                           @bind-Value="Request.FirstName" For="@(() => Request.FirstName)"/>
-            <MudTextField Label="MiddleName" Class="mt-3"
+            <MudTextField Label="MiddleTitle" Class="mt-3"
                           @bind-Value="Request.MiddleName" For="@(() => Request.MiddleName)"/>
-            <MudTextField Label="LastName" Class="mt-3"
+            <MudTextField Label="LastTitle" Class="mt-3"
                           @bind-Value="Request.LastName" For="@(() => Request.LastName)"/>
             <MudTextField Label="Phone Number" Class="mt-3"
                           @bind-Value="Request.PhoneNumber" For="@(() => Request.PhoneNumber)"/>

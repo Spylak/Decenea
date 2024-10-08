@@ -7,11 +7,13 @@ public static class TestMapper
 {
     public static TestDto TestToTestDto(this Test test, TestDto? testDto = null)
     {
-        testDto ??= new TestDto();
+        testDto ??= new TestDto {Version = test.Version};
         testDto.Title = test.Title;
         testDto.Description = test.Description;
-        testDto.ContactPhone = test.ContactPhone;
-        testDto.ContactEmail = test.ContactEmail;
+        testDto.Questions = test.TestQuestions
+            .Where(i => i.Question != null)
+            .Select(i => i.Question!.QuestionToQuestionDto())
+            .ToList();
         
         return testDto;
     }

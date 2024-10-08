@@ -19,12 +19,10 @@ public class TestQuestionConfiguration : LinkingTableConfiguration<TestQuestion>
 
         builder.HasOne(tq => tq.Test)
             .WithMany(t => t.TestQuestions)
-            .HasForeignKey(tq => tq.TestId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(tq => tq.TestId);
 
         builder.HasOne(tq => tq.Question)
             .WithMany(q => q.TestQuestions)
-            .HasForeignKey(tq => tq.QuestionId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(tq => tq.QuestionId);
     }
 }

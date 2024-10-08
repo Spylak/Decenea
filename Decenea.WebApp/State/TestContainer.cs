@@ -5,17 +5,20 @@ namespace Decenea.WebApp.State;
 
 public class TestContainer
 {
-    private IndexedDb _indexedDb { get; set; }
-    private Test _upsertTest { get; set; }
-    private Test _onGoingTest { get; set; }
+    private readonly IndexedDb _indexedDb;
+    private Test _upsertTest;
+    private Test? _onGoingTest;
     public TestContainer(IndexedDb indexedDb)
     {
         _upsertTest = new Test();
-        _onGoingTest = new Test();
         _indexedDb = indexedDb;
     }
-    public async Task UpsertTestToIndexedDb(Test test)
+    public async Task UpsertTestToIndexedDb(Test? test)
     {
+        if (test is null)
+        {
+            return;
+        }
         var testResult = await _indexedDb.Tests.GetByIdAsync(test.Id);
         if (testResult.Message == "There are no entities in the table." ||
             testResult.Message == "No entity with that id.")
@@ -29,10 +32,7 @@ public class TestContainer
     }
     public Test UpsertTest
     {
-        get
-        {
-            return _upsertTest;
-        }
+        get => _upsertTest;
         set
         {
             _upsertTest = value;
@@ -43,7 +43,7 @@ public class TestContainer
     {
         return _upsertTest;
     }
-    public Test OngoingTest
+    public Test? OngoingTest
     {
         get
         {
@@ -55,7 +55,7 @@ public class TestContainer
             NotifyStateChanged();
         }
     }
-    public Test GetOnGoingTestTest()
+    public Test? GetOnGoingTestTest()
     {
         return _onGoingTest;
     }

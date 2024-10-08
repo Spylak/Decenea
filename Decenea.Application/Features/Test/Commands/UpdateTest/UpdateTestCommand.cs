@@ -9,11 +9,9 @@ namespace Decenea.Application.Features.Test.Commands.UpdateTest;
 public class UpdateTestCommand : UpdateCommand , ICommand<ErrorOr<TestDto>>
 {
     public required string Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string ContactPhone { get; set; }
-    public string ContactEmail { get; set; }
+    public required string Title { get; set; }
+    public required string Description { get; set; }
     public required string UserId { get; set; }
     public required string UserEmail { get; set; }
-    public List<string>? QuestionIds { get; set; }
+    public List<QuestionDto>? Questions { get; set; }
 }

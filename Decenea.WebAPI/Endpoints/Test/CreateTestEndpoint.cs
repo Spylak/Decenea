@@ -20,25 +20,18 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<
     
     public override async Task<ApiResponseResult<TestDto>> ExecuteAsync(CreateTestRequest req, CancellationToken ct)
     {
-
-        var accessToken = HttpContext.Request.Headers["Authorization"]
-            .ToString()
-            .Replace("Bearer ","");
-
-        var claims = accessToken.GetTokenClaimJwts();
-
-        var userId = claims.Value?.GetClaimValueByKey("userId");
+        var userId = HttpContext.User.FindFirst("userId")?.Value;
         
         if(userId is null)
             return new ApiResponseResult<TestDto>(null, true, "Invalid JWT.");
         
         var result = await new CreateTestCommand()
         {
+            Id = userId,
             UserId = userId,
             Title = req.Title,
-            ContactPhone = req.ContactPhone,
-            ContactEmail = req.ContactEmail,
-            Description = req.Description
+            Description = req.Description,
+            Questions = req.Questions
         }.ExecuteAsync(ct);
         
         return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());

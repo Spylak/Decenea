@@ -1,3 +1,5 @@
+using ErrorOr;
+
 namespace Decenea.Common.Common;
 
 public record ApiResponseResult
@@ -13,6 +15,13 @@ public record ApiResponseResult
         IsError = isError ?? true;
         Messages = [];
         Data = null;
+    }
+    
+    public ApiResponseResult(bool? isError = null, object? data = null)
+    {
+        IsError = isError ?? true;
+        Messages = [];
+        Data = data;
     }
     
     public ApiResponseResult(bool? isError = null, Dictionary<string, string>? messages = null)
@@ -44,10 +53,24 @@ public record ApiResponseResult
             Messages["Generic"] = message; 
         Data = data;
     }
+    
+    public ApiResponseResult(bool isError, List<Error> errors)
+    {
+        IsError = isError;
+        Messages = errors.ToDictionary(i=>i.Code, i => i.Description);
+    }
+    
+    public ApiResponseResult(bool isError, object? data, List<Error> errors)
+    {
+        IsError = isError;
+        Messages = errors.ToDictionary(i=>i.Code, i => i.Description);
+        Data = data;
+    }
 
     public bool IsError { get; set; }
     public Dictionary<string, string> Messages { get; set; } = new();
-    public object? Data { get; set; }
+
+    public object? Data { get; init; }
 }
 
 public record ApiResponseResult<T> : ApiResponseResult where T : class?
@@ -67,5 +90,6 @@ public record ApiResponseResult<T> : ApiResponseResult where T : class?
     {
         Data = data;
     }
-    public new T? Data { get; set; }
+    
+    public new T? Data { get; init; }
 }

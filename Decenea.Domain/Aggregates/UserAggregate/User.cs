@@ -2,6 +2,7 @@ using ErrorOr;
 using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
+using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Aggregates.UserAggregate;
 
@@ -56,7 +57,8 @@ public class User : AuditableAggregateRoot
             MiddleName = middleName,
             PhoneNumber = phoneNumber,
             Role = UserRole.Guest,
-            PasswordHash = passHash
+            PasswordHash = passHash,
+            Version = RandomStringGenerator.RandomString(8)
         };
         
         return user;

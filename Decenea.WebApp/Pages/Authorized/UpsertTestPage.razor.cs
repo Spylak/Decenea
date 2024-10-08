@@ -1,7 +1,12 @@
-﻿using Decenea.Common.Enums;
+﻿using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Enums;
+using Decenea.Common.Requests.Test;
+using Decenea.WebApp.Apis;
 using Decenea.WebApp.Components;
 using Decenea.WebApp.Constants;
 using Decenea.WebApp.Helpers;
+using Decenea.WebApp.Mappers;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
 using Decenea.WebApp.State;
@@ -13,6 +18,7 @@ namespace Decenea.WebApp.Pages.Authorized;
 public partial class UpsertTestPage
 {
     [Inject] private TestContainer TestContainer { get; set; }
+    [Inject] private ITestApi TestApi { get; set; }
     [Parameter] public string? TestId { get; set; }
     protected override async Task OnInitializedAsync()
     {
@@ -26,7 +32,7 @@ public partial class UpsertTestPage
             var test = tests.Data?
                 .FirstOrDefault(i => i.Id == TestId);
 
-            TestContainer.UpsertTest = test ?? new Test(){ Name = "TestName"};
+            TestContainer.UpsertTest = test ?? new Test(){ Title = "TestName"};
             
             if (test is null)
             {
@@ -55,7 +61,7 @@ public partial class UpsertTestPage
     {
         TestContainer.UpsertTest = new Test()
         {
-            Name = "New Test"
+            Title = "New Test"
         };
         TestContainer.UpsertTest.Description = $"Test with id: {TestContainer.UpsertTest.Id}";
         await IndexedDb.UpsertTest.DropTableAsync();
@@ -67,7 +73,7 @@ public partial class UpsertTestPage
     {
         TestContainer.UpsertTest = new Test()
         {
-            Name = "Sample Test",
+            Title = "Sample Test",
             GenericQuestionModels = new List<GenericQuestionModel>()
             {
                 SampleHelper.GetOrderingDnDQuestionSample(),
@@ -92,6 +98,36 @@ public partial class UpsertTestPage
 
     private async Task Update(GenericQuestionModel entity)
     {
+    }
+
+    private async Task<ApiResponseResult<TestDto>> RemoteSave()
+    {
+        if (string.IsNullOrWhiteSpace(TestContainer.UpsertTest.Version))
+        {
+            return await TestApi.Create(new CreateTestRequest()
+            {
+                Title = TestContainer.UpsertTest.Title,
+                Description = TestContainer.UpsertTest.Description,
+                Questions = TestContainer
+                    .UpsertTest
+                    .GenericQuestionModels
+                    .Select(i => i.ToDto())
+                    .ToList()
+            });
+        }
+        
+        return await TestApi.Update(new UpdateTestRequest()
+        {
+            Id = TestContainer.UpsertTest.Id,
+            Title = TestContainer.UpsertTest.Title,
+            Description = TestContainer.UpsertTest.Description,
+            Version = TestContainer.UpsertTest.Version,
+            Questions = TestContainer
+                .UpsertTest
+                .GenericQuestionModels
+                .Select(i => i.ToDto())
+                .ToList()
+        });
     }
 
     async Task CommittedItemChanges(GenericQuestionModel item)

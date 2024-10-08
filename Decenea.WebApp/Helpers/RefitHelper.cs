@@ -10,7 +10,7 @@ public static class RefitHelper
     {
         return new RefitSettings()
         {
-            ContentSerializer = (IHttpContentSerializer)new SystemTextJsonContentSerializer(new JsonSerializerOptions()
+            ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions()
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

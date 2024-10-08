@@ -1,8 +1,9 @@
+using Decenea.Common.Common;
 using Decenea.Common.Enums;
 
 namespace Decenea.Common.DataTransferObjects.Question;
 
-public class QuestionDto
+public class QuestionDto : VersionedDto
 {
     public string? Id { get; set; }
     public string Description { get; set; } = "";

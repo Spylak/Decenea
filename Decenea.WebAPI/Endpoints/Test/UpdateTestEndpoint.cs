@@ -32,14 +32,11 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponseResult<
         
         if(userId is null || userEmail is null)
             return new ApiResponseResult<object>(null, true, "Invalid JWT.");
-
         
         var result = await new UpdateTestCommand()
         {
             Id = req.Id,
             Title = req.Title,
-            ContactPhone = req.ContactPhone,
-            ContactEmail = req.ContactEmail,
             Description = req.Description,
             Version = req.Version,
             UserId = userId,

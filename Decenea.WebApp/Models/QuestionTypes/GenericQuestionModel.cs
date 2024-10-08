@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Decenea.Common.Enums;
+using MudBlazor;
 
 namespace Decenea.WebApp.Models.QuestionTypes;
 
@@ -7,13 +8,14 @@ public class GenericQuestionModel
 { 
     public string Id { get; set; } = Ulid.NewUlid().ToString();
 
-    public string Description { get; set; } = "";
-    public string Title { get; set; } = "";
+    public string Description { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
     public int? SecondsToAnswer { get; set; } 
     public int? Order { get; set; } 
     public double? Weight { get; set; }
     public required QuestionType QuestionType { get; init; }
     public string SerializedQuestionContent { get; set; } = string.Empty;
+    public string Version { get; set; } = string.Empty;
     public static GenericQuestionModel<T> ConvertToGenericModel<T>(GenericQuestionModel nonGenericModel) where T : QuestionBase
     {
         T questionContent = JsonSerializer.Deserialize<T>(nonGenericModel.SerializedQuestionContent)!;

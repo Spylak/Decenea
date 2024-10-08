@@ -7,7 +7,7 @@ using Decenea.Common.Requests.Test;
 
 namespace Decenea.WebAPI.Endpoints.Test;
 
-public class AddTestQuestionsEndpoint : Endpoint<AddQuestionsRequest, ApiResponseResult<object>>
+public class AddTestQuestionsEndpoint : Endpoint<AddTestQuestionsRequest, ApiResponseResult<object>>
 {
     public override void Configure()
     {
@@ -17,7 +17,7 @@ public class AddTestQuestionsEndpoint : Endpoint<AddQuestionsRequest, ApiRespons
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponseResult<object>> ExecuteAsync(AddQuestionsRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<object>> ExecuteAsync(AddTestQuestionsRequest req, CancellationToken ct)
     {
 
         var accessToken = HttpContext.Request.Headers["Authorization"]
