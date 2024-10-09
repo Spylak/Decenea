@@ -6,14 +6,14 @@ namespace Decenea.WebApp.State;
 public class TestContainer
 {
     private readonly IndexedDb _indexedDb;
-    private Test _upsertTest;
-    private Test? _onGoingTest;
+    private TestModel _upsertTestModel;
+    private TestModel? _onGoingTest;
     public TestContainer(IndexedDb indexedDb)
     {
-        _upsertTest = new Test();
+        _upsertTestModel = new TestModel();
         _indexedDb = indexedDb;
     }
-    public async Task UpsertTestToIndexedDb(Test? test)
+    public async Task UpsertTestToIndexedDb(TestModel? test)
     {
         if (test is null)
         {
@@ -30,20 +30,20 @@ public class TestContainer
             await _indexedDb.Tests.UpdateAsync(test);
         }
     }
-    public Test UpsertTest
+    public TestModel UpsertTestModel
     {
-        get => _upsertTest;
+        get => _upsertTestModel;
         set
         {
-            _upsertTest = value;
+            _upsertTestModel = value;
             NotifyStateChanged();
         }
     }
-    public Test GetUpsertTest()
+    public TestModel GetUpsertTest()
     {
-        return _upsertTest;
+        return _upsertTestModel;
     }
-    public Test? OngoingTest
+    public TestModel? OngoingTest
     {
         get
         {
@@ -55,7 +55,7 @@ public class TestContainer
             NotifyStateChanged();
         }
     }
-    public Test? GetOnGoingTestTest()
+    public TestModel? GetOnGoingTestTest()
     {
         return _onGoingTest;
     }

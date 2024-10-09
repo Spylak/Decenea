@@ -28,6 +28,7 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Error
                 .Create(command.Title,
                     command.Description,
                     command.UserId,
+                    command.MinutesToComplete,
                     command.Questions?.Select(i => new Domain.Aggregates.QuestionAggregate.Question()
                     {
                         Description = i.Description,

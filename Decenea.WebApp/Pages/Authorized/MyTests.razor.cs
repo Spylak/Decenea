@@ -1,6 +1,9 @@
 using Blazored.LocalStorage;
+using Decenea.Common.Requests.Test;
 using Decenea.WebApp.Abstractions;
+using Decenea.WebApp.Apis;
 using Decenea.WebApp.Database;
+using Decenea.WebApp.Mappers;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.State;
 using Microsoft.AspNetCore.Components;
@@ -16,14 +19,21 @@ public partial class MyTests
     [Inject] private IDialogService DialogService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
-    private List<Test> Tests { get; set; } = new List<Test>();
+    [Inject] private ITestApi TestApi { get; set; }
+    private List<TestModel> Tests { get; set; } = new List<TestModel>();
 
     protected override async Task OnInitializedAsync()
     {
         var tests = await IndexedDb.Tests.GetAllAsync();
         if (tests.IsSuccess)
         {
-            Tests = tests.Data?.ToList() ?? new List<Test>();
+            Tests = tests.Data?.ToList() ?? [];
+        }
+
+        var remoteTests = await TestApi.Get(new GetManyTestsRequest());
+        if (!remoteTests.IsError)
+        {
+            Tests.AddRange(remoteTests.Data?.Select(i => i.ToTestModel()) ?? []);
         }
         await base.OnInitializedAsync();
     }

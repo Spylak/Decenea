@@ -4,7 +4,7 @@ using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Mappers;
 
-public static class QuestionMapper
+public static class QuestionModelMapper
 {
     // Map from GenericQuestionModel to QuestionDto
     public static QuestionDto ToDto(this GenericQuestionModel model)

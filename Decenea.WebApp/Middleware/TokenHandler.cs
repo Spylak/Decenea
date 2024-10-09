@@ -30,7 +30,10 @@ public class TokenHandler : DelegatingHandler
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {
             if (_authStateProvider.AuthTokensResponse.RefreshToken is null)
+            {
+                await _authStateProvider.NotifyUserLogout();
                 return new HttpResponseMessage();
+            }
             
             var refreshTokenResponse = await _authApi.RefreshToken(new RegenerateAuthTokensRequest(_authStateProvider.AuthTokensResponse.RefreshToken));
 

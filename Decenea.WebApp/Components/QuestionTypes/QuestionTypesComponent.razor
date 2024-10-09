@@ -21,7 +21,7 @@
             </MudItem>
             <MudItem xs="4" sm="4">
                 <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@(() => EditMode = !EditMode)">@(!EditMode ? "Edit" : "Preview")</MudButton>
-                @* <MudButton OnClick="async () => { await GlobalFunctionService.ConsoleLog(TestContainer.Test); }">Log item</MudButton> *@
+                @* <MudButton OnClick="async () => { await GlobalFunctionService.ConsoleLog(TestModelContainer.TestModel); }">Log item</MudButton> *@
             </MudItem>
         }
         <MudItem xs="12">

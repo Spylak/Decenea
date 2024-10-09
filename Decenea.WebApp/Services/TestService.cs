@@ -1,3 +1,4 @@
+using Decenea.Common.Common;
 using Decenea.WebApp.Abstractions;
 using Decenea.WebApp.Database;
 using Decenea.WebApp.Models;
@@ -13,15 +14,15 @@ public class TestService : ITestService
         _globalFunctionService = globalFunctionService;
     }
     
-    public async Task<ResponseAPI> AddToTest<TQuestion>(Test test,TQuestion question) where TQuestion : class
+    public async Task<ApiResponseResult> AddToTest<TQuestion>(TestModel testModel,TQuestion question) where TQuestion : class
     {
         try
         {
-            return new ResponseAPI(true);
+            return new ApiResponseResult(false);
         }
         catch (Exception ex)
         {
-            return new ResponseAPI(false,ex.Message);
+            return new ApiResponseResult(true,ex.Message);
         }
     }
 }

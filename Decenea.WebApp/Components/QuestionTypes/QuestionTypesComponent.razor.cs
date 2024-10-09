@@ -14,7 +14,7 @@ public partial class QuestionTypesComponent
 {
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
-    [Parameter] public Test Test { get; set; }
+    [Parameter] public TestModel TestModel { get; set; }
 
     [Parameter] public GenericQuestionModel? Question { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> QuestionChanged { get; set; }
@@ -42,21 +42,21 @@ public partial class QuestionTypesComponent
     }
     private void SaveQuestionToTest(GenericQuestionModel genericQuestionModel)
     {
-        var question = Test.GenericQuestionModels
+        var question = TestModel.GenericQuestionModels
             .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
         if (question is null)
         {
             if (!string.IsNullOrWhiteSpace(genericQuestionModel.Description))
             {
-                Test.GenericQuestionModels.Add(genericQuestionModel);
+                TestModel.GenericQuestionModels.Add(genericQuestionModel);
                 Snackbar.Add(Messages.QuestionSaved, Severity.Success);
                 return;
             }
         }
         else
         {
-            Test.GenericQuestionModels.Remove(question);
-            Test.GenericQuestionModels.Add(genericQuestionModel);
+            TestModel.GenericQuestionModels.Remove(question);
+            TestModel.GenericQuestionModels.Add(genericQuestionModel);
             Snackbar.Add(Messages.QuestionSaved, Severity.Success);
             return;
         }
@@ -66,12 +66,12 @@ public partial class QuestionTypesComponent
 
     private async Task UpdateQuestion(GenericQuestionModel genericQuestionModel)
     {
-        var question = Test.GenericQuestionModels
+        var question = TestModel.GenericQuestionModels
             .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
         if (question is null)
             return;
-        Test.GenericQuestionModels.Remove(question);
-        Test.GenericQuestionModels.Add(genericQuestionModel);
+        TestModel.GenericQuestionModels.Remove(question);
+        TestModel.GenericQuestionModels.Add(genericQuestionModel);
         await QuestionChanged.InvokeAsync(genericQuestionModel);
     }
 }

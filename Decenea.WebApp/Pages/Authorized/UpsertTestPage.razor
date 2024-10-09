@@ -13,7 +13,7 @@
         <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await RemoteSave())">Remote Save</MudButton>
     </MudItem>
     <MudItem xs="4">
-        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await TestContainer.UpsertTestToIndexedDb(TestContainer.UpsertTest))">Local Save</MudButton>
+        <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await TestContainer.UpsertTestToIndexedDb(TestContainer.UpsertTestModel))">Local Save</MudButton>
     </MudItem>
     <MudItem xs="4">
         <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="@(async () => await NewTest())">New Test</MudButton>
@@ -22,10 +22,10 @@
         <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="@(async () => await SampleTest())">Sample Test</MudButton>
     </MudItem>
     <MudItem xs="12">
-        <TestPropertiesForm Test="@TestContainer.UpsertTest"></TestPropertiesForm>
+        <TestPropertiesForm Test="@TestContainer.UpsertTestModel"></TestPropertiesForm>
     </MudItem>
     <MudItem xs="12">
-        <MudDataGrid T="GenericQuestionModel" Items="@TestContainer.UpsertTest?.GenericQuestionModels"
+        <MudDataGrid T="GenericQuestionModel" Items="@TestContainer.UpsertTestModel.GenericQuestionModels"
                      Bordered="true"
                      Dense="true"
                      ReadOnly="true"
@@ -59,7 +59,7 @@
                         <MudIconButton
                             Icon="@Icons.Material.Filled.Delete"
                             Color="Color.Error"
-                            OnClick="@(() => TestContainer.UpsertTest.RemoveQuestionById(context.Item.Id))"/>
+                            OnClick="@(() => TestContainer.UpsertTestModel.RemoveQuestionById(context.Item.Id))"/>
                     </CellTemplate>
                 </TemplateColumn>
                 <PropertyColumn Property="x => x.Id"

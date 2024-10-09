@@ -8,7 +8,7 @@
 <h3 style="text-align: center">MyTests</h3>
 <MudGrid Style="margin: auto;max-width: 90%">
     <MudItem xs="12">
-        <MudDataGrid T="Test" Items="@Tests" EditMode="DataGridEditMode.Cell"
+        <MudDataGrid T="TestModel" Items="@Tests" EditMode="DataGridEditMode.Cell"
                      Bordered="true"
                      Dense="true"
                      ReadOnly="true"
@@ -22,7 +22,7 @@
             <ToolBarContent>
                 <MudSpacer/>
                 <MudIconButton Color="Color.Warning" OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))"></MudIconButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => NavigationManager.NavigateTo(NavigationHelper.Test()))">Create Test</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => NavigationManager.NavigateTo(NavigationHelper.Test()))">Create TestModel</MudButton>
             </ToolBarContent>
             <Columns>
                 <TemplateColumn Filterable="false"
@@ -45,9 +45,13 @@
                     Property="i => i.Title"
                     Editable="false">
                 </PropertyColumn>
+                <PropertyColumn
+                    Property="i => i.Version"
+                    Editable="false">
+                </PropertyColumn>
             </Columns>
             <PagerContent>
-                <MudDataGridPager T="Test"/>
+                <MudDataGridPager T="TestModel"/>
             </PagerContent>
         </MudDataGrid>
 

@@ -10,7 +10,7 @@ public partial class QuestionTypesDialog
     [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
 
     [Parameter] public string? ContentText { get; set; }
-    [Parameter] public Test Test { get; set; }
+    [Parameter] public TestModel TestModel { get; set; }
     [Parameter] public GenericQuestionModel GenericQuestion { get; set; }
 
     [Parameter] public string? ButtonText { get; set; }

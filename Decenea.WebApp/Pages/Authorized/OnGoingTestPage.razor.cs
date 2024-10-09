@@ -72,7 +72,7 @@ public partial class OnGoingTestPage
             {
                 if (TestContainer.OngoingTest.Id != TestId)
                 {
-                    var result = await IndexedDb.OngoingTest.AddAsync(TestContainer.UpsertTest);
+                    var result = await IndexedDb.OngoingTest.AddAsync(TestContainer.UpsertTestModel);
                     // var dropTable = await IndexedDb.OngoingTest.DropTable();
                 }
             }

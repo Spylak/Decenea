@@ -16,10 +16,16 @@ public class Test : AuditableAggregateRoot
     private List<TestUser> _testUsers = new ();
     public IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
 
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public static Test Create(string title, string descripton,
+    public required string Title { get; set; }
+    public required string Description { get; set; }
+    public required int MinutesToComplete { get; set; }
+    public DateTime? StartingTime { get; set; }
+
+    public static Test Create(
+        string title, 
+        string descripton,
         string userId,
+        int minutesToComplete,
         List<Question>? testQuestions = null,
         List<TestUser>? testUsers = null)
     {
@@ -28,6 +34,7 @@ public class Test : AuditableAggregateRoot
             Title = title,
             UserId = userId,
             Description = descripton,
+            MinutesToComplete = minutesToComplete,
             Version = RandomStringGenerator.RandomString(8)
         };
         

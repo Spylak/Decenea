@@ -10,6 +10,7 @@ public class CreateTestCommand : ICommand<ErrorOr<TestDto>>
     public string? Id { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
+    public required int MinutesToComplete { get; set; }
     public required string UserId { get; set; }
     public List<QuestionDto>? Questions { get; set; }
 }

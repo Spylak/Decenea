@@ -32,7 +32,7 @@ public partial class UpsertTestPage
             var test = tests.Data?
                 .FirstOrDefault(i => i.Id == TestId);
 
-            TestContainer.UpsertTest = test ?? new Test(){ Title = "TestName"};
+            TestContainer.UpsertTestModel = test ?? new TestModel(){ Title = "Test Name"};
             
             if (test is null)
             {
@@ -40,18 +40,18 @@ public partial class UpsertTestPage
                 var upsertTest = upsertTests.Data?.FirstOrDefault();
                 if (upsertTest is not null)
                 {
-                    TestContainer.UpsertTest = upsertTest;
+                    TestContainer.UpsertTestModel = upsertTest;
                 }
             }
 
             if (!keys.Data?.Contains("upserttest") ?? false)
             {
-                if (TestContainer.UpsertTest.Id == TestId)
+                if (TestContainer.UpsertTestModel.Id == TestId)
                 {
                     var dropTable = await IndexedDb.UpsertTest.DropTableAsync();
                 }
 
-                var result = await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTest);
+                var result = await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
             }
         }
         await base.OnInitializedAsync();
@@ -59,19 +59,19 @@ public partial class UpsertTestPage
 
     private async Task NewTest()
     {
-        TestContainer.UpsertTest = new Test()
+        TestContainer.UpsertTestModel = new TestModel()
         {
             Title = "New Test"
         };
-        TestContainer.UpsertTest.Description = $"Test with id: {TestContainer.UpsertTest.Id}";
+        TestContainer.UpsertTestModel.Description = $"Test with id: {TestContainer.UpsertTestModel.Id}";
         await IndexedDb.UpsertTest.DropTableAsync();
-        await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTest);
-        NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTest.Id}");
+        await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
+        NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTestModel.Id}");
     }
 
     private async Task SampleTest()
     {
-        TestContainer.UpsertTest = new Test()
+        TestContainer.UpsertTestModel = new TestModel()
         {
             Title = "Sample Test",
             GenericQuestionModels = new List<GenericQuestionModel>()
@@ -88,12 +88,11 @@ public partial class UpsertTestPage
             },
         };
         
-        TestContainer.UpsertTest.Description = $"Test with id: {TestContainer.UpsertTest.Id}";
-        await GlobalFunctionService.ConsoleLogAsync(TestContainer.UpsertTest);
+        TestContainer.UpsertTestModel.Description = $"Test with id: {TestContainer.UpsertTestModel.Id}";
         await IndexedDb.UpsertTest.DropTableAsync();
-        await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTest);
+        await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
         
-        NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTest.Id}");
+        NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTestModel.Id}");
     }
 
     private async Task Update(GenericQuestionModel entity)
@@ -102,14 +101,15 @@ public partial class UpsertTestPage
 
     private async Task<ApiResponseResult<TestDto>> RemoteSave()
     {
-        if (string.IsNullOrWhiteSpace(TestContainer.UpsertTest.Version))
+        if (string.IsNullOrWhiteSpace(TestContainer.UpsertTestModel.Version))
         {
             return await TestApi.Create(new CreateTestRequest()
             {
-                Title = TestContainer.UpsertTest.Title,
-                Description = TestContainer.UpsertTest.Description,
+                Title = TestContainer.UpsertTestModel.Title,
+                Description = TestContainer.UpsertTestModel.Description,
+                MinutesToComplete = TestContainer.UpsertTestModel.MinutesToComplete,
                 Questions = TestContainer
-                    .UpsertTest
+                    .UpsertTestModel
                     .GenericQuestionModels
                     .Select(i => i.ToDto())
                     .ToList()
@@ -118,12 +118,13 @@ public partial class UpsertTestPage
         
         return await TestApi.Update(new UpdateTestRequest()
         {
-            Id = TestContainer.UpsertTest.Id,
-            Title = TestContainer.UpsertTest.Title,
-            Description = TestContainer.UpsertTest.Description,
-            Version = TestContainer.UpsertTest.Version,
+            Id = TestContainer.UpsertTestModel.Id,
+            Title = TestContainer.UpsertTestModel.Title,
+            Description = TestContainer.UpsertTestModel.Description,
+            Version = TestContainer.UpsertTestModel.Version,
+            MinutesToComplete = TestContainer.UpsertTestModel.MinutesToComplete,
             Questions = TestContainer
-                .UpsertTest
+                .UpsertTestModel
                 .GenericQuestionModels
                 .Select(i => i.ToDto())
                 .ToList()
@@ -142,7 +143,7 @@ public partial class UpsertTestPage
         foreach (var question in questions)
         {
             var obj =
-                TestContainer.UpsertTest
+                TestContainer.UpsertTestModel
                     .GetType()
                     .GetProperty(nameof(question.QuestionType));
             obj
@@ -158,7 +159,7 @@ public partial class UpsertTestPage
         {
             ["ButtonText"] = "Done",
             ["Color"] = Color.Success,
-            ["Test"] = TestContainer.UpsertTest
+            ["TestModel"] = TestContainer.UpsertTestModel
         };
         var dialogOptions = new DialogOptions()
         {
@@ -166,9 +167,9 @@ public partial class UpsertTestPage
             CloseOnEscapeKey = true
         };
         if (questionType is not null && questionId is not null)
-            parameters.Add("GenericQuestion",TestContainer.UpsertTest.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
+            parameters.Add("GenericQuestion",TestContainer.UpsertTestModel.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
         var dialog = await DialogService.ShowAsync<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
-        await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTest);
+        await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTestModel);
     }
 }

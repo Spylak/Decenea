@@ -30,6 +30,7 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<
             Id = userId,
             UserId = userId,
             Title = req.Title,
+            MinutesToComplete = req.MinutesToComplete,
             Description = req.Description,
             Questions = req.Questions
         }.ExecuteAsync(ct);

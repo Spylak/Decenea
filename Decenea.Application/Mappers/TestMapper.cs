@@ -7,9 +7,23 @@ public static class TestMapper
 {
     public static TestDto TestToTestDto(this Test test, TestDto? testDto = null)
     {
-        testDto ??= new TestDto {Version = test.Version};
-        testDto.Title = test.Title;
-        testDto.Description = test.Description;
+        if (testDto != null)
+        {
+            testDto.Title = test.Title;
+            testDto.Description = test.Description;
+            testDto.MinutesToComplete = test.MinutesToComplete;
+        }
+        else
+        {
+            testDto = new TestDto
+            {
+                Version = test.Version,
+                Title = test.Title,
+                Description = test.Description,
+                MinutesToComplete = test.MinutesToComplete
+            };
+        }
+        testDto.Id = test.Id;
         testDto.Questions = test.TestQuestions
             .Where(i => i.Question != null)
             .Select(i => i.Question!.QuestionToQuestionDto())
