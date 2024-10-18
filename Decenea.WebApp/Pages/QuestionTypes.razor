@@ -29,39 +29,42 @@
     <MudItem xs="12" sm="9">
         @if (Visibility[nameof(QuestionType.FillBlank)])
         {
-            <FillBlankQuestion EditMode="false" FillBlankQuestionBaseModel="FillBlank"></FillBlankQuestion>
+            <FillBlankQuestion EditMode="false" @bind-FillBlankQuestionBaseModel="QuestionTypesContainer.FillBlank"></FillBlankQuestion>
         }
         else if (Visibility[nameof(QuestionType.FillBlankDropdown)])
         {
-            <FillBlankDropdownQuestion EditMode="false" FillBlankDropdownQuestionBaseModel="FillBlankDropdownGenericQuestion"></FillBlankDropdownQuestion>
+            <FillBlankDropdownQuestion EditMode="false" @bind-FillBlankDropdownQuestionBaseModel="QuestionTypesContainer.FillBlankDropdownGenericQuestion"></FillBlankDropdownQuestion>
         }
         else if (Visibility[nameof(QuestionType.DragAndDrop)])
         {
-            <DragAndDropQuestion EditMode="false" DragAndDropQuestionBaseModel="DragAndDrop"></DragAndDropQuestion>
+            <DragAndDropQuestion EditMode="false" @bind-DragAndDropQuestionBaseModel="QuestionTypesContainer.DragAndDrop"></DragAndDropQuestion>
         }
         else if (Visibility[nameof(QuestionType.Dropdown)])
         {
-            <DropdownQuestion EditMode="false" DropdownQuestionBaseModel="Dropdown"></DropdownQuestion>
+            <DropdownQuestion EditMode="false" @bind-DropdownQuestionBaseModel="QuestionTypesContainer.Dropdown"></DropdownQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleChoice)])
         {
-            <MultipleChoiceQuestion EditMode="false" MultipleChoiceQuestionBaseModel="MultipleChoice"></MultipleChoiceQuestion>
+            <MultipleChoiceQuestion EditMode="false" @bind-MultipleChoiceQuestionBaseModel="QuestionTypesContainer.MultipleChoice"></MultipleChoiceQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleYesOrNo)])
         {
-            <MultipleYesOrNoQuestion EditMode="false" MultipleYesOrNoQuestionBaseModel="MultipleYesOrNo"></MultipleYesOrNoQuestion>
+            <MultipleYesOrNoQuestion EditMode="false" @bind-MultipleYesOrNoQuestionBaseModel="QuestionTypesContainer.MultipleYesOrNo"></MultipleYesOrNoQuestion>
         }
         else if (Visibility[nameof(QuestionType.Ordering)])
         {
-            <OrderingQuestion EditMode="false" OrderingQuestionBaseModel="OrderingGenericQuestionModel"></OrderingQuestion>
+            <OrderingQuestion EditMode="false" @bind-OrderingQuestionBaseModel="QuestionTypesContainer.OrderingGenericQuestionModel"></OrderingQuestion>
         }
         else if (Visibility[nameof(QuestionType.MultipleChoiceSingle)])
         {
-            <MultipleChoiceSingleQuestion EditMode="false" MultipleChoiceSingleQuestionBaseModel="MultipleChoiceSingle"></MultipleChoiceSingleQuestion>
+            <MultipleChoiceSingleQuestion EditMode="false" 
+                                          MultipleChoiceSingleQuestionBaseModel="QuestionTypesContainer.MultipleChoiceSingle"
+                                          MultipleChoiceSingleQuestionBaseModelChanged="newVal => ValueChanged(newVal)"
+                                          ></MultipleChoiceSingleQuestion>
         }
         else if (Visibility[nameof(QuestionType.OrderingDragAndDrop)])
         {
-            <OrderingDnDQuestion EditMode="false" OrderingDnDQuestionBaseModel="OrderingDnDGenericQuestionModel"></OrderingDnDQuestion>
+            <OrderingDnDQuestion EditMode="false" @bind-OrderingDnDQuestionBaseModel="QuestionTypesContainer.OrderingDnDGenericQuestionModel"></OrderingDnDQuestion>
         }
 
     </MudItem>

@@ -1,5 +1,6 @@
 using Decenea.Application.Features.User.Commands.RegenerateAuthTokens;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -12,7 +13,7 @@ public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest
 {
     public override void Configure()
     {
-        Put("/auth/regenerate-auth-tokens");
+        Put(RouteConstants.UsersRegenerateAuthTokens);
         Roles(EnumExtensions.GetNames<UserRole>());
     }
 

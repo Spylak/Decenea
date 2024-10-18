@@ -1,8 +1,6 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
 using Decenea.Common.DataTransferObjects.Test;
-using Decenea.Domain.Aggregates.TestAggregate;
-using ErrorOr;
 using FastEndpoints;
 using Serilog;
 
@@ -29,17 +27,17 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Error
                     command.Description,
                     command.UserId,
                     command.MinutesToComplete,
-                    command.Questions?.Select(i => new Domain.Aggregates.QuestionAggregate.Question()
-                    {
-                        Description = i.Description,
-                        Title = i.Title,
-                        QuestionType = i.QuestionType,
-                        SerializedQuestionContent = i.SerializedQuestionContent,
-                        Weight = i.Weight,
-                        IsAnswer = true,
-                        SecondsToAnswer = i.SecondsToAnswer,
-                        Order = i.Order
-                    }).ToList());
+                    command.Questions?.Select(i => Domain.Aggregates.QuestionAggregate.Question.Create(
+                        i.Description,
+                        i.IsAnswer,
+                        i.Title,
+                        i.SecondsToAnswer,
+                        i.Weight,
+                        i.Order,
+                        command.UserId,
+                        i.QuestionType,
+                        i.SerializedQuestionContent
+                    )).ToList());
 
             _dbContext.ModifiedBy = command.UserId;
             await _dbContext.Set<Domain.Aggregates.TestAggregate.Test>()

@@ -1,4 +1,3 @@
-using ErrorOr;
 using FastEndpoints;
 
 namespace Decenea.Application.Features.Group.Commands.RemoveGroupMembers;

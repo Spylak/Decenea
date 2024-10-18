@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Group.Commands.AddGroupMembers;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Group;
@@ -11,7 +12,7 @@ public class AddGroupMembersEndpoint : Endpoint<AddGroupMembersRequest, ApiRespo
 {
     public override void Configure()
     {
-        Put("/groups/add-members");
+        Put(RouteConstants.GroupsAddGroupMembers);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

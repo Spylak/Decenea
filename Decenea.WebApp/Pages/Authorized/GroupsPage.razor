@@ -1,8 +1,7 @@
 @attribute [Route($"/{Routes.Groups}")]
 
-@using Decenea.WebApp.Models
+@using Decenea.Common.Apis
 @using Decenea.WebApp.Abstractions
-@using Decenea.WebApp.Apis
 @using Decenea.Common.DataTransferObjects.Group
 @attribute [Authorize]
 @inject NavigationManager NavigationManager
@@ -62,6 +61,9 @@
                 </PropertyColumn>
                 <PropertyColumn
                     Property="i => i.Name">
+                </PropertyColumn>
+                <PropertyColumn
+                    Property="i => i.Version">
                 </PropertyColumn>
                 <TemplateColumn CellClass="d-flex justify-end">
                     <CellTemplate>

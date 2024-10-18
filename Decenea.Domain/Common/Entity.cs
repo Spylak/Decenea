@@ -1,5 +1,3 @@
-using Decenea.Common.Common;
-
 namespace Decenea.Domain.Common;
 
 public abstract class Entity : Versioned

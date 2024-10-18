@@ -1,5 +1,3 @@
-using Decenea.Common.DataTransferObjects.Question;
-
 namespace Decenea.Common.Requests.Test;
 
 public class RemoveTestQuestionsRequest

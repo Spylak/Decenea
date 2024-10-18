@@ -1,4 +1,3 @@
-using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Domain.Aggregates.UserAggregate;
 

@@ -2,7 +2,6 @@ using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using Decenea.WebApp.Models.QuestionTypes;
-using Decenea.WebApp.Services;
 
 namespace Decenea.WebApp.Components.QuestionTypes;
 
@@ -13,7 +12,10 @@ public partial class FillBlankQuestion
     [Parameter]
     public GenericQuestionModel? FillBlankQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> FillBlankQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<FillBlank>? FillBlankQuestionModel { get; set; }
+    private GenericQuestionModel<FillBlank>? FillBlankQuestionModel { get; set; } = new (new FillBlank())
+    {
+        QuestionType = QuestionType.FillBlank
+    };
     private string DynamicQuestion { get; set; } = "";
     private List<FillBlank.SpaceOption> Fields { get; set; } = new List<FillBlank.SpaceOption>();
     private string SpecialChars { get; set; } = "_____";

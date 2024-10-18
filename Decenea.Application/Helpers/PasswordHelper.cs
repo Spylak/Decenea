@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using ErrorOr;
 using Microsoft.AspNetCore.Identity;
 
 namespace Decenea.Application.Helpers;

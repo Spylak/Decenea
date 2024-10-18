@@ -1,30 +1,36 @@
 @attribute [Route($"/{Routes.Group}")]
 @attribute [Route($"/{Routes.Group}/{{groupId}}")]
 @attribute [Authorize]
-@using Decenea.WebApp.Apis
+@using Decenea.Common.Apis
 @using Decenea.Common.DataTransferObjects.Group
 @inherits Decenea.WebApp.Pages.Shared.BasePage
 @inject IGroupApi GroupApi
 @if (Group is not null)
 {
-    <h3>GroupPage</h3>
     <MudGrid Style="margin: auto;max-width: 90%">
         <MudItem xs="2">
+            <MudButton Color="Color.Success" Variant="Variant.Filled" OnClick="@(async () => await SaveChanges())">Save Changes</MudButton>
         </MudItem>
-        <MudItem xs="8">
+        <MudItem xs="10">
             <MudForm>
                 <MudGrid>
-                    <MudItem xs="6">
+                    <MudItem xs="4">
                         <MudTextField T="string" @bind-Value="Group.Id"
                                       Variant="Variant.Outlined"
                                       ReadOnly="@true"
                                       Label="Group Id"/>
                     </MudItem>
-                    <MudItem xs="6">
+                    <MudItem xs="4">
                         <MudTextField T="string" @bind-Value="Group.Name"
                                       Variant="Variant.Outlined"
                                       ReadOnly="@true"
                                       Label="Group Title"/>
+                    </MudItem>
+                    <MudItem xs="4">
+                        <MudTextField T="string" @bind-Value="Group.Version"
+                                      Variant="Variant.Outlined"
+                                      ReadOnly="@true"
+                                      Label="Version"/>
                     </MudItem>
                 </MudGrid>
             </MudForm>
@@ -47,11 +53,6 @@
                 <ToolBarContent>
                     <MudSpacer/>
                     <MudIconButton
-                        Icon="@Icons.Material.Filled.Settings"
-                        Color="Color.Warning"
-                        OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))">
-                    </MudIconButton>
-                    <MudIconButton
                         OnClick="@(() => AddGroupMember())"
                         Icon="@Icons.Material.Filled.Add"
                         Style="margin:-2px 5px 0"
@@ -73,6 +74,9 @@
                     </PropertyColumn>
                     <PropertyColumn
                         Property="i => i.Alias">
+                    </PropertyColumn>
+                    <PropertyColumn
+                        Property="i => i.Version">
                     </PropertyColumn>
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>

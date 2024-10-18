@@ -1,12 +1,7 @@
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using Blazored.LocalStorage;
-using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.Auth;
+using Decenea.Common.Apis;
 using Decenea.Common.Requests.User;
 using Decenea.WebApp.Abstractions;
-using Decenea.WebApp.Apis;
 using ErrorOr;
 using Refit;
 

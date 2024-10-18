@@ -18,7 +18,7 @@ public static class UserRoleExtensions
         return EnumExtensions.GetNames<UserRole>();
     }
     
-    public static string[] GetAuthorizesRoles()
+    public static string[] GetAuthorizedRoles()
     {
         return EnumExtensions.GetNames<UserRole>()
             .Where(i => i != nameof(UserRole.Guest))

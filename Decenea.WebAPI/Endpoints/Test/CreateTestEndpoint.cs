@@ -1,5 +1,6 @@
 using Decenea.Application.Features.Test.Commands.CreateTest;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -12,7 +13,7 @@ public class CreateTestEndpoint : Endpoint<CreateTestRequest, ApiResponseResult<
 {
     public override void Configure()
     {
-        Post("/tests/create");
+        Post(RouteConstants.TestsCreate);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

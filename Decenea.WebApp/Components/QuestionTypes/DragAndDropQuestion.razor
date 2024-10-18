@@ -7,7 +7,7 @@
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
                           Value="DragAndDropQuestionModel?.Description"
-                          ValueChanged="@(s => { if (DragAndDropQuestionModel is not null) { DragAndDropQuestionModel.Description = s; } })"
+                          ValueChanged="@(s => DescriptionChanged(s))"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>

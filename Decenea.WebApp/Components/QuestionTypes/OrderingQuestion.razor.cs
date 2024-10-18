@@ -10,7 +10,10 @@ public partial class OrderingQuestion
     [Parameter]
     public GenericQuestionModel? OrderingQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> OrderingQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<Ordering>? OrderingQuestionModel { get; set; }
+    private GenericQuestionModel<Ordering>? OrderingQuestionModel { get; set; } = new (new Ordering())
+    {
+        QuestionType = QuestionType.Ordering
+    };
     private string Choice { get; set; } = "";
 
     public override async Task SetParametersAsync(ParameterView parameters)

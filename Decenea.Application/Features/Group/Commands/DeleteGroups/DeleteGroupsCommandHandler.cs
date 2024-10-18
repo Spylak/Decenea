@@ -1,6 +1,5 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Enums;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 

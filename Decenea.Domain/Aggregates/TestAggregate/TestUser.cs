@@ -1,4 +1,3 @@
-using ErrorOr;
 using Decenea.Domain.Aggregates.UserAggregate;
 using Decenea.Domain.Common;
 using Decenea.Domain.Helpers;
@@ -17,8 +16,7 @@ public class TestUser : LinkingTable
         var testUser = new TestUser()
         {
             UserId = userId,
-            TestId = testId,
-            Version = RandomStringGenerator.RandomString(8)
+            TestId = testId
         };
 
         return testUser;

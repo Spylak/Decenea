@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Test.Commands.UpdateTest;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
@@ -12,7 +13,7 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponseResult<
 {
     public override void Configure()
     {
-        Put("/tests/update");
+        Put(RouteConstants.TestsUpdate);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

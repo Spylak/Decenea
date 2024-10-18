@@ -12,8 +12,28 @@ public static class QuestionMapper
             questionDto = new QuestionDto()
             {
                 QuestionType = question.QuestionType,
-                Version = question.Version
+                Version = question.Version,
+                IsAnswer = question.IsAnswer,
+                SerializedQuestionContent = question.SerializedQuestionContent,
+                UserId = question.UserId,
+                Description = question.Description,
+                Title = question.Title,
+                Order = question.Order,
+                Weight = question.Weight,
+                Id = question.Id
             };
+        }
+        else
+        {
+            questionDto.Version = question.Version;
+            questionDto.IsAnswer = question.IsAnswer;
+            questionDto.SerializedQuestionContent = question.SerializedQuestionContent;
+            questionDto.UserId = question.UserId;
+            questionDto.Description = question.Description;
+            questionDto.Title = question.Title;
+            questionDto.Order = question.Order;
+            questionDto.Weight = question.Weight;
+            questionDto.Id = question.Id;
         }
         
         return questionDto;
@@ -25,15 +45,18 @@ public static class QuestionMapper
         {
             question = new Question()
             {
+                UserId = questionDto.UserId,
                 QuestionType = questionDto.QuestionType,
                 Title = questionDto.Title,
                 Description = questionDto.Description,
                 SerializedQuestionContent = questionDto.SerializedQuestionContent,
-                Version = questionDto.Version ?? string.Empty
+                Version = questionDto.Version
             };
         }
         else
         {
+            question.Version = questionDto.Version;
+            question.UserId = questionDto.UserId;
             question.QuestionType = questionDto.QuestionType;
             question.Title = questionDto.Title;
             question.Description = questionDto.Description;

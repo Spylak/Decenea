@@ -1,5 +1,6 @@
 using Decenea.Application.Features.Test.Commands.DeleteTests;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
@@ -10,8 +11,8 @@ public class DeleteTestsEndpoint : Endpoint<DeleteTestsRequest, ApiResponseResul
 {
     public override void Configure()
     {
-        Delete("/tests/delete");
-        Roles(UserRoleExtensions.GetAuthorizesRoles());
+        Delete(RouteConstants.TestsDelete);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
 
     public override async Task<ApiResponseResult<object>> ExecuteAsync(DeleteTestsRequest req, CancellationToken ct)

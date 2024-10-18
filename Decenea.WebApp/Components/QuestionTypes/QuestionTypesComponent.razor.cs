@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 using Decenea.WebApp.Constants;
-using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Models;
 using Decenea.WebApp.Models.QuestionTypes;
 
@@ -67,7 +66,7 @@ public partial class QuestionTypesComponent
     private async Task UpdateQuestion(GenericQuestionModel genericQuestionModel)
     {
         var question = TestModel.GenericQuestionModels
-            .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
+            .FirstOrDefault(i => i.Id.Equals(genericQuestionModel.Id));
         if (question is null)
             return;
         TestModel.GenericQuestionModels.Remove(question);

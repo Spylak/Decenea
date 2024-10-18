@@ -1,11 +1,8 @@
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Application.Features.Group.Commands.AddGroupMembers;
 using Decenea.Common.Enums;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Group = Decenea.Domain.Aggregates.GroupAggregate.Group;
 
 namespace Decenea.Application.Features.Group.Commands.AddGroupMembers;
 
@@ -27,6 +24,7 @@ public class AddGroupMembersCommandHandler : ICommandHandler<AddGroupMembersComm
             
             var group = await _dbContext
                 .Set<Domain.Aggregates.GroupAggregate.Group>()
+                .Include(i => i.GroupMembers)
                 .FirstOrDefaultAsync(i => i.Id == command.GroupId && 
                                           i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail && j.GroupRole == GroupRole.Owner), cancellationToken);
             
@@ -34,9 +32,26 @@ public class AddGroupMembersCommandHandler : ICommandHandler<AddGroupMembersComm
                 return Error.NotFound(description: "Group not found.");
             
             _dbContext.ModifiedBy = command.UserId;
+            
+            var membersToUpdateList = group.GroupMembers
+                .Where(i => command.GroupMemberDtos
+                    .Select(j => j.GroupUserEmail)
+                    .Contains(i.GroupUserEmail)).ToList();
+            
             foreach (var groupMember in command.GroupMemberDtos)
             {
-                group.AddNewGroupMember(groupMember.GroupUserEmail, command.GroupId, groupMember.GroupRole);
+                var member = membersToUpdateList
+                    .FirstOrDefault(i => i.GroupUserEmail == groupMember.GroupUserEmail);
+
+                if (member is not null)
+                {
+                     member.GroupRole = groupMember.GroupRole;
+                     member.Alias = groupMember.Alias;
+                }
+                else
+                {
+                    group.AddNewGroupMember(groupMember.GroupUserEmail, command.GroupId, groupMember.GroupRole);
+                }
             }
             _dbContext.Set<Domain.Aggregates.GroupAggregate.Group>().Update(group);
             await _dbContext.SaveChangesAsync(cancellationToken);

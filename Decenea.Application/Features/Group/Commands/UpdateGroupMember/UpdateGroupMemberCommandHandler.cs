@@ -3,7 +3,6 @@ using Decenea.Application.Mappers;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.GroupAggregate;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

@@ -1,4 +1,3 @@
-using ErrorOr;
 using Decenea.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;

@@ -1,7 +1,6 @@
 using Decenea.Application.Abstractions.Messaging;
 using Decenea.Common.DataTransferObjects.Question;
 using Decenea.Common.DataTransferObjects.Test;
-using ErrorOr;
 using FastEndpoints;
 
 namespace Decenea.Application.Features.Test.Commands.UpdateTest;

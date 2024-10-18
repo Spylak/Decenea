@@ -1,5 +1,6 @@
 using Decenea.Application.Features.User.Commands.RegisterUser;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
@@ -11,7 +12,7 @@ public class RegisterUserEndpoint : Endpoint<RegisterUserRequest, ApiResponseRes
 { 
     public override void Configure()
     {
-        Post("/users/register");
+        Post(RouteConstants.UsersRegister);
         AllowAnonymous();
     }
 

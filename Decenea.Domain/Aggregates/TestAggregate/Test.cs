@@ -1,6 +1,5 @@
 using Decenea.Domain.Aggregates.QuestionAggregate;
 using Decenea.Domain.Aggregates.UserAggregate;
-using ErrorOr;
 using Decenea.Domain.Common;
 using Decenea.Domain.Helpers;
 
@@ -34,8 +33,7 @@ public class Test : AuditableAggregateRoot
             Title = title,
             UserId = userId,
             Description = descripton,
-            MinutesToComplete = minutesToComplete,
-            Version = RandomStringGenerator.RandomString(8)
+            MinutesToComplete = minutesToComplete
         };
         
         if (testQuestions is not null)
@@ -81,8 +79,7 @@ public class Test : AuditableAggregateRoot
         _testQuestions.Add(new TestQuestion()
         {
             TestId = Id,
-            QuestionId = questionId,
-            Version = RandomStringGenerator.RandomString(8)
+            QuestionId = questionId
         });
     }
     

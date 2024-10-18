@@ -57,8 +57,7 @@ public class User : AuditableAggregateRoot
             MiddleName = middleName,
             PhoneNumber = phoneNumber,
             Role = UserRole.Guest,
-            PasswordHash = passHash,
-            Version = RandomStringGenerator.RandomString(8)
+            PasswordHash = passHash
         };
         
         return user;

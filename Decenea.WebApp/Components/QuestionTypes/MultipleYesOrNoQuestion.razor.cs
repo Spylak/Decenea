@@ -10,7 +10,10 @@ public partial class MultipleYesOrNoQuestion
     [Parameter]
     public GenericQuestionModel? MultipleYesOrNoQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> MultipleYesOrNoQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; }
+    private GenericQuestionModel<MultipleYesOrNo>? MultipleYesOrNoQuestionModel { get; set; } = new (new MultipleYesOrNo())
+    {
+        QuestionType = QuestionType.MultipleYesOrNo
+    };
     protected override void OnParametersSet()
     {  
         if (MultipleYesOrNoQuestionBaseModel is not null)

@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Common.Common;
 using ErrorOr;
 using Decenea.Domain.Common;
 using Decenea.Domain.Common.Enums;
@@ -13,6 +12,7 @@ using Decenea.Infrastructure.Persistence.EntityConfigurations;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Update;
 using Serilog;
 
 
@@ -156,14 +156,13 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                         auditable.CreatedBy = createdBy;
                         auditable.CreatedByTimestampUtc = dateTimeUtcNow;
                     }
-
-                    auditable.LastModifiedBy = createdBy;
-                    auditable.LastModifiedByTimestampUtc = dateTimeUtcNow;
-                    
-                    if (entityEntry.State == EntityState.Modified)
+                    else if (entityEntry.State == EntityState.Modified)
                     {
                         auditable.Version = RandomStringGenerator.RandomString(8);
                     }
+
+                    auditable.LastModifiedBy = createdBy;
+                    auditable.LastModifiedByTimestampUtc = dateTimeUtcNow;
                 }
 
                 var entityId = GetEntityKeyString(entityEntry);

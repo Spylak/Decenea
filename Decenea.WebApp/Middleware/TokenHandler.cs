@@ -1,18 +1,18 @@
+using Decenea.Common.Apis;
 using Decenea.Common.Requests.User;
 using Decenea.WebApp.Abstractions;
-using Decenea.WebApp.Apis;
 using Decenea.WebApp.State;
 
 namespace Decenea.WebApp.Middleware;
 
 public class TokenHandler : DelegatingHandler
 {
-    private readonly IAuthApi _authApi;
     private readonly IAuthStateProvider _authStateProvider;
+    private readonly IAuthApi _authApi;
 
     public TokenHandler(IAuthApi authApi, AuthStateProvider authStateProvider)
     {
-        _authApi = authApi ?? throw new ArgumentNullException(nameof(authApi));
+        _authApi = authApi;
         _authStateProvider = authStateProvider;
     }
 
@@ -32,7 +32,6 @@ public class TokenHandler : DelegatingHandler
             if (_authStateProvider.AuthTokensResponse.RefreshToken is null)
             {
                 await _authStateProvider.NotifyUserLogout();
-                return new HttpResponseMessage();
             }
             
             var refreshTokenResponse = await _authApi.RefreshToken(new RegenerateAuthTokensRequest(_authStateProvider.AuthTokensResponse.RefreshToken));

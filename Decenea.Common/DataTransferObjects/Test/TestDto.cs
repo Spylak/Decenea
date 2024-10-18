@@ -13,4 +13,5 @@ public class TestDto : VersionedDto
     public string UserName { get; set; }
     public string UserId { get; set; }
     public List<QuestionDto> Questions { get; set; } = [];
+    public List<TestUserDto> TestUsers { get; set; } = [];
 }

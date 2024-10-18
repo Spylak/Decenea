@@ -10,7 +10,10 @@ public partial class MultipleChoiceQuestion
     [Parameter]
     public GenericQuestionModel? MultipleChoiceQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> MultipleChoiceQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; }
+    private GenericQuestionModel<MultipleChoice>? MultipleChoiceQuestionModel { get; set; } = new (new MultipleChoice())
+    {
+        QuestionType = QuestionType.MultipleChoice
+    };
     protected override void OnParametersSet()
     {
         if (MultipleChoiceQuestionBaseModel is not null)

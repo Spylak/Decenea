@@ -1,18 +1,19 @@
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Requests.User;
 using Refit;
 
-namespace Decenea.WebApp.Apis;
+namespace Decenea.Common.Apis;
 [Headers("Content-Type: application/json")]
 public interface IAuthApi
 {
-    [Put("/api/auth/login")]
+    [Put(RouteConstants.UsersLogin)]
     Task<ApiResponseResult<LoginUserResponse>> Login([Body] LoginUserRequest request);
 
-    [Put("/api/auth/logout")]
+    [Put(RouteConstants.UsersLogout)]
     Task Logout();
 
-    [Put("/api/auth/regenerate-auth-tokens")]
+    [Put(RouteConstants.UsersRegenerateAuthTokens)]
     Task<ApiResponseResult<AuthTokensResponse>> RefreshToken([Body] RegenerateAuthTokensRequest request);
 }

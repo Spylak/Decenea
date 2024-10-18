@@ -1,5 +1,4 @@
 using Decenea.Common.DataTransferObjects.Group;
-using ErrorOr;
 using FastEndpoints;
 
 namespace Decenea.Application.Features.Group.Commands.CreateGroups;

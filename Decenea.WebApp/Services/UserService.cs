@@ -1,8 +1,8 @@
 using Blazored.LocalStorage;
+using Decenea.Common.Apis;
 using Decenea.Common.Requests.User;
 using ErrorOr;
 using Decenea.WebApp.Abstractions;
-using Decenea.WebApp.Apis;
 
 namespace Decenea.WebApp.Services;
 

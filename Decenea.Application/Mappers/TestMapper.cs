@@ -5,7 +5,10 @@ namespace Decenea.Application.Mappers;
 
 public static class TestMapper
 {
-    public static TestDto TestToTestDto(this Test test, TestDto? testDto = null)
+    public static TestDto TestToTestDto(this Test test,
+        TestDto? testDto = null,
+        bool includeQuestions = false,
+        bool includeTestUsers = false)
     {
         if (testDto != null)
         {
@@ -24,10 +27,18 @@ public static class TestMapper
             };
         }
         testDto.Id = test.Id;
-        testDto.Questions = test.TestQuestions
+        testDto.Questions = includeQuestions ? test.TestQuestions
             .Where(i => i.Question != null)
             .Select(i => i.Question!.QuestionToQuestionDto())
-            .ToList();
+            .ToList() : [];
+
+        testDto.TestUsers = includeTestUsers
+            ? test.TestUsers.Select(i => new TestUserDto
+            {
+                UserEmail = i.User?.Email ?? "Not Found",
+                UserId = i.UserId,
+            }).ToList()
+            : [];
         
         return testDto;
     }

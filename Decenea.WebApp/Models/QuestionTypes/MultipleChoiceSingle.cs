@@ -12,12 +12,12 @@ public class MultipleChoiceSingle : QuestionBase
     {
         
     }
-    public List<SubQuestion> SubQuestions { get; set; } = new List<SubQuestion>();
+    public List<SubQuestion> SubQuestions { get; set; } = [];
 
     public class SubQuestion
     {
         public string Text { get; set; } = string.Empty;
         public string? Picked { get; set; } = string.Empty;
-        public List<string> Choices { get; set; } = new List<string>();
+        public List<string> Choices { get; set; } = [];
     }
 }

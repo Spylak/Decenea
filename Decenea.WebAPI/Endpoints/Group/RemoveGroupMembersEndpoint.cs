@@ -1,5 +1,6 @@
 using Decenea.Application.Features.Group.Commands.RemoveGroupMembers;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Group;
@@ -10,7 +11,7 @@ public class RemoveGroupMembersEndpoint : Endpoint<RemoveGroupMembersRequest, Ap
 {
     public override void Configure()
     {
-        Put("/groups/remove-members");
+        Put(RouteConstants.GroupsRemoveGroupMembers);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

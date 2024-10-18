@@ -2,7 +2,6 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Common.Extensions;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

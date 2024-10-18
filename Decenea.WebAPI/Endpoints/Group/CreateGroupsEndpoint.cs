@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Group.Commands.CreateGroups;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -12,7 +13,7 @@ public class CreateGroupsEndpoint : Endpoint<CreateGroupsRequest, ApiResponseRes
 {
     public override void Configure()
     {
-        Post("/groups/create");
+        Post(RouteConstants.GroupsCreate);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

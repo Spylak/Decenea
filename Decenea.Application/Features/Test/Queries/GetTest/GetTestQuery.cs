@@ -1,5 +1,4 @@
 using Decenea.Common.DataTransferObjects.Test;
-using ErrorOr;
 using FastEndpoints;
 
 namespace Decenea.Application.Features.Test.Queries.GetTest;

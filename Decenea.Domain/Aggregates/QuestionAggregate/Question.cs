@@ -7,8 +7,7 @@ namespace Decenea.Domain.Aggregates.QuestionAggregate;
 
 public class Question : AuditableAggregateRoot
 {
-    public string? UserId { get; set; }
-    public User? User { get; set; }
+    public required string UserId { get; set; }
     private List<TestQuestion> _testQuestions = new ();
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
     public required string Description { get; set; }
@@ -19,4 +18,29 @@ public class Question : AuditableAggregateRoot
     public bool IsAnswer { get; set; }
     public required QuestionType QuestionType { get; set; }
     public required string SerializedQuestionContent { get; set; }
+
+    public static Question Create(string description,
+        bool isAnswer,
+        string title,
+        int? secondsToAnswer,
+        double? weight,
+        int? order,
+        string? userId,
+        QuestionType questionType,
+        string serializedQuestionContent
+        )
+    {
+        return new Question
+        {
+            Description = description,
+            Title = title,
+            UserId = userId,
+            QuestionType = questionType,
+            SerializedQuestionContent = serializedQuestionContent,
+            Weight = weight,
+            IsAnswer = isAnswer,
+            SecondsToAnswer = secondsToAnswer,
+            Order = order
+        };
+    }
 }

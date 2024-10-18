@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Group.Commands.DeleteGroups;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Group;
@@ -11,8 +12,8 @@ public class DeleteGroupsEndpoint : Endpoint<DeleteGroupsRequest, ApiResponseRes
 {
     public override void Configure()
     {
-        Delete("/groups/delete");
-        Roles(UserRoleExtensions.GetAuthorizesRoles());
+        Delete(RouteConstants.GroupsDelete);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
 
     public override async Task<ApiResponseResult<object>> ExecuteAsync(DeleteGroupsRequest req, CancellationToken ct)

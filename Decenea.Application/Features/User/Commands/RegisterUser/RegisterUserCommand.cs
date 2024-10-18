@@ -1,5 +1,4 @@
 using Decenea.Common.DataTransferObjects.User;
-using ErrorOr;
 using FastEndpoints;
 
 namespace Decenea.Application.Features.User.Commands.RegisterUser;

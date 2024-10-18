@@ -3,7 +3,6 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Helpers;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Domain.Helpers;
-using ErrorOr;
 using FastEndpoints;
 using FastEndpoints.Security;
 using Microsoft.EntityFrameworkCore;

@@ -2,8 +2,8 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
-using ErrorOr;
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Decenea.Application.Features.Group.Commands.CreateGroups;
@@ -22,17 +22,32 @@ public class CreateGroupsCommandHandler : ICommandHandler<CreateGroupsCommand, E
         try
         {
             var groupsToAddList = new List<Domain.Aggregates.GroupAggregate.Group>();
+            var groupsToUpdateList = await _dbContext
+                .Set<Domain.Aggregates.GroupAggregate.Group>()
+                .Where(i => command.GroupDtos.Select(j => j.Id).Contains(i.Id))
+                .ToListAsync(cancellationToken);
+            
             foreach (var group in command.GroupDtos)
             {
-                var groupToAdd = Domain.Aggregates.GroupAggregate.Group.Create(group.Name, group.Id);
-                groupToAdd.AddNewGroupMember(command.UserEmail, groupToAdd.Id, GroupRole.Owner);
-                groupsToAddList.Add(groupToAdd);
+                var groupToUpdate = groupsToUpdateList
+                    .FirstOrDefault(i => i.Id == group.Id);
+                if (groupToUpdate != null)
+                {
+                    groupToUpdate.Name = group.Name;
+                }
+                else
+                {
+                    var groupToAdd = Domain.Aggregates.GroupAggregate.Group.Create(group.Name, group.Id);
+                    groupToAdd.AddNewGroupMember(command.UserEmail, groupToAdd.Id, GroupRole.Owner);
+                    groupsToAddList.Add(groupToAdd);
+                }
             }
 
             if (groupsToAddList.Count == 0)
                 return Error.Failure(description: "No groups to add");
             
             _dbContext.ModifiedBy = command.UserId;
+            _dbContext.Set<Domain.Aggregates.GroupAggregate.Group>().UpdateRange(groupsToUpdateList);
             await _dbContext.Set<Domain.Aggregates.GroupAggregate.Group>().AddRangeAsync(groupsToAddList, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return groupsToAddList.Select(i => i.GroupToGroupDto(false)).ToList();

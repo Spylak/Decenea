@@ -1,5 +1,6 @@
 using Decenea.Application.Features.User.Commands.LoginUser;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
@@ -11,7 +12,7 @@ public class LoginUserEndpoint : Endpoint<LoginUserRequest, ApiResponseResult<Lo
 { 
     public override void Configure()
     {
-        Put("/auth/login");
+        Put(RouteConstants.UsersLogin);
         AllowAnonymous();
     }
 

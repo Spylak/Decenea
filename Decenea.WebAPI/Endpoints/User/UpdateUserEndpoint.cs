@@ -1,9 +1,10 @@
 using Decenea.Application.Features.User.Commands.UpdateUser;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.User;
+using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.User;
-
 
 namespace Decenea.WebAPI.Endpoints.User;
 
@@ -11,7 +12,8 @@ public class UpdateUserEndpoint : Endpoint<UpdateUserRequest, ApiResponseResult<
 {
     public override void Configure()
     {
-        Post("/users/update");
+        Post(RouteConstants.UsersUpdate);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
 
     public override async Task<ApiResponseResult<UserDto>> ExecuteAsync(UpdateUserRequest req, CancellationToken ct)

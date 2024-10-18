@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Group.Commands.UpdateGroup;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -12,7 +13,7 @@ public class UpdateGroupEndpoint : Endpoint<UpdateGroupRequest, ApiResponseResul
 {
     public override void Configure()
     {
-        Put("/groups/update");
+        Put(RouteConstants.GroupsUpdate);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

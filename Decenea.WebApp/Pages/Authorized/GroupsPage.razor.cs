@@ -1,6 +1,5 @@
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Requests.Group;
-using Decenea.WebApp.Models;
 
 namespace Decenea.WebApp.Pages.Authorized;
 
@@ -12,7 +11,7 @@ public partial class GroupsPage
     {
         var result = await GroupApi.Get();
         if (!result.IsError)
-            Groups = result.Data ?? new List<GroupDto>();
+            Groups = result.Data ?? [];
     }
 
     private void AddGroup()
@@ -20,6 +19,7 @@ public partial class GroupsPage
         Groups.Add(new GroupDto()
         {
             Name = "New Group " + Groups.Count,
+            Version = string.Empty,
             Id = Ulid.NewUlid().ToString()
         });
     }
@@ -30,9 +30,12 @@ public partial class GroupsPage
         {
             Id = i.Id,
             Name = i.Name,
-            
+            Version = string.Empty
         }).ToList();
         await GroupApi.Create(new CreateGroupsRequest(groupDtos));
+        var result = await GroupApi.Get();
+        if (!result.IsError)
+            Groups = result.Data ?? [];
     }
 
     private async Task RemoveGroup(string id)

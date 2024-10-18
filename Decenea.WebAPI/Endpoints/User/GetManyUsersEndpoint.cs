@@ -1,5 +1,6 @@
 using Decenea.Application.Features.User.Queries.GetManyUsers;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -11,7 +12,7 @@ public class GetManyUsersEndpoint : Endpoint<EmptyRequest, ApiResponseResult<Lis
 {
     public override void Configure()
     {
-        Get("/users/get-many");
+        Get(RouteConstants.UsersGetMany);
         Roles(nameof(UserRole.Admin));
     }
 

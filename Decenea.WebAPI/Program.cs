@@ -46,7 +46,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseFastEndpoints(c => {
+app.UseFastEndpoints(c =>
+{
     c.Endpoints.RoutePrefix = "api";
 });
 app.UseSwaggerGen();

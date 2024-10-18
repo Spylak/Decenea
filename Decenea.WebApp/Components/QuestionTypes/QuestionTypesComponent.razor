@@ -1,4 +1,3 @@
-@using Decenea.WebApp.Models.QuestionTypes
 @using System.Reflection
 
 <MudPaper Class="ma-2" Elevation="0" Square="true" Style="@Style">
@@ -20,8 +19,7 @@
                 </MudSelect>
             </MudItem>
             <MudItem xs="4" sm="4">
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@(() => EditMode = !EditMode)">@(!EditMode ? "Edit" : "Preview")</MudButton>
-                @* <MudButton OnClick="async () => { await GlobalFunctionService.ConsoleLog(TestModelContainer.TestModel); }">Log item</MudButton> *@
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@(() => EditMode = !EditMode)">@(!EditMode ? "Preview" : "Edit")</MudButton>
             </MudItem>
         }
         <MudItem xs="12">

@@ -1,5 +1,4 @@
 using Decenea.Application.Abstractions.Persistance;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

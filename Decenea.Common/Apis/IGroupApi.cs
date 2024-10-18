@@ -1,26 +1,27 @@
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Requests.Group;
 using Refit;
 
-namespace Decenea.WebApp.Apis;
+namespace Decenea.Common.Apis;
 [Headers("Content-Type: application/json")]
 public interface IGroupApi
 {
-    [Post("/api/groups/create")]
+    [Post(RouteConstants.GroupsCreate)]
     Task<ApiResponseResult<List<GroupDto>>> Create([Body] CreateGroupsRequest request);
-    [Put("/api/groups/update")]
+    [Put(RouteConstants.GroupsUpdate)]
     Task<ApiResponseResult<GroupDto>> Update([Body] UpdateGroupRequest request);
-    [Delete("/api/groups/delete")]
+    [Delete(RouteConstants.GroupsDelete)]
     Task<ApiResponseResult<object>> Delete([Body] DeleteGroupsRequest request);
-    [Get("/api/groups/get")]
+    [Get(RouteConstants.GroupsGet)]
     Task<ApiResponseResult<GroupDto>> Get(GetGroupRequest request);
-    [Get("/api/groups/get-many")]
+    [Get(RouteConstants.GroupsGetMany)]
     Task<ApiResponseResult<List<GroupDto>>> Get();
-    [Put("/api/groups/update-member")]
+    [Put(RouteConstants.GroupsUpdateGroupMember)]
     Task<ApiResponseResult<GroupMemberDto>> UpdateMember([Body] UpdateGroupMemberRequest request);
-    [Put("/api/groups/add-members")]
+    [Put(RouteConstants.GroupsAddGroupMembers)]
     Task<ApiResponseResult<object>> AddMembers([Body] AddGroupMembersRequest request);
-    [Put("/api/groups/remove-members")]
+    [Put(RouteConstants.GroupsRemoveGroupMembers)]
     Task<ApiResponseResult<object>> RemoveMembers([Body] RemoveGroupMembersRequest request);
 }

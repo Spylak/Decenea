@@ -1,26 +1,25 @@
 using Decenea.Common.Common;
-using Decenea.Common.DataTransferObjects.Group;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Test;
-using Decenea.Common.Requests.Group;
 using Decenea.Common.Requests.Test;
 using Refit;
 
-namespace Decenea.WebApp.Apis;
+namespace Decenea.Common.Apis;
 [Headers("Content-Type: application/json")]
 public interface ITestApi
 {
-    [Post("/api/tests/create")]
+    [Post(RouteConstants.TestsCreate)]
     Task<ApiResponseResult<TestDto>> Create([Body] CreateTestRequest request);
-    [Put("/api/tests/update")]
+    [Put(RouteConstants.TestsUpdate)]
     Task<ApiResponseResult<TestDto>> Update([Body] UpdateTestRequest request);
-    [Delete("/api/tests/delete")]
+    [Delete(RouteConstants.TestsDelete)]
     Task<ApiResponseResult<object>> Delete([Body] DeleteTestsRequest request);
-    [Get("/api/tests/get")]
+    [Get(RouteConstants.TestsGet)]
     Task<ApiResponseResult<TestDto>> Get(GetTestRequest request);
-    [Get("/api/tests/get-many")]
+    [Get(RouteConstants.TestsGetMany)]
     Task<ApiResponseResult<List<TestDto>>> Get(GetManyTestsRequest request);
-    [Put("/api/tests/add-questions")]
+    [Put(RouteConstants.TestsAddQuestions)]
     Task<ApiResponseResult<object>> AddQuestions([Body] AddTestQuestionsRequest request);
-    [Put("/api/tests/remove-questions")]
+    [Put(RouteConstants.TestsRemoveQuestions)]
     Task<ApiResponseResult<object>> RemoveQuestions([Body] RemoveTestQuestionsRequest request);
 }

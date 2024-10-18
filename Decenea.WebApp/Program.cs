@@ -1,11 +1,12 @@
 using Blazored.LocalStorage;
+using Decenea.Common.Apis;
+using Decenea.Common.Constants;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using Decenea.WebApp;
 using Decenea.WebApp.Abstractions;
-using Decenea.WebApp.Apis;
 using Decenea.WebApp.Database;
 using Decenea.WebApp.Extensions;
 using Decenea.WebApp.Helpers;
@@ -32,6 +33,7 @@ builder.Services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
 builder.Services.AddTransient<IGlobalFunctionService,GlobalFunctionService>();
 builder.Services.AddTransient<ICookieService,CookieService>();
 builder.Services.AddSingleton<TestContainer>();
+builder.Services.AddSingleton<QuestionTypesContainer>();
 builder.Services.AddMudServices(config =>
 {
     config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
@@ -46,18 +48,18 @@ builder.Services.AddMudServices(config =>
 });
 
 builder.Services.AddRefitClient<IAuthApi>(RefitHelper.GetSettings())
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"));
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl));
 
 builder.Services.AddRefitClient<IUserApi>(RefitHelper.GetSettings())
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"))
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl))
     .AddTokenHandler();
 
 builder.Services.AddRefitClient<IGroupApi>(RefitHelper.GetSettings())
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"))
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl))
     .AddTokenHandler();
 
 builder.Services.AddRefitClient<ITestApi>(RefitHelper.GetSettings())
-    .ConfigureHttpClient(client => client.BaseAddress = new Uri("http://localhost:5080"))
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl))
     .AddTokenHandler();
 
 await builder.Build().RunAsync();

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Test.Commands.RemoveTestQuestions;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
@@ -11,10 +12,8 @@ public class RemoveTestQuestionsEndpoint : Endpoint<RemoveTestQuestionsRequest, 
 {
     public override void Configure()
     {
-        Put("/tests/remove-questions");
-        Roles(nameof(UserRole.SuperAdmin),
-            nameof(UserRole.Admin),
-            nameof(UserRole.Member));
+        Put(RouteConstants.TestsRemoveQuestions);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
     
     public override async Task<ApiResponseResult<object>> ExecuteAsync(RemoveTestQuestionsRequest req, CancellationToken ct)

@@ -1,6 +1,4 @@
-@using System.Linq
 @using Decenea.WebApp.Models.QuestionTypes
-@using NPOI.SS.Formula.Functions
 @inherits QuestionBaseComponent
 
 <MudGrid>
@@ -86,10 +84,13 @@
                 }
                 <MudRadioGroup T="string?"
                                Value="@(item.SubQuestion.Picked)"
-                               ValueChanged="@(async (s) => { item.SubQuestion.Picked = s; await ChoiceChanged(); })">
+                               ValueChanged="@(async s => { item.SubQuestion.Picked = s;await ChoiceChanged(); })">
                     @foreach (var choice in item.SubQuestion.Choices)
                     {
-                        <MudRadio T="string" Size="Size.Large" Color="Color.Primary" Option="choice"> @choice </MudRadio>
+                        <MudRadio T="string?" 
+                                  Size="Size.Large" 
+                                  Color="Color.Primary" 
+                                  Value="choice"> @choice </MudRadio>
                     }
                 </MudRadioGroup>
             </MudStack>

@@ -8,10 +8,12 @@ namespace Decenea.WebApp.Components.QuestionTypes;
 
 public partial class DragAndDropQuestion
 {
-    [Parameter]
-    public GenericQuestionModel? DragAndDropQuestionBaseModel { get; set; }
+    [Parameter] public GenericQuestionModel? DragAndDropQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> DragAndDropQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<DragAndDrop>? DragAndDropQuestionModel { get; set; }
+    private GenericQuestionModel<DragAndDrop>? DragAndDropQuestionModel { get; set; } = new (new DragAndDrop())
+    {
+        QuestionType = QuestionType.DragAndDrop
+    };
 
     private string DropZoneInput { get; set; } = "";
     private string DropItemInput { get; set; } = "";
@@ -21,26 +23,38 @@ public partial class DragAndDropQuestion
     {
         if (DragAndDropQuestionBaseModel is not null)
         {
-            DragAndDropQuestionModel = GenericQuestionModel.ConvertToGenericModel<DragAndDrop>(DragAndDropQuestionBaseModel);
+            DragAndDropQuestionModel =
+                GenericQuestionModel.ConvertToGenericModel<DragAndDrop>(DragAndDropQuestionBaseModel);
         }
+
         await ValueChanged();
     }
-    
+
+    private void DescriptionChanged(string description)
+    {
+        if (DragAndDropQuestionModel is not null)
+        {
+            DragAndDropQuestionModel.Description = description;
+        }
+    }
+
     private async Task ItemUpdated(MudItemDropInfo<DragAndDrop.DropItem> dropItem)
     {
         if (dropItem.Item is null)
             return;
         dropItem.Item.Selector = dropItem.DropzoneIdentifier;
-        await DragAndDropQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DragAndDropQuestionModel));
+        await DragAndDropQuestionBaseModelChanged.InvokeAsync(
+            GenericQuestionModel.ConvertToNonGenericModel(DragAndDropQuestionModel));
     }
-    
+
     private async Task CreateSample()
     {
         DragAndDropQuestionModel = SampleHelper.GetDragAndDropQuestionSample();
-        await DragAndDropQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DragAndDropQuestionModel));
+        await DragAndDropQuestionBaseModelChanged.InvokeAsync(
+            GenericQuestionModel.ConvertToNonGenericModel(DragAndDropQuestionModel));
         await ValueChanged();
     }
-    
+
     private async Task Reset()
     {
         DragAndDropQuestionModel = new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
@@ -50,7 +64,7 @@ public partial class DragAndDropQuestion
         };
         await ValueChanged();
     }
-    
+
     private async Task AddNewDropZone()
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)
@@ -68,7 +82,7 @@ public partial class DragAndDropQuestion
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)
             return;
-        
+
         DragAndDropQuestionModel.QuestionContent.Choices.Add(new DragAndDrop.DropItem()
         {
             Name = $"Item {DateTime.Now.ToString("mm:ss")}",
@@ -81,27 +95,27 @@ public partial class DragAndDropQuestion
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)
             return;
-        
-        DragAndDropQuestionModel.QuestionContent.DropZones[key] = newVal; 
-        await ValueChanged(); 
+
+        DragAndDropQuestionModel.QuestionContent.DropZones[key] = newVal;
+        await ValueChanged();
     }
-    
+
     private async Task ValueChanged()
     {
         Rerender = false;
         await Task.Delay(50);
         Rerender = true;
     }
-    
+
     private async Task RemoveItem(DragAndDrop.DropItem item)
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)
             return;
-        
+
         DragAndDropQuestionModel.QuestionContent.Choices.Remove(item);
         await ValueChanged();
     }
-    
+
     private async Task RemoveItem(int key)
     {
         if (DragAndDropQuestionModel?.QuestionContent is null)

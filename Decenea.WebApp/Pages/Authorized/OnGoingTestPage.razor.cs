@@ -16,7 +16,10 @@ public partial class OnGoingTestPage
     private Dictionary<int, GenericQuestionModel> _genericQuestionModels = new Dictionary<int, GenericQuestionModel>();
     private async Task StartTest()
     {
-        TestContainer.OngoingTest.StartingTime = DateTime.Now;
+        if (TestContainer.OngoingTest is not null)
+        {
+            TestContainer.OngoingTest.StartingTime = DateTime.Now;
+        }
         await IndexedDb.OngoingTest.AddAsync(TestContainer.OngoingTest);
         StateHasChanged();
     }

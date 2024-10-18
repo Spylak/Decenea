@@ -4,42 +4,44 @@
 @using Decenea.WebApp.Components.Countdown
 <PageTitle>OnGoingTestPage</PageTitle>
 
-@if (TestContainer.OngoingTest?.StartingTime > DateTime.Now)
-{
-    <h4>The test is starting in @((TestContainer.OngoingTest.StartingTime.Value - DateTime.Now).ToString("mm:ss")))</h4>
-    <h4>Or you can start now</h4>
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@StartTest">Start Test!</MudButton>
-
-}else if (TestContainer.OngoingTest?.StartingTime == DateTime.MinValue)
-{
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@StartTest">Start Test!</MudButton>
-}
-else
-{
-    <MudGrid>
-        <MudItem xs="12">
-            <Countdown TotalTimeInSeconds="@((int)((TestContainer.OngoingTest?.FinishTime - DateTime.Now)?.TotalSeconds??0))"
-                       Finished="b => Console.WriteLine(b)"
-                       ></Countdown>
+<MudGrid Spacing="0">
+    @if (TestContainer.OngoingTest?.StartingTime > DateTime.Now)
+    {
+        <h4>The test is starting in @((TestContainer.OngoingTest.StartingTime.Value - DateTime.Now).ToString("mm:ss")))</h4>
+        <h4>Or you can start now</h4>
+        <MudButton Size="Size.Medium" Color="Color.Primary" Variant="Variant.Filled" OnClick="@StartTest">Start Test!</MudButton>
+    }
+    else if (TestContainer.OngoingTest?.StartingTime == DateTime.MinValue)
+    {
+        <MudItem Style="justify-content: center;display: flex;align-items: center;margin-top: 25vh" xs="12">
+            <MudButton Size="Size.Medium" Color="Color.Primary" Variant="Variant.Filled" OnClick="@StartTest">Start Test!</MudButton>
         </MudItem>
-        @if (TestContainer.OngoingTest?.GenericQuestionModels.Any() ?? false)
+    }
+    else
+    {
+        @* <MudItem xs="12"> *@
+        @*     <Countdown TotalTimeInSeconds="@((int)((TestContainer.OngoingTest?.FinishTime - DateTime.Now)?.TotalSeconds??0))" *@
+        @*                Finished="b => Console.WriteLine(b)" *@
+        @*                ></Countdown> *@
+        @* </MudItem> *@
+        if (TestContainer.OngoingTest?.GenericQuestionModels.Any() ?? false)
         {
+            <MudItem xs="12" Style="display: flex;">
+                @if (ActiveQuestionIndex > 0)
+                {
+                    <MudButton Size="Size.Medium" OnClick="PreviousQuestion">Previous</MudButton>
+                }
+                <MudSpacer/>
+                @if (ActiveQuestionIndex < TestContainer.OngoingTest.GenericQuestionModels.Count - 1)
+                {
+                    <MudButton Size="Size.Medium" OnClick="NextQuestion">Next</MudButton>
+                }
+            </MudItem>
             <MudItem xs="12" Style="height: 90%">
                 <QuestionTypesComponent TestModel="TestContainer.OngoingTest"
                                         PresentationOnly="true"
                                         @bind-Question="@_genericQuestionModels[ActiveQuestionIndex]"/>
             </MudItem>
-            <MudItem xs="12" Style="display: flex">
-                @if (ActiveQuestionIndex > 0)
-                {
-                    <MudButton OnClick="PreviousQuestion">Previous</MudButton>
-                }
-                <MudSpacer/>
-                @if (ActiveQuestionIndex < TestContainer.OngoingTest.GenericQuestionModels.Count - 1)
-                {
-                    <MudButton OnClick="NextQuestion">Next</MudButton>
-                }
-            </MudItem>
         }
-    </MudGrid>
-}
+    }
+</MudGrid>

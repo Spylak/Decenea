@@ -12,7 +12,10 @@ public partial class OrderingDnDQuestion
     [Parameter]
     public GenericQuestionModel? OrderingDnDQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> OrderingDnDQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<OrderingDragAndDrop>? OrderingDnDQuestionModel { get; set; }
+    private GenericQuestionModel<OrderingDragAndDrop>? OrderingDnDQuestionModel { get; set; } = new (new OrderingDragAndDrop())
+    {
+        QuestionType = QuestionType.OrderingDragAndDrop
+    };
 
     private bool Rerender { get; set; } = false;
     

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Group.Queries.GetGroup;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
@@ -12,8 +13,8 @@ public class GetGroupEndpoint : Endpoint<GetGroupRequest, ApiResponseResult<Grou
 {
     public override void Configure()
     {
-        Get("/groups/get");
-        Roles(UserRoleExtensions.GetAuthorizesRoles());
+        Get(RouteConstants.GroupsGet);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
 
     public override async Task<ApiResponseResult<GroupDto>> ExecuteAsync(GetGroupRequest req, CancellationToken ct)

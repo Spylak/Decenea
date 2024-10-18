@@ -23,7 +23,7 @@ public partial class GroupPage
         }
     }
 
-    private async Task AddGroupMember()
+    private void AddGroupMember()
     {
         Group.GroupMembers.Add(new GroupMemberDto()
         {
@@ -31,15 +31,27 @@ public partial class GroupPage
             GroupRole = GroupRole.Member,
             GroupUserEmail = "user@email.com"
         });
+    }
+
+    private async Task SaveChanges()
+    {
         await GroupApi.AddMembers(new AddGroupMembersRequest()
         {
             GroupId = Group.Id,
             GroupMembers = Group.GroupMembers.Select(i => new AddGroupMemberDto()
             {
                 GroupUserEmail = i.GroupUserEmail,
-                GroupRole = i.GroupRole
+                GroupRole = i.GroupRole,
+                Alias = i.Alias
             }).ToList()
         });
+        if (GroupId is not null)
+        {
+            var result  = await GroupApi.Get(new GetGroupRequest(GroupId));
+            if (result is { IsError: false, Data: not null })
+                Group = result.Data;
+            StateHasChanged();
+        }
     }
 
     private async Task RemoveGroupMember(string userEmail)

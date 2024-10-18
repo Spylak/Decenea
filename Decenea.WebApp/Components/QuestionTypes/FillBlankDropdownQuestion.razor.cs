@@ -10,7 +10,10 @@ public partial class FillBlankDropdownQuestion
     [Parameter]
     public GenericQuestionModel? FillBlankDropdownQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> FillBlankDropdownQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; }
+    private GenericQuestionModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; } = new (new FillBlankDropdown())
+    {
+        QuestionType = QuestionType.FillBlankDropdown
+    };
     private string SpecialChars { get; set; } = "_____";
     private List<string> QuestionText { get; set; } = new List<string>();
     private string DynamicQuestion { get; set; } = "";

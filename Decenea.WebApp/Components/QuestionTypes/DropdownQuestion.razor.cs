@@ -10,7 +10,10 @@ public partial class DropdownQuestion
     [Parameter]
     public GenericQuestionModel? DropdownQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> DropdownQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<Dropdown>? DropdownQuestionModel { get; set; }
+    private GenericQuestionModel<Dropdown>? DropdownQuestionModel { get; set; }= new (new Dropdown())
+    {
+        QuestionType = QuestionType.Dropdown
+    };
     protected override void OnParametersSet()
     {
         if (DropdownQuestionBaseModel is not null)

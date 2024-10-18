@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Decenea.Application.Features.Test.Commands.AddTestQuestions;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
@@ -11,7 +12,7 @@ public class AddTestQuestionsEndpoint : Endpoint<AddTestQuestionsRequest, ApiRes
 {
     public override void Configure()
     {
-        Put("/tests/add-questions");
+        Put(RouteConstants.TestsAddQuestions);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));

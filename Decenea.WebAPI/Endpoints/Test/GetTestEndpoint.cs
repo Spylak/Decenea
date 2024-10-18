@@ -1,6 +1,8 @@
 using Decenea.Application.Features.Test.Queries.GetTest;
 using Decenea.Common.Common;
+using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
 using Decenea.Common.Requests.Test;
 
@@ -11,8 +13,9 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponseResult<TestDt
 {
     public override void Configure()
     {
-        Get("/tests/get");
-        AllowAnonymous();
+        Get(RouteConstants.TestsGet);
+        Roles(UserRoleExtensions.GetAuthorizedRoles());
+
     }
     
     public override async Task<ApiResponseResult<TestDto>> ExecuteAsync(GetTestRequest req, CancellationToken ct)

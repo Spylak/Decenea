@@ -1,7 +1,6 @@
 using Decenea.Application.Abstractions.Persistance;
 using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.GroupAggregate;
-using ErrorOr;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;

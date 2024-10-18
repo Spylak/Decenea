@@ -10,29 +10,29 @@ public partial class MultipleChoiceSingleQuestion
     [Parameter]
     public GenericQuestionModel? MultipleChoiceSingleQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> MultipleChoiceSingleQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<MultipleChoiceSingle>? MultipleChoiceSingleQuestionModel { get; set; }
-    public override async Task SetParametersAsync(ParameterView parameters)
+    private GenericQuestionModel<MultipleChoiceSingle>? MultipleChoiceSingleQuestionModel { get; set; } = new (new MultipleChoiceSingle())
     {
-        await base.SetParametersAsync(parameters);
+        QuestionType = QuestionType.MultipleChoiceSingle
+    };
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
         if (MultipleChoiceSingleQuestionBaseModel is not null)
         {
             MultipleChoiceSingleQuestionModel = GenericQuestionModel.ConvertToGenericModel<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel);
-            Fields = MultipleChoiceSingleQuestionModel.QuestionContent?.SubQuestions.Select(i => new Field()
-            {
-                Input = "",
-                SubQuestion = i
-            }).ToList() ?? new List<Field>();
+            PopulateFields();
         }
     }
+
     private class Field
     {
         public string Input { get; set; } = "";
-        public IEnumerable<string> SelectedChoices { get; set; } = Enumerable.Empty<string>();
+        public IEnumerable<string> SelectedChoices { get; set; } = [];
 
-        public MultipleChoiceSingle.SubQuestion SubQuestion { get; set; } = new MultipleChoiceSingle.SubQuestion();
+        public MultipleChoiceSingle.SubQuestion SubQuestion { get; set; } = new ();
     }
 
-    private List<Field> Fields { get; set; } = new List<Field>();
+    private List<Field> Fields { get; set; } = [];
     
     private async Task CreateSample()
     {
