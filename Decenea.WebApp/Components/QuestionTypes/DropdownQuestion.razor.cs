@@ -10,26 +10,21 @@ public partial class DropdownQuestion
     [Parameter]
     public GenericQuestionModel? DropdownQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> DropdownQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<Dropdown>? DropdownQuestionModel { get; set; }= new (new Dropdown())
-    {
-        QuestionType = QuestionType.Dropdown
-    };
+    private GenericQuestionModel<Dropdown> DropdownQuestionModel { get; set; } = InitializeGenericQuestionModel();
+    
     protected override void OnParametersSet()
     {
-        if (DropdownQuestionBaseModel is not null)
-        {
-            DropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<Dropdown>(DropdownQuestionBaseModel);
-            PopulateFields();
-        }
+        DropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<Dropdown>(DropdownQuestionBaseModel ?? InitializeGenericQuestionModel());
+        PopulateFields();
     }
 
     private class Field
     {
         public string Input { get; set; } = "";
-        public Dropdown.SubQuestion SubQuestion { get; set; } = new Dropdown.SubQuestion();
+        public Dropdown.SubQuestion SubQuestion { get; set; } = new();
     }
     
-    private List<Field> Fields { get; set; } = new List<Field>();
+    private List<Field> Fields { get; set; } = [];
 
     private async Task CreateSample()
     {
@@ -37,14 +32,18 @@ public partial class DropdownQuestion
         PopulateFields();
         await DropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DropdownQuestionModel));
     }
+
+    private static GenericQuestionModel<Dropdown> InitializeGenericQuestionModel()
+    {
+        return new GenericQuestionModel<Dropdown>(new Dropdown())
+        {
+            QuestionType = QuestionType.Dropdown,
+        };
+    }
     
     private void Reset()
     {
-        DropdownQuestionModel = new GenericQuestionModel<Dropdown>(new Dropdown())
-        {
-            QuestionType = QuestionType.Dropdown,
-            Id = DropdownQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString()
-        };
+        DropdownQuestionModel = InitializeGenericQuestionModel();
         ClearFields();
     }
 
@@ -55,9 +54,6 @@ public partial class DropdownQuestion
 
     private void PopulateFields()
     {
-        if(DropdownQuestionModel?.QuestionContent is null)
-            return;
-        
         Fields = DropdownQuestionModel.QuestionContent.SubQuestions.Select( i => new Field()
         {
             Input = "",
@@ -116,10 +112,7 @@ public partial class DropdownQuestion
             }
         }
 
-        if (DropdownQuestionModel is not null)
-        {
-            DropdownQuestionModel.QuestionContent = new Dropdown() { SubQuestions = subQuestions };
-            await DropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DropdownQuestionModel));
-        }
+        DropdownQuestionModel.QuestionContent = new Dropdown() { SubQuestions = subQuestions };
+        await DropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(DropdownQuestionModel));
     }
 }

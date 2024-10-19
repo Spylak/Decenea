@@ -10,32 +10,27 @@ public partial class FillBlankDropdownQuestion
     [Parameter]
     public GenericQuestionModel? FillBlankDropdownQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> FillBlankDropdownQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<FillBlankDropdown>? FillBlankDropdownQuestionModel { get; set; } = new (new FillBlankDropdown())
-    {
-        QuestionType = QuestionType.FillBlankDropdown
-    };
+
+    private GenericQuestionModel<FillBlankDropdown> FillBlankDropdownQuestionModel { get; set; } = InitializeGenericQuestionModel();
     private string SpecialChars { get; set; } = "_____";
-    private List<string> QuestionText { get; set; } = new List<string>();
+    private List<string> QuestionText { get; set; } = [];
     private string DynamicQuestion { get; set; } = "";
     private int NumberOfSpaces { get; set; } = 0;
     private class Field
     {
         public string Input { get; set; } = "";
-        public FillBlankDropdown.SpaceOption Option { get; set; } = new FillBlankDropdown.SpaceOption();
+        public FillBlankDropdown.SpaceOption Option { get; set; } = new();
     }
-    private List<Field> Fields { get; set; } = new List<Field>();
+    private List<Field> Fields { get; set; } = [];
 
     protected override void OnParametersSet()
     {
-        if (FillBlankDropdownQuestionBaseModel is not null)
-        {
-            FillBlankDropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel);
-            UpdateOptions(FillBlankDropdownQuestionModel.Description);
-            PopulateDynamicQuestion();
-        }
+        FillBlankDropdownQuestionModel = GenericQuestionModel.ConvertToGenericModel<FillBlankDropdown>(FillBlankDropdownQuestionBaseModel ?? InitializeGenericQuestionModel());
+        UpdateOptions(FillBlankDropdownQuestionModel.Description);
+        PopulateDynamicQuestion();
     }
 
-    private void AddOption(Field field,string input)
+    private void AddOption(Field field, string input)
     {
         if (!field.Option.Choices.Select(i => i.Text).Contains(input))
         {
@@ -49,8 +44,6 @@ public partial class FillBlankDropdownQuestion
     
     private void UpdateOptions(string question)
     {
-        if(FillBlankDropdownQuestionModel is null)
-            return;
         FillBlankDropdownQuestionModel.Description = question;
         NumberOfSpaces= question.Split(SpecialChars).Length - 1;
         var options = new List<FillBlankDropdown.SpaceOption>();
@@ -58,8 +51,6 @@ public partial class FillBlankDropdownQuestion
             .Description
             .Split(SpecialChars)
             .ToList();
-        if(FillBlankDropdownQuestionModel?.QuestionContent is null)
-            return;
 
         for (int i = 0; i < NumberOfSpaces; i++)
         {
@@ -71,7 +62,7 @@ public partial class FillBlankDropdownQuestion
                     Option = FillBlankDropdownQuestionModel.QuestionContent.Options.ElementAtOrDefault(i) is not null ? FillBlankDropdownQuestionModel.QuestionContent.Options[i] : new FillBlankDropdown.SpaceOption()
                     {
                         SpaceNo = i,
-                        Choices = new List<FillBlankDropdown.Choice>()
+                        Choices = []
                     }
                 });
             }
@@ -88,7 +79,7 @@ public partial class FillBlankDropdownQuestion
             Option = new FillBlankDropdown.SpaceOption()
             {
                 SpaceNo = Fields.Count + 1,
-                Choices = new List<FillBlankDropdown.Choice>()
+                Choices = []
             }
         });
     }
@@ -108,26 +99,27 @@ public partial class FillBlankDropdownQuestion
         PopulateDynamicQuestion();
         await FillBlankDropdownQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(FillBlankDropdownQuestionModel));
     }
+
+    private static GenericQuestionModel<FillBlankDropdown> InitializeGenericQuestionModel()
+    {
+        return new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
+        {
+            QuestionType = QuestionType.FillBlankDropdown
+        };
+    }
     
     private void Reset()
     {
-        FillBlankDropdownQuestionModel = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
-            {
-                Id = FillBlankDropdownQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
-                QuestionType = QuestionType.FillBlankDropdown
-            };
+        FillBlankDropdownQuestionModel = InitializeGenericQuestionModel();
         UpdateOptions(FillBlankDropdownQuestionModel.Description);
         PopulateDynamicQuestion();
-        Fields = new List<Field>();
+        Fields = [];
     }
     
     private void PopulateDynamicQuestion()
     {
-        if(FillBlankDropdownQuestionModel?.QuestionContent is null)
-            return;
-        
         DynamicQuestion = "";
-        QuestionText = new List<string>();
+        QuestionText = [];
         QuestionText = FillBlankDropdownQuestionModel.Description.Split(SpecialChars).ToList();
         for (var i=0;i<QuestionText.Count-1;i++)
         {
@@ -145,9 +137,10 @@ public partial class FillBlankDropdownQuestion
     {
         var answers= Fields.Select(i => i.Option)
             .FirstOrDefault(i => i.SpaceNo == j);
-        foreach (var itm in answers?.Choices ?? new List<FillBlankDropdown.Choice>())
+        
+        foreach (var itm in answers?.Choices ?? [])
         {
-            if (itm.Text==args)
+            if(itm.Text==args)
             {
                 itm.Checked = true;
             }

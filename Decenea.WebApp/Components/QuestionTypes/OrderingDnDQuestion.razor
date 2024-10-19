@@ -7,8 +7,8 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          Value="OrderingDnDQuestionModel?.Description"
-                          ValueChanged="@(s => { if (OrderingDnDQuestionModel is not null) { OrderingDnDQuestionModel.Description = s; } })"
+                          Value="OrderingDnDQuestionModel.Description"
+                          ValueChanged="@(s => { OrderingDnDQuestionModel.Description = s; })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>
@@ -27,7 +27,7 @@
         <MudItem xs="12" sm="2" Style="text-align: end">
             <MudButton Color="Color.Tertiary" Variant="Variant.Filled" OnClick="async () => await Save(GenericQuestionModel.ConvertToNonGenericModel(OrderingDnDQuestionModel))">Save</MudButton>
         </MudItem>
-        foreach (var item in OrderingDnDQuestionModel?.QuestionContent?.Choices ?? [])
+        foreach (var item in OrderingDnDQuestionModel.QuestionContent.Choices)
         {
             if (OrderingDnDQuestionModel?.QuestionContent is not null)
             {
@@ -35,7 +35,7 @@
                     <MudTextField
                         Value="item.Name"
                         T="string"
-                        ValueChanged="async (s) => { item.Name = s; await ValueChanged(); }"
+                        ValueChanged="async s => { item.Name = s; await ValueChanged(); }"
                         Variant="Variant.Outlined"
                         Label="@($"Choice No.{OrderingDnDQuestionModel.QuestionContent.Choices.IndexOf(item) + 1}")"
                         Adornment="@(EditMode ? Adornment.End : Adornment.None)"
@@ -49,21 +49,21 @@
     {
         <MudItem xs="12">
         <MudField Variant="Variant.Outlined" Label="Question">
-            @OrderingDnDQuestionModel?.Description
+            @OrderingDnDQuestionModel.Description
         </MudField>
         </MudItem>
     }
 </MudGrid>
 @if (Rerender)
 {
-    <MudDropContainer T="OrderingDragAndDrop.DropItem" Items="@((OrderingDnDQuestionModel?.QuestionContent.Choices ?? []).OrderBy(i => i.Order))" ItemsSelector="@((item, dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+    <MudDropContainer T="OrderingDragAndDrop.DropItem" Items="@((OrderingDnDQuestionModel.QuestionContent.Choices).OrderBy(i => i.Order))" ItemsSelector="@((item, dropzone) => item.Selector == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
         <ChildContent>
             <MudGrid>
                 <MudItem xs="6">
                     <MudPaper Class="ma-4 flex-grow-1">
                         <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
-                            <MudListSubheader>@(OrderingDnDQuestionModel?.QuestionContent.OptionZone.Name)</MudListSubheader>
-                            <MudDropZone T="OrderingDragAndDrop.DropItem" Identifier="@($"{OrderingDnDQuestionModel?.QuestionContent.OptionZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
+                            <MudListSubheader>@(OrderingDnDQuestionModel.QuestionContent.OptionZone.Name)</MudListSubheader>
+                            <MudDropZone T="OrderingDragAndDrop.DropItem" Identifier="@($"{OrderingDnDQuestionModel.QuestionContent.OptionZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
                         </MudList>
                     </MudPaper>
                 </MudItem>
@@ -72,8 +72,8 @@
                         <MudItem xs="12">
                             <MudPaper Class="ma-4 flex-grow-1">
                                 <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
-                                    <MudListSubheader>@OrderingDnDQuestionModel?.QuestionContent.AnswerZone.Name</MudListSubheader>
-                                    <MudDropZone T="OrderingDragAndDrop.DropItem" Identifier="@($"{OrderingDnDQuestionModel?.QuestionContent.AnswerZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
+                                    <MudListSubheader>@OrderingDnDQuestionModel.QuestionContent.AnswerZone.Name</MudListSubheader>
+                                    <MudDropZone T="OrderingDragAndDrop.DropItem" Identifier="@($"{OrderingDnDQuestionModel.QuestionContent.AnswerZone.Identifier}")" Class="flex-grow-1" AllowReorder="true"/>
                                 </MudList>
                             </MudPaper>
                         </MudItem>

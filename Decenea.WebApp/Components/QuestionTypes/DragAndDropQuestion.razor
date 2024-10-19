@@ -6,7 +6,7 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          Value="DragAndDropQuestionModel?.Description"
+                          Value="DragAndDropQuestionModel.Description"
                           ValueChanged="@(s => DescriptionChanged(s))"
                           Variant="Variant.Outlined"
                           Label="Question"/>
@@ -31,7 +31,7 @@
         </MudItem>
         <MudItem xs="6">
             <MudGrid>
-                @foreach (var item in DragAndDropQuestionModel?.QuestionContent.Choices ?? [])
+                @foreach (var item in DragAndDropQuestionModel.QuestionContent.Choices)
                 {
                     <MudItem xs="12">
                         <MudTextField
@@ -39,7 +39,7 @@
                             T="string"
                             ValueChanged="async (s) => { item.Name = s; await ValueChanged(); }"
                             Variant="Variant.Outlined"
-                            Label="@($"Choice No.{DragAndDropQuestionModel?.QuestionContent.Choices.IndexOf(item) + 1}")"
+                            Label="@($"Choice No.{DragAndDropQuestionModel.QuestionContent.Choices.IndexOf(item) + 1}")"
                             Adornment="@(EditMode ? Adornment.End : Adornment.None)"
                             AdornmentIcon="@Icons.Material.Filled.Close"
                             OnAdornmentClick="() => RemoveItem(item)"/>
@@ -49,7 +49,7 @@
         </MudItem>
         <MudItem xs="6">
             <MudGrid>
-                @foreach (var item in DragAndDropQuestionModel?.QuestionContent.DropZones ?? [])
+                @foreach (var item in DragAndDropQuestionModel.QuestionContent.DropZones)
                 {
                     <MudItem xs="12" sm="6">
                         <MudTextField
@@ -70,7 +70,7 @@
     {
         <MudItem xs="12">
             <MudField Variant="Variant.Outlined" Label="Question">
-                @DragAndDropQuestionModel?.Description
+                @DragAndDropQuestionModel.Description
             </MudField>
         </MudItem>
     }
@@ -78,25 +78,25 @@
         @if (Rerender)
         {
             <MudDropContainer T="DragAndDrop.DropItem"
-                              Items="@(DragAndDropQuestionModel?.QuestionContent?.Choices ?? [])"
+                              Items="@(DragAndDropQuestionModel.QuestionContent.Choices)"
                               ItemsSelector="@((item, dropzone) => item.Selector == dropzone)"
                               ItemDropped="ItemUpdated"
                               Class="d-flex flex-wrap flex-grow-1">
                 <ChildContent>
-                    @if (DragAndDropQuestionModel?.QuestionContent is not null && DragAndDropQuestionModel.QuestionContent.DropZones.Any())
+                    @if (DragAndDropQuestionModel.QuestionContent.DropZones.Any())
                     {
                         <MudGrid>
                             <MudItem xs="6">
                                 <MudPaper Class="ma-4 flex-grow-1">
                                     <MudList T="string" Clickable="true" Class="d-flex flex-column mud-height-full" Style="min-height: 100px;">
-                                        <MudListSubheader>@DragAndDropQuestionModel?.QuestionContent.DropZones[0]</MudListSubheader>
+                                        <MudListSubheader>@DragAndDropQuestionModel.QuestionContent.DropZones[0]</MudListSubheader>
                                         <MudDropZone T="DragAndDrop.DropItem" Identifier="@("0")" Class="flex-grow-1"/>
                                     </MudList>
                                 </MudPaper>
                             </MudItem>
                             <MudItem xs="6">
                                 <MudGrid>
-                                    @foreach (var itm in DragAndDropQuestionModel?.QuestionContent.DropZones.Where(i => i.Key != 0) ?? [])
+                                    @foreach (var itm in DragAndDropQuestionModel.QuestionContent.DropZones.Where(i => i.Key != 0))
                                     {
                                         <MudItem xs="12">
                                             <MudPaper Class="ma-4 flex-grow-1">

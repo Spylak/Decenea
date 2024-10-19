@@ -7,7 +7,7 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          Value="MultipleYesOrNoQuestionModel?.Description"
+                          Value="MultipleYesOrNoQuestionModel.Description"
                           ValueChanged="@(s => { if (MultipleYesOrNoQuestionModel is not null) { MultipleYesOrNoQuestionModel.Description = s; } })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
@@ -32,7 +32,7 @@
     {
         <MudItem xs="12">
             <MudField Variant="Variant.Outlined" Label="Question">
-                @MultipleYesOrNoQuestionModel?.Description
+                @MultipleYesOrNoQuestionModel.Description
             </MudField>
         </MudItem>
     }

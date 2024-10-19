@@ -8,8 +8,8 @@
         <MudItem xs="12">
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
-                          Value="DropdownQuestionModel?.Description"
-                          ValueChanged="@(s => { if (DropdownQuestionModel is not null) { DropdownQuestionModel.Description = s; } })"
+                          Value="DropdownQuestionModel.Description"
+                          ValueChanged="@(s => { DropdownQuestionModel.Description = s; })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>
@@ -33,7 +33,7 @@
     {
         <MudItem xs="12">
             <MudField Variant="Variant.Outlined" Label="Question">
-                @DropdownQuestionModel?.Description
+                @DropdownQuestionModel.Description
             </MudField>
         </MudItem>
     }

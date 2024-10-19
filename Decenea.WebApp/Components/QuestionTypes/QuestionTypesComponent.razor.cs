@@ -42,7 +42,7 @@ public partial class QuestionTypesComponent
     private void SaveQuestionToTest(GenericQuestionModel genericQuestionModel)
     {
         var question = TestModel.GenericQuestionModels
-            .FirstOrDefault(i => i.Id!.Equals(genericQuestionModel.Id));
+            .FirstOrDefault(i => i.Id.Equals(genericQuestionModel.Id));
         if (question is null)
         {
             if (!string.IsNullOrWhiteSpace(genericQuestionModel.Description))

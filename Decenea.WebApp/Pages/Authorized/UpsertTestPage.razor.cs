@@ -161,13 +161,16 @@ public partial class UpsertTestPage
             ["Color"] = Color.Success,
             ["TestModel"] = TestContainer.UpsertTestModel
         };
+        
         var dialogOptions = new DialogOptions()
         {
             BackdropClick = false,
             CloseOnEscapeKey = true
         };
+        
         if (questionType is not null && questionId is not null)
             parameters.Add("GenericQuestion",TestContainer.UpsertTestModel.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
+        
         var dialog = await DialogService.ShowAsync<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
         await IndexedDb.UpsertTest.UpdateAsync(TestContainer.UpsertTestModel);

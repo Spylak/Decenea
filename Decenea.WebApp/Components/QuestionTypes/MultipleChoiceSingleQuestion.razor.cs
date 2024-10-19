@@ -10,18 +10,13 @@ public partial class MultipleChoiceSingleQuestion
     [Parameter]
     public GenericQuestionModel? MultipleChoiceSingleQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> MultipleChoiceSingleQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<MultipleChoiceSingle>? MultipleChoiceSingleQuestionModel { get; set; } = new (new MultipleChoiceSingle())
-    {
-        QuestionType = QuestionType.MultipleChoiceSingle
-    };
+
+    private GenericQuestionModel<MultipleChoiceSingle> MultipleChoiceSingleQuestionModel { get; set; } = InitializeGenericQuestionModel();
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        if (MultipleChoiceSingleQuestionBaseModel is not null)
-        {
-            MultipleChoiceSingleQuestionModel = GenericQuestionModel.ConvertToGenericModel<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel);
-            PopulateFields();
-        }
+        MultipleChoiceSingleQuestionModel = GenericQuestionModel.ConvertToGenericModel<MultipleChoiceSingle>(MultipleChoiceSingleQuestionBaseModel ?? InitializeGenericQuestionModel());
+        PopulateFields();
     }
 
     private class Field
@@ -40,14 +35,18 @@ public partial class MultipleChoiceSingleQuestion
         PopulateFields();
         await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleChoiceSingleQuestionModel));
     }
+
+    private static GenericQuestionModel<MultipleChoiceSingle> InitializeGenericQuestionModel()
+    {
+        return new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
+        {
+            QuestionType = QuestionType.MultipleChoiceSingle
+        };
+    }
     
     private void Reset()
     {
-        MultipleChoiceSingleQuestionModel = new GenericQuestionModel<MultipleChoiceSingle>(new MultipleChoiceSingle())
-            {
-                Id = MultipleChoiceSingleQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString(),
-                QuestionType = QuestionType.MultipleChoiceSingle
-            };
+        MultipleChoiceSingleQuestionModel = InitializeGenericQuestionModel();
         PopulateFields();
     }
 
@@ -61,14 +60,12 @@ public partial class MultipleChoiceSingleQuestion
 
     private async Task ChoiceChanged()
     {
+        MultipleChoiceSingleQuestionModel.QuestionContent.SubQuestions = Fields.Select(i => i.SubQuestion).ToList();
         await MultipleChoiceSingleQuestionBaseModelChanged.InvokeAsync(GenericQuestionModel.ConvertToNonGenericModel(MultipleChoiceSingleQuestionModel));
     }
     
     private void PopulateFields()
     {
-        if(MultipleChoiceSingleQuestionModel?.QuestionContent is null)
-            return;
-        
         Fields = MultipleChoiceSingleQuestionModel.QuestionContent.SubQuestions.Select(i => new Field()
         {
             Input = "",

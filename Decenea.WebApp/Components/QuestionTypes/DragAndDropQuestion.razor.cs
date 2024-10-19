@@ -10,10 +10,7 @@ public partial class DragAndDropQuestion
 {
     [Parameter] public GenericQuestionModel? DragAndDropQuestionBaseModel { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> DragAndDropQuestionBaseModelChanged { get; set; }
-    private GenericQuestionModel<DragAndDrop>? DragAndDropQuestionModel { get; set; } = new (new DragAndDrop())
-    {
-        QuestionType = QuestionType.DragAndDrop
-    };
+    private GenericQuestionModel<DragAndDrop> DragAndDropQuestionModel { get; set; } = InitializeGenericQuestionModel();
 
     private string DropZoneInput { get; set; } = "";
     private string DropItemInput { get; set; } = "";
@@ -21,27 +18,20 @@ public partial class DragAndDropQuestion
 
     protected override async Task OnParametersSetAsync()
     {
-        if (DragAndDropQuestionBaseModel is not null)
-        {
-            DragAndDropQuestionModel =
-                GenericQuestionModel.ConvertToGenericModel<DragAndDrop>(DragAndDropQuestionBaseModel);
-        }
-
+        DragAndDropQuestionModel = GenericQuestionModel.ConvertToGenericModel<DragAndDrop>(DragAndDropQuestionBaseModel ?? InitializeGenericQuestionModel());
         await ValueChanged();
     }
 
     private void DescriptionChanged(string description)
     {
-        if (DragAndDropQuestionModel is not null)
-        {
-            DragAndDropQuestionModel.Description = description;
-        }
+        DragAndDropQuestionModel.Description = description;
     }
 
     private async Task ItemUpdated(MudItemDropInfo<DragAndDrop.DropItem> dropItem)
     {
         if (dropItem.Item is null)
             return;
+        
         dropItem.Item.Selector = dropItem.DropzoneIdentifier;
         await DragAndDropQuestionBaseModelChanged.InvokeAsync(
             GenericQuestionModel.ConvertToNonGenericModel(DragAndDropQuestionModel));
@@ -55,21 +45,22 @@ public partial class DragAndDropQuestion
         await ValueChanged();
     }
 
+    private static GenericQuestionModel<DragAndDrop> InitializeGenericQuestionModel()
+    {
+        return new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
+        {
+            QuestionType = QuestionType.DragAndDrop
+        };
+    }
+
     private async Task Reset()
     {
-        DragAndDropQuestionModel = new GenericQuestionModel<DragAndDrop>(new DragAndDrop())
-        {
-            QuestionType = QuestionType.DragAndDrop,
-            Id = DragAndDropQuestionBaseModel?.Id ?? Ulid.NewUlid().ToString()
-        };
+        DragAndDropQuestionModel = InitializeGenericQuestionModel();
         await ValueChanged();
     }
 
     private async Task AddNewDropZone()
     {
-        if (DragAndDropQuestionModel?.QuestionContent is null)
-            return;
-
         var identifier = DragAndDropQuestionModel
             .QuestionContent
             .DropZones.Keys.Max() + 1;
@@ -80,9 +71,6 @@ public partial class DragAndDropQuestion
 
     private async Task AddNewField()
     {
-        if (DragAndDropQuestionModel?.QuestionContent is null)
-            return;
-
         DragAndDropQuestionModel.QuestionContent.Choices.Add(new DragAndDrop.DropItem()
         {
             Name = $"Item {DateTime.Now.ToString("mm:ss")}",
@@ -93,9 +81,6 @@ public partial class DragAndDropQuestion
 
     private async Task DragAndDropQuestionModelQuestionContentDropZonesChnaged(int key, string newVal)
     {
-        if (DragAndDropQuestionModel?.QuestionContent is null)
-            return;
-
         DragAndDropQuestionModel.QuestionContent.DropZones[key] = newVal;
         await ValueChanged();
     }
@@ -109,18 +94,12 @@ public partial class DragAndDropQuestion
 
     private async Task RemoveItem(DragAndDrop.DropItem item)
     {
-        if (DragAndDropQuestionModel?.QuestionContent is null)
-            return;
-
         DragAndDropQuestionModel.QuestionContent.Choices.Remove(item);
         await ValueChanged();
     }
 
     private async Task RemoveItem(int key)
     {
-        if (DragAndDropQuestionModel?.QuestionContent is null)
-            return;
-
         DragAndDropQuestionModel.QuestionContent.DropZones.Remove(key);
         await ValueChanged();
     }

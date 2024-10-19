@@ -10,7 +10,7 @@
             <MudTextField T="string"
                           Lines="6"
                           Style="width: 100%"
-                          Value="FillBlankDropdownQuestionModel?.Description"
+                          Value="FillBlankDropdownQuestionModel.Description"
                           ValueChanged="(val) => UpdateOptions(val)"
                           Variant="Variant.Outlined"
                           Label="Question"/>
@@ -63,7 +63,7 @@
                                   OnAdornmentClick="() => AddOption(item, item.Input)"/>
                 }
                 <MudSelect T="string"
-                           Value="@(item.Option.Choices.FirstOrDefault(i => i.Checked) is null ? "Choose one" : item.Option.Choices.FirstOrDefault(i => i.Checked).Text)"
+                           Value="@(item.Option.Choices.FirstOrDefault(i => i.Checked) is null ? "Choose one" : item.Option.Choices.FirstOrDefault(i => i.Checked)?.Text)"
                            Label="@($"Space No.{Fields.IndexOf(item) + 1}")"
                            Variant="Variant.Outlined"
                            AnchorOrigin="Origin.BottomCenter"
