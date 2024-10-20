@@ -15,12 +15,12 @@ public class DeleteTestsCommandHandler : ICommandHandler<DeleteTestsCommand, Err
     
     public async Task<ErrorOr<bool>> ExecuteAsync(DeleteTestsCommand command, CancellationToken ct)
     {
-        var group = await _dbContext
+        var test = await _dbContext
             .Set<Domain.Aggregates.TestAggregate.Test>()
             .Where(i => command.TestIds.Contains(i.Id)
                         && i.UserId == command.UserId)
             .ExecuteDeleteAsync(ct);
             
-        return group == 1;
+        return test == 1;
     }
 }

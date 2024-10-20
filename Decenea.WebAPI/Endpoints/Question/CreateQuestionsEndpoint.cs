@@ -8,7 +8,7 @@ using Decenea.Common.Requests.Question;
 
 namespace Decenea.WebAPI.Endpoints.Question;
 
-public class CreateQuestionEndpoint : Endpoint<CreateQuestionRequest, ApiResponseResult<QuestionDto>>
+public class CreateQuestionsEndpoint : Endpoint<CreateQuestionsRequest, ApiResponseResult<List<QuestionDto>>>
 {
     public override void Configure()
     {
@@ -18,19 +18,20 @@ public class CreateQuestionEndpoint : Endpoint<CreateQuestionRequest, ApiRespons
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponseResult<QuestionDto>> ExecuteAsync(CreateQuestionRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<List<QuestionDto>>> ExecuteAsync(CreateQuestionsRequest req, CancellationToken ct)
     {
         var userId = HttpContext.User.FindFirst("userId")?.Value;
         
         if(userId is null)
-            return new ApiResponseResult<QuestionDto>(null, true, "Invalid JWT.");
+            return new ApiResponseResult<List<QuestionDto>>(null, true, "Invalid JWT.");
         
-        var result = await new CreateQuestionCommand()
+        var result = await new CreateQuestionsCommand()
         {
             UserId = userId,
-            Question = req.Question,
+            TestId = req.TestId,
+            Questions = req.Questions
         }.ExecuteAsync(ct);
         
-        return new ApiResponseResult<QuestionDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
+        return new ApiResponseResult<List<QuestionDto>>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }

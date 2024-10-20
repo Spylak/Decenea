@@ -28,7 +28,7 @@ public class Test : AuditableAggregateRoot
         List<Question>? testQuestions = null,
         List<TestUser>? testUsers = null)
     {
-        var test = new Test()
+        var test = new Test
         {
             Title = title,
             UserId = userId,

@@ -25,12 +25,13 @@ public class Question : AuditableAggregateRoot
         int? secondsToAnswer,
         double? weight,
         int? order,
-        string? userId,
+        string userId,
         QuestionType questionType,
-        string serializedQuestionContent
+        string serializedQuestionContent,
+        string? testId = null
         )
     {
-        return new Question
+        var question = new Question
         {
             Description = description,
             Title = title,
@@ -42,5 +43,15 @@ public class Question : AuditableAggregateRoot
             SecondsToAnswer = secondsToAnswer,
             Order = order
         };
+        
+        if (testId != null)
+        {
+            question._testQuestions.Add(new TestQuestion()
+            {
+                TestId = testId,
+                QuestionId = question.Id
+            });
+        }
+        return question;
     }
 }

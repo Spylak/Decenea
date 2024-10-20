@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Decenea.Application.Features.Test.Commands.AddTestQuestions;
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
@@ -29,17 +28,14 @@ public class AddTestQuestionsEndpoint : Endpoint<AddTestQuestionsRequest, ApiRes
 
         var userId = claims.Value?.GetClaimValueByKey("userId");
         
-        var userEmail = claims.Value?.GetClaimValueByKey(ClaimTypes.Email);
-        
-        if(userId is null || userEmail is null)
+        if(userId is null)
             return new ApiResponseResult<object>(null, true, "Invalid JWT.");
 
         var result = await new AddTestQuestionsCommand()
         {
             UserId = userId,
             TestId = req.TestId,
-            QuestionIds = req.QuestionIds,
-            UserEmail = userEmail
+            QuestionIds = req.QuestionIds
         }.ExecuteAsync(ct);
         
         return new ApiResponseResult<object>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
