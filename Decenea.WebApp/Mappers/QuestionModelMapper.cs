@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Decenea.Common.DataTransferObjects.Answer;
 using Decenea.Common.DataTransferObjects.Question;
 using Decenea.WebApp.Models.QuestionTypes;
 
@@ -20,6 +21,15 @@ public static class QuestionModelMapper
             QuestionType = model.QuestionType,
             SerializedQuestionContent = model.SerializedQuestionContent,
             Version = model.Version
+        };
+    }
+    
+    public static TestAnswerDto ToAnswerDto(this GenericQuestionModel model)
+    {
+        return new TestAnswerDto
+        {
+            QuestionId = model.Id,
+            SerializedQuestionContent = model.SerializedQuestionContent
         };
     }
 

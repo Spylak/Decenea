@@ -12,7 +12,6 @@ public class QuestionDto : VersionedDto
     public int? SecondsToAnswer { get; set; } 
     public int? Order { get; set; } 
     public double? Weight { get; set; }
-    public bool IsAnswer { get; set; }
     public required QuestionType QuestionType { get; init; }
     public string SerializedQuestionContent { get; set; } = string.Empty;
 }

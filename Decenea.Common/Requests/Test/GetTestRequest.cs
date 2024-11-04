@@ -2,5 +2,6 @@ namespace Decenea.Common.Requests.Test;
 
 public class GetTestRequest
 {
-    public string Id { get; set; }
+    public required string Id { get; set; }
+    public bool IncludeQuestions { get; set; }
 }

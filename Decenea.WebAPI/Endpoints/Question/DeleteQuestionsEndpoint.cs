@@ -1,4 +1,4 @@
-using Decenea.Application.Features.Question.Commands.DeleteQuestion;
+using Decenea.Application.Features.Question.Commands.DeleteQuestions;
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
 using Decenea.Common.Enums;
@@ -11,7 +11,7 @@ public class DeleteQuestionsEndpoint : Endpoint<DeleteQuestionsRequest, ApiRespo
 {
     public override void Configure()
     {
-        Get(RouteConstants.QuestionsGetMany);
+        Get(RouteConstants.QuestionsDelete);
         Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
     

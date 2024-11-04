@@ -14,7 +14,6 @@ public partial class QuestionTypesComponent
     [Inject] private IGlobalFunctionService GlobalFunctionService { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
     [Parameter] public TestModel TestModel { get; set; }
-
     [Parameter] public GenericQuestionModel? Question { get; set; }
     [Parameter] public EventCallback<GenericQuestionModel> QuestionChanged { get; set; }
     [Parameter] public string Style { get; set; } = "";

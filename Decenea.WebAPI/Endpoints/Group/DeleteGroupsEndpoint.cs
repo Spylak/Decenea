@@ -18,9 +18,14 @@ public class DeleteGroupsEndpoint : Endpoint<DeleteGroupsRequest, ApiResponseRes
 
     public override async Task<ApiResponseResult<object>> ExecuteAsync(DeleteGroupsRequest req, CancellationToken ct)
     {
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+        
+        if(userEmail is null)
+            return new ApiResponseResult<object>(null, true, "Invalid JWT.");
+        
         var result = await new DeleteGroupsCommand()
         {
-            UserEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? "",
+            UserEmail = userEmail,
             GroupIds = req.Ids
         }.ExecuteAsync(ct);
         return new ApiResponseResult<object>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());

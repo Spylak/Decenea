@@ -12,7 +12,7 @@ public class GetQuestionEndpoint : Endpoint<GetQuestionRequest, ApiResponseResul
 {
     public override void Configure()
     {
-        Get(RouteConstants.QuestionsGetMany);
+        Get(RouteConstants.QuestionsGet);
         Roles(UserRoleExtensions.GetAuthorizedRoles());
     }
     

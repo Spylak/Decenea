@@ -8,18 +8,19 @@ namespace Decenea.Domain.Aggregates.TestAggregate;
 public class Test : AuditableAggregateRoot
 {
     public required string UserId { get; set; }
-    public User User { get; set; }
+    public User? User { get; set; }
     private List<TestQuestion> _testQuestions = new ();
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
     
     private List<TestUser> _testUsers = new ();
     public IReadOnlyCollection<TestUser> TestUsers  => _testUsers.AsReadOnly();
+    
+    private List<TestGroup> _testGroups = new ();
+    public IReadOnlyCollection<TestGroup> TestGroups  => _testGroups.AsReadOnly();
 
     public required string Title { get; set; }
     public required string Description { get; set; }
     public required int MinutesToComplete { get; set; }
-    public DateTime? StartingTime { get; set; }
-
     public static Test Create(
         string title, 
         string descripton,
@@ -92,6 +93,21 @@ public class Test : AuditableAggregateRoot
     {
         var testUserResult = TestUser.Create(userId, test.Id);
         test._testUsers.Add(testUserResult);
+    }
+
+    public static void AddTestGroupToTest(Test test, string groupId)
+    {
+        var testGroupResult = TestGroup.Create(groupId, test.Id);
+        test._testGroups.Add(testGroupResult);
+    }
+    
+    public static void RemoveTestGroupFromTest(Test test, string groupId)
+    {
+        var index = test._testGroups.FindIndex(i => i.GroupId == groupId);
+        if (index != -1)
+        {
+            test._testGroups.RemoveAt(index);
+        }
     }
     
     public static void RemoveTestUserFromTest(Test test, string userId)

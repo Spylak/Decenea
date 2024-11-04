@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Decenea.Infrastructure.Persistence.EntityConfigurations.Test;
 
-public class TestUserConfiguration : LinkingTableConfiguration<TestUser>
+public class TestUserConfiguration : AuditableEntityConfiguration<TestUser>
 {
     public override void Configure(EntityTypeBuilder<TestUser> builder)
     {

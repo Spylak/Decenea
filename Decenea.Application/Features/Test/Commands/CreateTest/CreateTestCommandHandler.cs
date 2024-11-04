@@ -29,11 +29,7 @@ public class CreateTestCommandHandler : ICommandHandler<CreateTestCommand, Error
                     command.MinutesToComplete,
                     command.Questions?.Select(i => Domain.Aggregates.QuestionAggregate.Question.Create(
                         i.Description,
-                        i.IsAnswer,
                         i.Title,
-                        i.SecondsToAnswer,
-                        i.Weight,
-                        i.Order,
                         command.UserId,
                         i.QuestionType,
                         i.SerializedQuestionContent

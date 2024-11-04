@@ -62,5 +62,9 @@ builder.Services.AddRefitClient<ITestApi>(RefitHelper.GetSettings())
     .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl))
     .AddTokenHandler();
 
+builder.Services.AddRefitClient<IQuestionApi>(RefitHelper.GetSettings())
+    .ConfigureHttpClient(client => client.BaseAddress = new Uri(RouteConstants.BaseApiUrl))
+    .AddTokenHandler();
+
 await builder.Build().RunAsync();
 

@@ -12,19 +12,11 @@ public class Question : AuditableAggregateRoot
     public IReadOnlyCollection<TestQuestion> TestQuestions => _testQuestions.AsReadOnly();
     public required string Description { get; set; }
     public required string Title { get; set; }
-    public int? SecondsToAnswer { get; set; } 
-    public int? Order { get; set; } 
-    public double? Weight { get; set; }
-    public bool IsAnswer { get; set; }
     public required QuestionType QuestionType { get; set; }
     public required string SerializedQuestionContent { get; set; }
 
     public static Question Create(string description,
-        bool isAnswer,
         string title,
-        int? secondsToAnswer,
-        double? weight,
-        int? order,
         string userId,
         QuestionType questionType,
         string serializedQuestionContent,
@@ -37,11 +29,7 @@ public class Question : AuditableAggregateRoot
             Title = title,
             UserId = userId,
             QuestionType = questionType,
-            SerializedQuestionContent = serializedQuestionContent,
-            Weight = weight,
-            IsAnswer = isAnswer,
-            SecondsToAnswer = secondsToAnswer,
-            Order = order
+            SerializedQuestionContent = serializedQuestionContent
         };
         
         if (testId != null)

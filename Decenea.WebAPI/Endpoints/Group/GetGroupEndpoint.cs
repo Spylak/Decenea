@@ -19,9 +19,14 @@ public class GetGroupEndpoint : Endpoint<GetGroupRequest, ApiResponseResult<Grou
 
     public override async Task<ApiResponseResult<GroupDto>> ExecuteAsync(GetGroupRequest req, CancellationToken ct)
     {
+        var userEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+        
+        if(userEmail is null)
+            return new ApiResponseResult<GroupDto>(null, true, "Invalid JWT.");
+        
         var result = await new GetGroupQuery()
         {
-            UserEmail = HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ?? "",
+            UserEmail = userEmail,
             GroupId = req.Id
         }.ExecuteAsync(ct);
         return new ApiResponseResult<GroupDto>(result.Value , result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());

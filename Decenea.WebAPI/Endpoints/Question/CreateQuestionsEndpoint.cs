@@ -1,4 +1,4 @@
-using Decenea.Application.Features.Question.Commands.CreateQuestion;
+using Decenea.Application.Features.Question.Commands.CreateQuestions;
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
 using Decenea.Common.DataTransferObjects.Question;

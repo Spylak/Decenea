@@ -30,6 +30,8 @@ public static class RouteConstants
     public const string GroupsUpdateGroupMember = "/groups/update-group-member";
     public const string GroupsRemoveGroupMembers = "/groups/remove-group-members";
     
+    public const string AnswersUpsert = "/answers/upsert";
+    
     public const string QuestionsCreate = "/questions/create";
     public const string QuestionsUpdate = "/questions/update";
     public const string QuestionsDelete = "/questions/delete";

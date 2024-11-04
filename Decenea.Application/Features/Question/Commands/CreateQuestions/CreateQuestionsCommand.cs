@@ -1,7 +1,7 @@
 using Decenea.Common.DataTransferObjects.Question;
 using FastEndpoints;
 
-namespace Decenea.Application.Features.Question.Commands.CreateQuestion;
+namespace Decenea.Application.Features.Question.Commands.CreateQuestions;
 
 public class CreateQuestionsCommand : ICommand<ErrorOr<List<QuestionDto>>>
 {

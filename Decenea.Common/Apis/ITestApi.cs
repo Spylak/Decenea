@@ -1,6 +1,8 @@
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
+using Decenea.Common.DataTransferObjects.Answer;
 using Decenea.Common.DataTransferObjects.Test;
+using Decenea.Common.Requests.Answer;
 using Decenea.Common.Requests.Test;
 using Refit;
 
@@ -22,4 +24,6 @@ public interface ITestApi
     Task<ApiResponseResult<object>> AddQuestions([Body] AddTestQuestionsRequest request);
     [Put(RouteConstants.TestsRemoveQuestions)]
     Task<ApiResponseResult<object>> RemoveQuestions([Body] RemoveTestQuestionsRequest request);
+    [Post(RouteConstants.AnswersUpsert)]
+    Task<ApiResponseResult<List<TestAnswerDto>>> UpsertTestAnswers([Body] UpsertAnswersRequest request);
 }

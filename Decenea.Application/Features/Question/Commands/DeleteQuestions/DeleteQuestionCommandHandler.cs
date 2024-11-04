@@ -1,12 +1,9 @@
 using Decenea.Application.Abstractions.Persistance;
-using Decenea.Application.Features.Question.Queries.GetQuestion;
-using Decenea.Application.Mappers;
-using Decenea.Common.DataTransferObjects.Question;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace Decenea.Application.Features.Question.Commands.DeleteQuestion;
+namespace Decenea.Application.Features.Question.Commands.DeleteQuestions;
 
 public class DeleteQuestionCommandHandler : ICommandHandler<DeleteQuestionsCommand, ErrorOr<bool>>
 {

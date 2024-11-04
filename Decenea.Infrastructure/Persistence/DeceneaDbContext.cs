@@ -18,6 +18,15 @@ using Serilog;
 
 namespace Decenea.Infrastructure.Persistence;
 
+file static class AuditLogJsonSerializerOptions
+{
+    public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions
+        {
+            ReferenceHandler = ReferenceHandler.Preserve,
+            MaxDepth = 64
+        };
+}
+
 internal class DeceneaDbContext : DbContext, IDeceneaDbContext
 {
     public string? ModifiedBy { get; set; }
@@ -174,11 +183,7 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                         EntityType = entityEntry.Entity.GetType().ToString(),
                         ExecutedOperation = (ExecutedOperation)entityEntry.State,
                         OperationExecutedAt = dateTimeUtcNow,
-                        DataAfterExecutedOperation = JsonSerializer.Serialize(entityEntry.Entity, new JsonSerializerOptions
-                        {
-                            ReferenceHandler = ReferenceHandler.Preserve,
-                            MaxDepth = 64
-                        })
+                        DataAfterExecutedOperation = JsonSerializer.Serialize(entityEntry.Entity, AuditLogJsonSerializerOptions.JsonSerializerOptions)
                     };
 
                     await AddAsync(auditLog);
@@ -187,7 +192,6 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
                 {
                     Log.Error("The entityId for: {entityEntry} was not found", entityEntry);
                 }
-                
             }
         }
         catch (Exception ex)
@@ -195,29 +199,29 @@ internal class DeceneaDbContext : DbContext, IDeceneaDbContext
             Log.Error("There was something wrong while ProcessAuditableEntities : {ex}", ex);
         }
     }
-    
+
     private string GetEntityKeyString(EntityEntry entityEntry)
     {
         var keyProperties = entityEntry
             .Metadata
             .FindPrimaryKey()?
             .Properties;
-        
+
         if (keyProperties == null || !keyProperties.Any())
             return string.Empty;
 
         var keyValues = new List<object>();
         foreach (var property in keyProperties)
         {
-            var value = entityEntry.Property(property.Name).CurrentValue 
+            var value = entityEntry.Property(property.Name).CurrentValue
                         ?? entityEntry.Property(property.Name).OriginalValue;
-        
+
             // For new entities, use the local value if available
             if (entityEntry.State == EntityState.Added)
             {
                 value = entityEntry.Property(property.Name).CurrentValue;
             }
-        
+
             keyValues.Add(value ?? "");
         }
 

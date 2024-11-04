@@ -13,26 +13,24 @@ public static class QuestionMapper
             {
                 QuestionType = question.QuestionType,
                 Version = question.Version,
-                IsAnswer = question.IsAnswer,
                 SerializedQuestionContent = question.SerializedQuestionContent,
                 UserId = question.UserId,
                 Description = question.Description,
                 Title = question.Title,
-                Order = question.Order,
-                Weight = question.Weight,
+                Order = null,
+                Weight = null,
                 Id = question.Id
             };
         }
         else
         {
             questionDto.Version = question.Version;
-            questionDto.IsAnswer = question.IsAnswer;
             questionDto.SerializedQuestionContent = question.SerializedQuestionContent;
             questionDto.UserId = question.UserId;
             questionDto.Description = question.Description;
             questionDto.Title = question.Title;
-            questionDto.Order = question.Order;
-            questionDto.Weight = question.Weight;
+            questionDto.Order = null;
+            questionDto.Weight = null;
             questionDto.Id = question.Id;
         }
         

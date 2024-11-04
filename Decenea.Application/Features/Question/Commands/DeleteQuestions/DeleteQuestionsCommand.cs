@@ -1,6 +1,6 @@
 using FastEndpoints;
 
-namespace Decenea.Application.Features.Question.Commands.DeleteQuestion;
+namespace Decenea.Application.Features.Question.Commands.DeleteQuestions;
 
 public class DeleteQuestionsCommand : ICommand<ErrorOr<bool>>
 {

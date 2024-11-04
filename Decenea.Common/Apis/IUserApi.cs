@@ -1,6 +1,5 @@
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
-using Decenea.Common.DataTransferObjects.Auth;
 using Decenea.Common.DataTransferObjects.User;
 using Decenea.Common.Requests.User;
 using Refit;

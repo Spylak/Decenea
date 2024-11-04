@@ -40,6 +40,7 @@ public partial class MyTests
 
     private void TakeTest(string testId)
     {
+        TestContainer.OngoingTest = Tests.FirstOrDefault(t => t.Id == testId);
         NavigationManager.NavigateTo($"/ongoingtest/{testId}");
     }
 

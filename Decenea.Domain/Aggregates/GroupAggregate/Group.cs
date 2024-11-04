@@ -1,4 +1,5 @@
 using Decenea.Common.Enums;
+using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
 using Decenea.Domain.Helpers;
 
@@ -13,6 +14,8 @@ public class Group : AuditableAggregateRoot
     public required string Name { get; set; }
     private readonly List<GroupMember> _groupMembers = new ();
     public IReadOnlyCollection<GroupMember> GroupMembers => _groupMembers.AsReadOnly();
+    private List<TestGroup> _testGroups = new ();
+    public IReadOnlyCollection<TestGroup> TestGroups  => _testGroups.AsReadOnly();
     public static Group Create(string name, string? id = null)
     {
         var test = new Group(id)

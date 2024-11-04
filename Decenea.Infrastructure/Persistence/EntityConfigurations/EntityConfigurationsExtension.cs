@@ -17,10 +17,14 @@ public static class EntityConfigurationsExtension
         builder.ApplyConfiguration(new UserConfiguration());
         builder.ApplyConfiguration(new UserClaimConfiguration());
         builder.ApplyConfiguration(new UserTokenConfiguration());
-        builder.ApplyConfiguration(new TestConfiguration());
+        
         builder.ApplyConfiguration(new QuestionConfiguration());
+        builder.ApplyConfiguration(new TestAnswerConfiguration());
+        
+        builder.ApplyConfiguration(new TestConfiguration());
         builder.ApplyConfiguration(new TestQuestionConfiguration());
         builder.ApplyConfiguration(new TestUserConfiguration());
+        builder.ApplyConfiguration(new TestGroupConfiguration());
         
         builder.ApplyConfiguration(new GroupConfiguration());
         builder.ApplyConfiguration(new GroupMemberConfiguration());

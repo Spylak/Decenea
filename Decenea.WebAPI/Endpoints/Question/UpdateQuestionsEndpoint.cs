@@ -1,6 +1,6 @@
 namespace Decenea.WebAPI.Endpoints.Question;
 
-public class UpdateQuestionEndpoint
+public class UpdateQuestionsEndpoint
 {
     
 }

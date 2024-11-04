@@ -54,7 +54,7 @@ public class CreateGroupsCommandHandler : ICommandHandler<CreateGroupsCommand, E
         }
         catch (Exception ex)
         {
-            Log.Error("Failed to Create Group from request: {command} with error: {ex}", command,ex);
+            Log.Error("Failed to UpsertTestAnswers Group from request: {command} with error: {ex}", command,ex);
             return Error.Unexpected(description: ex.Message);
         }
     }
