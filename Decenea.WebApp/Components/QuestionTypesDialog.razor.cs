@@ -1,7 +1,7 @@
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Models;
-using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Components;
 

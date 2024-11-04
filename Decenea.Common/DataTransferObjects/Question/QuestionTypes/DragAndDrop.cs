@@ -1,7 +1,7 @@
 
 using Decenea.Common.Enums;
 
-namespace Decenea.WebApp.Models.QuestionTypes;
+namespace Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 public class DragAndDrop : QuestionBase
 {
@@ -9,8 +9,8 @@ public class DragAndDrop : QuestionBase
     {
     }
 
-    private Dictionary<int, string> _choices = new Dictionary<int, string>();
-    public List<DropItem> Choices { get; set; } = new List<DropItem>();
+    private Dictionary<int, string> _choices = new();
+    public List<DropItem> Choices { get; set; } = [];
 
     public Dictionary<int, string> DropZones
     {

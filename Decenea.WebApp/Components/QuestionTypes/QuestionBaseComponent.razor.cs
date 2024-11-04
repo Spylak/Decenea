@@ -1,4 +1,4 @@
-using Decenea.WebApp.Models.QuestionTypes;
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Microsoft.AspNetCore.Components;
 
 namespace Decenea.WebApp.Components.QuestionTypes;

@@ -1,9 +1,7 @@
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Decenea.Common.Enums;
 using Decenea.WebApp.Abstractions;
 using Microsoft.AspNetCore.Components;
-
-using Decenea.WebApp.Helpers;
-using Decenea.WebApp.Models.QuestionTypes;
 using Decenea.WebApp.State;
 
 namespace Decenea.WebApp.Pages;
@@ -18,7 +16,7 @@ public partial class QuestionTypes
     {
         QuestionTypesContainer.MultipleChoiceSingle = newValue;
     }
-    private Dictionary<string, bool> Visibility = new Dictionary<string, bool>()
+    private Dictionary<string, bool> Visibility = new ()
     {
         { nameof(QuestionType.DragAndDrop), true },
         { nameof(QuestionType.OrderingDragAndDrop), false },

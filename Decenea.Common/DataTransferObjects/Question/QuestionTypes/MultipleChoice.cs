@@ -1,7 +1,7 @@
 
 using Decenea.Common.Enums;
 
-namespace Decenea.WebApp.Models.QuestionTypes;
+namespace Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 public class MultipleChoice : QuestionBase
 {
@@ -9,12 +9,12 @@ public class MultipleChoice : QuestionBase
     {
         
     }
-    public List<SubQuestion> SubQuestions { get; set; }  = new List<SubQuestion>();
+    public List<SubQuestion> SubQuestions { get; set; }  = [];
 
     public class SubQuestion
     {
         public string? Text { get; set; }
-        public List<Choice> Choices { get; set; } = new List<Choice>();
+        public List<Choice> Choices { get; set; } = [];
     }
 
     public class Choice

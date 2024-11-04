@@ -1,10 +1,6 @@
-
-
-
-
 using Decenea.Common.Enums;
 
-namespace Decenea.WebApp.Models.QuestionTypes;
+namespace Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 public class Dropdown : QuestionBase
 {

@@ -1,7 +1,7 @@
 
 using Decenea.Common.Enums;
 
-namespace Decenea.WebApp.Models.QuestionTypes;
+namespace Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 public class FillBlankDropdown : QuestionBase
 {
@@ -9,11 +9,11 @@ public class FillBlankDropdown : QuestionBase
     {
         
     }
-    public List<SpaceOption> Options { get; set; } = new List<SpaceOption>();
+    public List<SpaceOption> Options { get; set; } = [];
     public class SpaceOption
     {
         public int SpaceNo { get; set; }
-        public List<Choice> Choices { get; set; } = new List<Choice>();
+        public List<Choice> Choices { get; set; } = [];
     }
     public class Choice
     {

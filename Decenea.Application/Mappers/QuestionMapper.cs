@@ -13,7 +13,7 @@ public static class QuestionMapper
             {
                 QuestionType = question.QuestionType,
                 Version = question.Version,
-                SerializedQuestionContent = question.SerializedQuestionContent,
+                SerializedQuestionContent = question.SerializedUnAnsweredContent,
                 UserId = question.UserId,
                 Description = question.Description,
                 Title = question.Title,
@@ -25,7 +25,7 @@ public static class QuestionMapper
         else
         {
             questionDto.Version = question.Version;
-            questionDto.SerializedQuestionContent = question.SerializedQuestionContent;
+            questionDto.SerializedQuestionContent = question.SerializedUnAnsweredContent;
             questionDto.UserId = question.UserId;
             questionDto.Description = question.Description;
             questionDto.Title = question.Title;
@@ -37,31 +37,31 @@ public static class QuestionMapper
         return questionDto;
     }
     
-    public static Question QuestionDtoToQuestion(this QuestionDto questionDto, Question? question = null)
-    {
-        if (question is null)
-        {
-            question = new Question()
-            {
-                UserId = questionDto.UserId,
-                QuestionType = questionDto.QuestionType,
-                Title = questionDto.Title,
-                Description = questionDto.Description,
-                SerializedQuestionContent = questionDto.SerializedQuestionContent,
-                Version = questionDto.Version
-            };
-        }
-        else
-        {
-            question.Version = questionDto.Version;
-            question.UserId = questionDto.UserId;
-            question.QuestionType = questionDto.QuestionType;
-            question.Title = questionDto.Title;
-            question.Description = questionDto.Description;
-            question.SerializedQuestionContent = questionDto.SerializedQuestionContent;
-        }
-        
-        
-        return question;
-    }
+    // public static Question QuestionDtoToQuestion(this QuestionDto questionDto, Question? question = null)
+    // {
+    //     if (question is null)
+    //     {
+    //         question = new Question()
+    //         {
+    //             UserId = questionDto.UserId,
+    //             QuestionType = questionDto.QuestionType,
+    //             Title = questionDto.Title,
+    //             Description = questionDto.Description,
+    //             SerializedQuestionContent = questionDto.SerializedQuestionContent,
+    //             Version = questionDto.Version
+    //         };
+    //     }
+    //     else
+    //     {
+    //         question.Version = questionDto.Version;
+    //         question.UserId = questionDto.UserId;
+    //         question.QuestionType = questionDto.QuestionType;
+    //         question.Title = questionDto.Title;
+    //         question.Description = questionDto.Description;
+    //         question.SerializedQuestionContent = questionDto.SerializedQuestionContent;
+    //     }
+    //     
+    //     
+    //     return question;
+    // }
 }

@@ -1,4 +1,4 @@
-namespace Decenea.WebApp.Helpers;
+namespace Decenea.Common.Helpers;
 
 public class ListHelper
 {

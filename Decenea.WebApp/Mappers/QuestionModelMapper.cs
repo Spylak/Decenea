@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Decenea.Common.DataTransferObjects.Answer;
 using Decenea.Common.DataTransferObjects.Question;
-using Decenea.WebApp.Models.QuestionTypes;
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 namespace Decenea.WebApp.Mappers;
 

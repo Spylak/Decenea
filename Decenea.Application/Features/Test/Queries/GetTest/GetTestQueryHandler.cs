@@ -27,7 +27,7 @@ public class GetTestQueryHandler : ICommandHandler<GetTestQuery, ErrorOr<TestDto
                                           (i.UserId == query.UserId 
                                            || i.TestUsers.Select(j => j.UserId).Contains(query.UserId)), cancellationToken);
 
-            if (test is not null)
+            if (test is null)
             {
                 var testGroup = await _dbContext.Set<TestGroup>()
                     .Include(i => i.Test)
@@ -54,7 +54,7 @@ public class GetTestQueryHandler : ICommandHandler<GetTestQuery, ErrorOr<TestDto
             
             if(test is null)
                 return Error.NotFound(description: "Test not found.");
-
+            
             return test.TestToTestDto(includeQuestions: query.IncludeQuestions);
         }
         catch (Exception ex)

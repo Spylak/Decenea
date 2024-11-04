@@ -31,7 +31,29 @@ public static class TestModelMapper
             MinutesToComplete = dto.MinutesToComplete,
             Version = dto.Version,
             StartingTime = dto.StartingTime,
-            GenericQuestionModels = dto.Questions.Select(q => q.ToGenericQuestionModel()).ToList()
+            GenericQuestionModels = dto
+                .Questions
+                .Select(q => q.ToGenericQuestionModel())
+                .ToList()
         };
+    }
+    
+    public static TestModel ToTestModel(this ActiveTestDto dto)
+    {
+        var tesModel =  new TestModel
+        {
+            Id = dto.Id,
+            Title = dto.Title,
+            Description = dto.Description,
+            MinutesToComplete = dto.MinutesToComplete,
+            Version = dto.Version,
+            StartingTime = dto.StartingTime,
+            GenericQuestionModels = dto
+                .Questions
+                .Select(q => q.ToGenericQuestionModel())
+                .ToList()
+        };
+        
+        return tesModel;
     }
 }

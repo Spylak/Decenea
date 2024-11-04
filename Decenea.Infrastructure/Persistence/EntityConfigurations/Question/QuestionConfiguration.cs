@@ -1,3 +1,4 @@
+using Decenea.Domain.Aggregates.QuestionAggregate;
 using Decenea.Infrastructure.Persistence.EntityConfigurations.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,11 +15,15 @@ public class QuestionConfiguration : AuditableAggregateConfiguration<Domain.Aggr
                 builder.Property(q => q.Description).IsRequired();
                 builder.Property(q => q.Title).HasMaxLength(200).IsRequired();
                 builder.Property(q => q.QuestionType).IsRequired();
-                builder.Property(q => q.SerializedQuestionContent);
+                builder.Property(q => q.SerializedUnAnsweredContent);
 
                 builder.HasMany(q => q.TestQuestions)
                         .WithOne(tq => tq.Question)
                         .HasForeignKey(tq => tq.QuestionId)
                         .OnDelete(DeleteBehavior.Cascade);
+                
+                builder.HasOne(tq => tq.Answer)
+                        .WithOne(t => t.Question)
+                        .HasForeignKey<QuestionAnswer>(t => t.QuestionId);
         }
 }

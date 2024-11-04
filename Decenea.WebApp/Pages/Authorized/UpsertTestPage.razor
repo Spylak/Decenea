@@ -2,8 +2,7 @@
 @attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
 @attribute [Authorize]
 @inherits Decenea.WebApp.Pages.Shared.BasePage
-
-@using Decenea.WebApp.Models.QuestionTypes
+@using Decenea.Common.DataTransferObjects.Question.QuestionTypes
 @using Decenea.WebApp.Components.TestComponents
 <PageTitle>@(string.IsNullOrWhiteSpace(TestId) ? "Test Creation" : "Modify test")</PageTitle>
 

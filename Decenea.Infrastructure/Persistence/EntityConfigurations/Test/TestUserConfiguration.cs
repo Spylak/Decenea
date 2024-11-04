@@ -11,9 +11,6 @@ public class TestUserConfiguration : AuditableEntityConfiguration<TestUser>
     {
         base.Configure(builder);
         builder.ToTable(name: "TestUsers");
-
-        builder.HasKey(tq => new { tq.TestId, tq.UserId });
-
         builder.Property(tq => tq.TestId).IsRequired();
         builder.Property(tq => tq.UserId).IsRequired();
 
@@ -25,6 +22,11 @@ public class TestUserConfiguration : AuditableEntityConfiguration<TestUser>
         builder.HasOne(tq => tq.User)
             .WithMany(u => u.TestUsers)
             .HasForeignKey(tq => tq.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(tq => tq.TestAnswers)
+            .WithOne(u => u.TestUser)
+            .HasForeignKey(tq => tq.TestUserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -18,6 +18,8 @@ public interface ITestApi
     Task<ApiResponseResult<object>> Delete([Body] DeleteTestsRequest request);
     [Get(RouteConstants.TestsGet)]
     Task<ApiResponseResult<TestDto>> Get(GetTestRequest request);
+    [Get(RouteConstants.TestsGetActive)]
+    Task<ApiResponseResult<ActiveTestDto>> Get(GetActiveTestRequest request);
     [Get(RouteConstants.TestsGetMany)]
     Task<ApiResponseResult<List<TestDto>>> Get(GetManyTestsRequest request);
     [Put(RouteConstants.TestsAddQuestions)]

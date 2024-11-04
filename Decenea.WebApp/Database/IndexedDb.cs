@@ -1,7 +1,7 @@
 using BlazorIDB;
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Microsoft.JSInterop;
 using Decenea.WebApp.Models;
-using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Database;
 

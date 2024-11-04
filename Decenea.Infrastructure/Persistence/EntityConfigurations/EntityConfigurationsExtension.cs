@@ -19,6 +19,7 @@ public static class EntityConfigurationsExtension
         builder.ApplyConfiguration(new UserTokenConfiguration());
         
         builder.ApplyConfiguration(new QuestionConfiguration());
+        builder.ApplyConfiguration(new QuestionAnswerConfiguration());
         builder.ApplyConfiguration(new TestAnswerConfiguration());
         
         builder.ApplyConfiguration(new TestConfiguration());

@@ -65,7 +65,7 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                     SerializedQuestionContent = a.SerializedQuestionContent,
                 })
                 .ToList();
-
+            
             var updateAnswers = command
                 .Answers
                 .Where(i => i.Version is not null)
@@ -79,15 +79,17 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                     .Where(i => updateAnswers.Any(a => a.QuestionId == i.QuestionId))
                     .ToList();
             }
-
+            
+            testUser.TestAnswers.AddRange(addAnswers);
+            
             foreach (var answer in updateAnswers)
             {
                 answer.SerializedQuestionContent = command
                     .Answers
                     .First(i => i.Id == answer.Id)
                     .SerializedQuestionContent;
-                _dbContext.Set<TestUser>().Update(testUser);
             }
+            _dbContext.Set<TestUser>().Update(testUser);
 
             await _dbContext.SaveChangesAsync(ct);
 

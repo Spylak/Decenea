@@ -1,4 +1,5 @@
-@using Decenea.WebApp.Models.QuestionTypes
+
+@using Decenea.Common.DataTransferObjects.Question.QuestionTypes
 @inherits QuestionBaseComponent
 <MudGrid>
     @if (EditMode)
@@ -7,7 +8,7 @@
             <MudTextField T="string" Lines="6"
                           Style="width: 100%"
                           Value="MultipleChoiceQuestionModel.Description"
-                          ValueChanged="@(s => { if (MultipleChoiceQuestionModel is not null) { MultipleChoiceQuestionModel.Description = s; } })"
+                          ValueChanged="@(s => { MultipleChoiceQuestionModel.Description = s; })"
                           Variant="Variant.Outlined"
                           Label="Question"/>
         </MudItem>

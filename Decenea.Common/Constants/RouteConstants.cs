@@ -8,6 +8,7 @@ public static class RouteConstants
     public const string TestsUpdate = "/tests/update";
     public const string TestsDelete = "/tests/delete";
     public const string TestsGet = "/tests/get";
+    public const string TestsGetActive = "/tests/get-active";
     public const string TestsGetMany = "/tests/get-many";
     public const string TestsAddQuestions = "/tests/add-questions";
     public const string TestsRemoveQuestions = "/tests/remove-questions";

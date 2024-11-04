@@ -1,11 +1,11 @@
 using Decenea.Common.Apis;
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Decenea.Common.Requests.Answer;
 using Decenea.Common.Requests.Test;
 using Decenea.WebApp.Abstractions;
 using Decenea.WebApp.Constants;
 using Decenea.WebApp.Database;
 using Decenea.WebApp.Mappers;
-using Decenea.WebApp.Models.QuestionTypes;
 using Decenea.WebApp.State;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -23,6 +23,7 @@ public partial class OnGoingTestPage
     private MudDialog MudDialog { get; set; }
     private int ActiveQuestionIndex = 0;
     private bool IsServerConnected = true;
+    private bool SubmittedTest = false;
     private readonly Dictionary<int, GenericQuestionModel> _genericQuestionModels = new();
 
     private async Task StartTest()
@@ -49,7 +50,7 @@ public partial class OnGoingTestPage
         if (TestId is not null)
         {
             var testApiResponseResult =
-                await TestApi.Get(new GetTestRequest { Id = TestId, IncludeQuestions = true });
+                await TestApi.Get(new GetActiveTestRequest() { Id = TestId });
 
             TestContainer.OngoingTest = testApiResponseResult.Data?.ToTestModel();
         }
@@ -113,7 +114,9 @@ public partial class OnGoingTestPage
         if (!result.IsError)
         {
             await IndexedDb.OngoingTest.DropTableAsync();
+            await MudDialog.CloseAsync(DialogResult.Ok(result));
             Snackbar.Add(Messages.AnswerSaved, Severity.Success);
+            SubmittedTest = true;
             StateHasChanged();
         }
     }

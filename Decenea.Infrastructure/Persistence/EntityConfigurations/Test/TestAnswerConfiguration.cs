@@ -9,7 +9,7 @@ public class TestAnswerConfiguration : AuditableEntityConfiguration<Domain.Aggre
         public override void Configure(EntityTypeBuilder<Domain.Aggregates.TestAggregate.TestAnswer> builder)
         {
                 base.Configure(builder);
-                builder.ToTable(name: "Answers");
+                builder.ToTable(name: "TestAnswers");
 
                 builder.Property(q => q.SerializedQuestionContent);
         }

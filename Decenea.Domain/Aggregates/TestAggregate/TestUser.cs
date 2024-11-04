@@ -9,8 +9,7 @@ public class TestUser : AuditableEntity
     public User? User { get; set; }
     public required string TestId { get; set; }
     public Test? Test { get; set; }
-    private List<TestAnswer> _testAnswers = new ();
-    public IReadOnlyCollection<TestAnswer> TestAnswers => _testAnswers.AsReadOnly();
+    public List<TestAnswer> TestAnswers { get; set; } = new ();
     
     public DateTime EndTime { get; set; } = DateTime.MaxValue;
     public static TestUser Create(string userId, string testId)

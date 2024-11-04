@@ -3,6 +3,7 @@ using System;
 using Decenea.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Decenea.Infrastructure.Migrations
 {
     [DbContext(typeof(DeceneaDbContext))]
-    partial class DeceneaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104204528_AddAnswersToQuestions")]
+    partial class AddAnswersToQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,6 +283,14 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.Property<string>("TestUserId")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TestUserTestId")
+                        .IsRequired()
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("TestUserUserId")
+                        .IsRequired()
                         .HasColumnType("character varying(26)");
 
                     b.Property<string>("Version")
@@ -290,7 +301,7 @@ namespace Decenea.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TestUserId");
+                    b.HasIndex("TestUserTestId", "TestUserUserId");
 
                     b.ToTable("TestAnswers", (string)null);
                 });
@@ -379,8 +390,10 @@ namespace Decenea.Infrastructure.Migrations
 
             modelBuilder.Entity("Decenea.Domain.Aggregates.TestAggregate.TestUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(26)
+                    b.Property<string>("TestId")
+                        .HasColumnType("character varying(26)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("character varying(26)");
 
                     b.Property<string>("CreatedBy")
@@ -394,6 +407,10 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("character varying(26)");
+
                     b.Property<string>("LastModifiedBy")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -402,23 +419,13 @@ namespace Decenea.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedByTimestampUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("TestId")
-                        .IsRequired()
-                        .HasColumnType("character varying(26)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("character varying(26)");
-
                     b.Property<string>("Version")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestId");
+                    b.HasKey("TestId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -742,7 +749,7 @@ namespace Decenea.Infrastructure.Migrations
                 {
                     b.HasOne("Decenea.Domain.Aggregates.TestAggregate.TestUser", "TestUser")
                         .WithMany("TestAnswers")
-                        .HasForeignKey("TestUserId")
+                        .HasForeignKey("TestUserTestId", "TestUserUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

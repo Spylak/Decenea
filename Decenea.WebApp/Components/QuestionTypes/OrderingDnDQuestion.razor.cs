@@ -1,9 +1,9 @@
-﻿using Decenea.Common.Enums;
+﻿using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
+using Decenea.Common.Enums;
 using Decenea.WebApp.Helpers;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using MudBlazor.Utilities;
-using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Components.QuestionTypes;
 

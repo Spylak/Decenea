@@ -1,8 +1,7 @@
-
 using Decenea.Common.Enums;
-using Decenea.WebApp.Helpers;
+using Decenea.Common.Helpers;
 
-namespace Decenea.WebApp.Models.QuestionTypes;
+namespace Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 
 public class Ordering : QuestionBase
 {

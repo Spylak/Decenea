@@ -1,5 +1,6 @@
 ﻿using Decenea.Common.Apis;
 using Decenea.Common.Common;
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Common.Enums;
 using Decenea.Common.Requests.Test;
@@ -8,7 +9,6 @@ using Decenea.WebApp.Constants;
 using Decenea.WebApp.Helpers;
 using Decenea.WebApp.Mappers;
 using Decenea.WebApp.Models;
-using Decenea.WebApp.Models.QuestionTypes;
 using Decenea.WebApp.State;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

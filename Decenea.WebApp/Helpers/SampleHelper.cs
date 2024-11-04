@@ -1,5 +1,5 @@
+using Decenea.Common.DataTransferObjects.Question.QuestionTypes;
 using Decenea.Common.Enums;
-using Decenea.WebApp.Models.QuestionTypes;
 
 namespace Decenea.WebApp.Helpers;
 
