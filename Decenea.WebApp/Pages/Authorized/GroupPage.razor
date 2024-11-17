@@ -3,6 +3,7 @@
 @attribute [Authorize]
 @using Decenea.Common.Apis
 @using Decenea.Common.DataTransferObjects.Group
+@using Decenea.Common.DataTransferObjects.Test
 @inherits Decenea.WebApp.Pages.Shared.BasePage
 @inject IGroupApi GroupApi
 @if (Group is not null)
@@ -91,5 +92,66 @@
                 </PagerContent>
             </MudDataGrid>
         </MudItem>
+        <MudItem xs="12">
+            <MudDataGrid T="TestDto" Items="@Group.TestDtos"
+                         Bordered="true"
+                         EditTrigger="DataGridEditTrigger.Manual"
+                         EditMode="DataGridEditMode.Form"
+                         ReadOnly="true"
+                         Dense="true"
+                         Hover="true"
+                         FilterMode="DataGridFilterMode.ColumnFilterRow"
+                         Filterable="true"
+                         FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                         Striped="true">
+                <ToolBarContent>
+                    <MudSpacer/>
+                    <MudIconButton
+                        OnClick="@(async () => await MudDialog.ShowAsync())"
+                        Icon="@Icons.Material.Filled.Add"
+                        Style="margin:-2px 5px 0"
+                        Color="Color.Tertiary"
+                        Variant="Variant.Filled"/>
+                </ToolBarContent>
+                <Columns>
+                    <TemplateColumn Filterable="false"
+                                    Sortable="false"
+                                    Editable="false">
+                        <CellTemplate>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Error"
+                                           OnClick="@(() => RemoveTest(context.Item.Id))"/>
+                        </CellTemplate>
+                    </TemplateColumn>
+                    <PropertyColumn
+                        Property="i => i.Id">
+                    </PropertyColumn>
+                    <PropertyColumn
+                        Property="i => i.Title">
+                    </PropertyColumn>
+                    <PropertyColumn
+                        Property="i => i.Version">
+                    </PropertyColumn>
+                </Columns>
+                <PagerContent>
+                    <MudDataGridPager T="GroupMemberDto"/>
+                </PagerContent>
+            </MudDataGrid>
+        </MudItem>
     </MudGrid>
+    
+    
+    <MudDialog @ref="MudDialog">
+        <TitleContent>
+            Add test
+        </TitleContent>
+        <DialogContent>
+            <MudTextField T="string" @bind-Value="@TestIdToAdd"></MudTextField>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Size="Size.Medium" Color="Color.Warning" OnClick="async () => await MudDialog.CloseAsync()">Cancel</MudButton>
+            <MudSpacer/>
+            <MudButton Size="Size.Medium" Color="Color.Success" OnClick="@(async () => await AddTestToGroup())">Submit</MudButton>
+        </DialogActions>
+    </MudDialog>
 }

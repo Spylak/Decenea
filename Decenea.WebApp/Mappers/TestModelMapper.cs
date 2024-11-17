@@ -34,7 +34,9 @@ public static class TestModelMapper
             GenericQuestionModels = dto
                 .Questions
                 .Select(q => q.ToGenericQuestionModel())
-                .ToList()
+                .ToList(),
+            Users = dto.TestUsers,
+            Groups = dto.Groups
         };
     }
     

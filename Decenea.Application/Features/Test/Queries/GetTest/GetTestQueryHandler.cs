@@ -2,6 +2,7 @@ using Decenea.Application.Abstractions.Persistance;
 using Decenea.Application.Mappers;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Domain.Aggregates.TestAggregate;
+using Decenea.Domain.Extensions;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -19,14 +20,36 @@ public class GetTestQueryHandler : ICommandHandler<GetTestQuery, ErrorOr<TestDto
     {
         try
         {
-            var test = await _dbContext.Set<Domain.Aggregates.TestAggregate.Test>()
-                .Include(i => i.TestQuestions)
-                .ThenInclude(i => i.Question)
-                .AsSplitQuery()
-                .FirstOrDefaultAsync(i => i.Id.Equals(query.Id) && 
-                                          (i.UserId == query.UserId 
-                                           || i.TestUsers.Select(j => j.UserId).Contains(query.UserId)), cancellationToken);
-
+            var testQuery = _dbContext.Set<Domain.Aggregates.TestAggregate.Test>()
+                .AsQueryable();
+            
+            if (query.IncludeQuestions)
+            {
+                testQuery = testQuery.Include(i => i.TestQuestions)
+                    .ThenInclude(i => i.Question)
+                    .AsSplitQuery();
+            }
+            
+            if (query.IncludeGroups)
+            {
+                testQuery = testQuery.Include(i => i.TestGroups)
+                    .ThenInclude(i => i.Group)
+                    .AsSplitQuery();
+            }
+            
+            if (query.IncludeUsers)
+            {
+                testQuery = testQuery.Include(i => i.TestUsers)
+                    .ThenInclude(i => i.User)
+                    .AsSplitQuery();
+            }
+            
+            var test = await testQuery
+                .FirstOrDefaultAsync(i => i.Id.Equals(query.Id) &&
+                                          (i.UserId == query.UserId
+                                           || i.TestUsers.Select(j => j.UserId).Contains(query.UserId)),
+                    cancellationToken);
+            
             if (test is null)
             {
                 var testGroup = await _dbContext.Set<TestGroup>()
@@ -55,7 +78,7 @@ public class GetTestQueryHandler : ICommandHandler<GetTestQuery, ErrorOr<TestDto
             if(test is null)
                 return Error.NotFound(description: "Test not found.");
             
-            return test.TestToTestDto(includeQuestions: query.IncludeQuestions);
+            return test.TestToTestDto(null, query.IncludeQuestions, query.IncludeUsers, query.IncludeGroups);
         }
         catch (Exception ex)
         {

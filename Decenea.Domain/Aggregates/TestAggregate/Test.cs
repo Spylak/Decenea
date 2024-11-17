@@ -57,19 +57,14 @@ public class Test : AuditableAggregateRoot
     }
     
     public static Test Update(Test test, string title, string descripton,
-        List<string>? questionIds = null)
+        List<Question>? questions = null)
     {
         test.Title = title;
         test.Description = descripton;
 
-        if (questionIds is not null)
+        if (questions != null)
         {
-            test._testQuestions.Clear();
-        
-            foreach (var questionId in questionIds)
-            {
-                test.AddQuestion(questionId);
-            }
+            test.SyncQuestions(questions);
         }
         
         return test;
@@ -87,6 +82,52 @@ public class Test : AuditableAggregateRoot
     public void RemoveQuestion(string questionId)
     {
         _testQuestions = _testQuestions.Where(i => i.QuestionId != questionId).ToList();
+    }
+    
+    public void SyncQuestions(List<Question> newQuestions)
+    {
+        var newQuestionIds = newQuestions
+            .Select(q => q.Id)
+            .ToHashSet();
+        
+        var currentQuestionIds = _testQuestions
+            .Select(tq => tq.QuestionId)
+            .ToHashSet();
+
+        var questionsToRemove = _testQuestions
+            .Where(tq => !newQuestionIds.Contains(tq.QuestionId))
+            .ToList();
+        
+        var questionsToUpdate = _testQuestions
+            .Where(tq => newQuestionIds.Contains(tq.QuestionId))
+            .ToList();
+        
+        foreach (var questionToRemove in questionsToRemove)
+        {
+            _testQuestions.Remove(questionToRemove);
+        }
+
+        foreach (var questionToUpdate in questionsToUpdate)
+        {
+            var question = newQuestions
+                .First(q => q.Id == questionToUpdate.QuestionId);
+            questionToUpdate.Question?.Update(question.Description,
+                question.Title, 
+                question.Answer?.SerializedAnsweredContent);
+        }
+
+        var questionsToAdd = newQuestions
+            .Where(q => !currentQuestionIds.Contains(q.Id))
+            .Select(q => new TestQuestion
+            {
+                TestId = Id,
+                QuestionId = q.Id,
+                Question = q,
+                Test = this
+            })
+            .ToList();
+        
+        _testQuestions.AddRange(questionsToAdd);
     }
 
     public static void AddTestUserToTest(Test test, string userId)

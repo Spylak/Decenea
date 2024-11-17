@@ -24,4 +24,6 @@ public interface IGroupApi
     Task<ApiResponseResult<object>> AddMembers([Body] AddGroupMembersRequest request);
     [Put(RouteConstants.GroupsRemoveGroupMembers)]
     Task<ApiResponseResult<object>> RemoveMembers([Body] RemoveGroupMembersRequest request);
+    [Put(RouteConstants.GroupsSyncTests)]
+    Task<ApiResponseResult<object>> SyncTests([Body] SyncTestsRequest  request);
 }

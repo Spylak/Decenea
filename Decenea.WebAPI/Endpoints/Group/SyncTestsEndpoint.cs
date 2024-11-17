@@ -1,26 +1,27 @@
 using System.Security.Claims;
-using Decenea.Application.Features.Test.Commands.UpdateTest;
+using Decenea.Application.Features.Group.Commands.AddGroupMembers;
+using Decenea.Application.Features.Group.Commands.SyncTests;
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
 using Decenea.Common.Enums;
 using Decenea.Common.Extensions;
-using Decenea.Common.Requests.Test;
+using Decenea.Common.Requests.Group;
 
+namespace Decenea.WebAPI.Endpoints.Group;
 
-namespace Decenea.WebAPI.Endpoints.Test;
-
-public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponseResult<object>>
+public class SyncTestsEndpoint : Endpoint<SyncTestsRequest, ApiResponseResult<object>>
 {
     public override void Configure()
     {
-        Put(RouteConstants.TestsUpdate);
+        Put(RouteConstants.GroupsSyncTests);
         Roles(nameof(UserRole.SuperAdmin),
             nameof(UserRole.Admin),
             nameof(UserRole.Member));
     }
     
-    public override async Task<ApiResponseResult<object>> ExecuteAsync(UpdateTestRequest req, CancellationToken ct)
+    public override async Task<ApiResponseResult<object>> ExecuteAsync(SyncTestsRequest req, CancellationToken ct)
     {
+
         var accessToken = HttpContext.Request.Headers["Authorization"]
             .ToString()
             .Replace("Bearer ","");
@@ -33,16 +34,13 @@ public class UpdateTestEndpoint : Endpoint<UpdateTestRequest, ApiResponseResult<
         
         if(userId is null || userEmail is null)
             return new ApiResponseResult<object>(null, true, "Invalid JWT.");
-        
-        var result = await new UpdateTestCommand()
+
+        var result = await new SyncTestsCommand()
         {
-            Id = req.Id,
-            Title = req.Title,
-            Description = req.Description,
-            Version = req.Version,
             UserId = userId,
-            UserEmail = userEmail,
-            Questions = req.Questions
+            GroupId = req.GroupId,
+            TestIds = req.TestIds,
+            UserEmail = userEmail
         }.ExecuteAsync(ct);
         
         return new ApiResponseResult<object>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());

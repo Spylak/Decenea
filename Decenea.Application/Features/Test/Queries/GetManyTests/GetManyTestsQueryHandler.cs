@@ -44,7 +44,7 @@ public class GetManyTestsQueryHandler : ICommandHandler<GetManyTestsQuery, Error
 
             var testDtos = await dbQuery
                 .Where(i => i.UserId == query.UserId)
-                .Select(i => i.TestToTestDto(null,query.IncludeDetails,query.IncludeDetails))
+                .Select(i => i.TestToTestDto(null,query.IncludeDetails,query.IncludeDetails, query.IncludeDetails))
                 .ToListAsync(cancellationToken);
             
             return testDtos;

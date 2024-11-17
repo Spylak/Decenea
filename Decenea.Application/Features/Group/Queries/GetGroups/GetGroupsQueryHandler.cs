@@ -20,7 +20,7 @@ public class GetGroupsQueryHandler : ICommandHandler<GetGroupsQuery, ErrorOr<Lis
         var group = await _dbContext
             .Set<Domain.Aggregates.GroupAggregate.Group>()
             .Where(i => i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail))
-            .Select(i => i.GroupToGroupDto(false))
+            .Select(i => i.GroupToGroupDto(false,true))
             .ToListAsync(ct);
             
         return group;

@@ -32,8 +32,6 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
             return claims.Errors;
         }
 
-        var username = claims.Value?.GetUserNameClaimValue();
-
         var email = claims.Value?.GetEmailClaimValue();
 
         if (email is null)
@@ -68,7 +66,7 @@ public class RegenerateAuthTokensCommandHandler : ICommandHandler<RegenerateAuth
 
                     u.Permissions.AddRange(new[] { "Browse", "Edit" });
 
-                    u.Claims.Add(new("userName", username));
+                    u.Claims.Add(new("userName", user.Email));
                     u.Claims.Add(new(ClaimTypes.Email, email));
 
                     u["userId"] = user.Id; //indexer based claim setting

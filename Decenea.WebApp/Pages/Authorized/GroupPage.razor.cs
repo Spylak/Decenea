@@ -2,16 +2,40 @@ using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.Enums;
 using Decenea.Common.Requests.Group;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace Decenea.WebApp.Pages.Authorized;
 
 public partial class GroupPage
 {
     [Parameter] public string? GroupId { get; set; }
+    private string? TestIdToAdd { get; set; }
+    private MudDialog MudDialog { get; set; }
+
     private GroupDto Group { get; set; } = new ()
     {
         Name = "Initial"
     };
+
+    private async Task AddTestToGroup()
+    {
+        var testIds = Group.TestDtos
+            .Select(i => i.Id)
+            .ToList();
+        
+        testIds.Add(TestIdToAdd);
+        await GroupApi.SyncTests(new SyncTestsRequest
+        {
+            GroupId = Group.Id,
+            TestIds = testIds
+        });
+        
+        var result  = await GroupApi.Get(new GetGroupRequest(GroupId));
+        if (result is { IsError: false, Data: not null })
+            Group = result.Data;
+        StateHasChanged();
+        await MudDialog.CloseAsync();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,6 +91,25 @@ public partial class GroupPage
             GroupId = Group.Id,
             GroupUserEmails = [groupMember.GroupUserEmail]
         });
+    }
+
+    private async Task RemoveTest(string testId)
+    {
+        var test = Group.TestDtos.FirstOrDefault(i => i.Id == testId);
+        if (test is null)
+        {
+            return;
+        }
+        Group.TestDtos.Remove(test);
+        await GroupApi.SyncTests(new SyncTestsRequest
+        {
+            GroupId = Group.Id,
+            TestIds = Group.TestDtos.Select(i => i.Id).ToList()
+        });
+        var result  = await GroupApi.Get(new GetGroupRequest(GroupId));
+        if (result is { IsError: false, Data: not null })
+            Group = result.Data;
+        StateHasChanged();
     }
     
     private async Task UpdateGroupMember(GroupMemberDto groupMemberDto)

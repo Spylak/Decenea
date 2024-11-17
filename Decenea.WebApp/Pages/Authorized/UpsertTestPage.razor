@@ -2,7 +2,9 @@
 @attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
 @attribute [Authorize]
 @inherits Decenea.WebApp.Pages.Shared.BasePage
+@using Decenea.Common.DataTransferObjects.Group
 @using Decenea.Common.DataTransferObjects.Question.QuestionTypes
+@using Decenea.Common.DataTransferObjects.Test
 @using Decenea.WebApp.Components.TestComponents
 <PageTitle>@(string.IsNullOrWhiteSpace(TestId) ? "Test Creation" : "Modify test")</PageTitle>
 
@@ -23,57 +25,123 @@
     <MudItem xs="12">
         <TestPropertiesForm Test="@TestContainer.UpsertTestModel"></TestPropertiesForm>
     </MudItem>
-    <MudItem xs="12">
-        <MudDataGrid T="GenericQuestionModel" Items="@TestContainer.UpsertTestModel.GenericQuestionModels"
-                     Bordered="true"
-                     Dense="true"
-                     ReadOnly="true"
-                     Hover="true"
-                     FilterMode="DataGridFilterMode.ColumnFilterRow"
-                     Filterable="true"
-                     FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
-                     Striped="true"
-                     RowClick="@(async itm => await QuestionDialog(itm.Item.QuestionType, itm.Item.Id))"
-                     ColumnResizeMode="ResizeMode.Column">
-            <ToolBarContent>
-                <MudSpacer/>
-                <MudIconButton
-                    Icon="@Icons.Material.Filled.Settings"
-                    Color="Color.Warning"
-                    OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))">
-                </MudIconButton>
-                <MudIconButton
-                    OnClick="@(async () => await QuestionDialog())"
-                    Icon="@Icons.Material.Filled.Add"
-                    Style="margin:-2px 5px 0"
-                    Color="Color.Tertiary"
-                    Variant="Variant.Filled"/>
-            </ToolBarContent>
-            <Columns>
-                <TemplateColumn
-                    Filterable="false"
-                    Sortable="false"
-                    Editable="false">
-                    <CellTemplate>
+    <MudTreeView T="string" ReadOnly>
+        <MudTreeViewItem Text="Questions" Expanded="false">
+            <MudItem xs="12">
+                <MudDataGrid T="GenericQuestionModel" Items="@TestContainer.UpsertTestModel?.GenericQuestionModels"
+                             Bordered="true"
+                             Dense="true"
+                             ReadOnly="true"
+                             Hover="true"
+                             FilterMode="DataGridFilterMode.ColumnFilterRow"
+                             Filterable="true"
+                             FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                             Striped="true"
+                             RowClick="@(async itm => await QuestionDialog(itm.Item.QuestionType, itm.Item.Id))"
+                             ColumnResizeMode="ResizeMode.Column">
+                    <ToolBarContent>
+                        <MudSpacer/>
                         <MudIconButton
-                            Icon="@Icons.Material.Filled.Delete"
-                            Color="Color.Error"
-                            OnClick="@(() => TestContainer.UpsertTestModel.RemoveQuestionById(context.Item.Id))"/>
-                    </CellTemplate>
-                </TemplateColumn>
-                <PropertyColumn Property="x => x.Id"
-                                Editable="false">
-                </PropertyColumn>
-                <PropertyColumn Property="x => x.Description"
-                                Editable="false">
-                </PropertyColumn>
-                <PropertyColumn Property="x => x.QuestionType"
-                                Editable="false">
-                </PropertyColumn>
-            </Columns>
-            <PagerContent>
-                <MudDataGridPager T="GenericQuestionModel"/>
-            </PagerContent>
-        </MudDataGrid>
-    </MudItem>
+                            Icon="@Icons.Material.Filled.Settings"
+                            Color="Color.Warning"
+                            OnClick="@(() => GlobalFunctionService.ConsoleLogAsync(""))">
+                        </MudIconButton>
+                        <MudIconButton
+                            OnClick="@(async () => await QuestionDialog())"
+                            Icon="@Icons.Material.Filled.Add"
+                            Style="margin:-2px 5px 0"
+                            Color="Color.Tertiary"
+                            Variant="Variant.Filled"/>
+                    </ToolBarContent>
+                    <Columns>
+                        <TemplateColumn
+                            Filterable="false"
+                            Sortable="false"
+                            Editable="false">
+                            <CellTemplate>
+                                <MudIconButton
+                                    Icon="@Icons.Material.Filled.Delete"
+                                    Color="Color.Error"
+                                    OnClick="@(() => TestContainer.UpsertTestModel?.RemoveQuestionById(context.Item.Id))"/>
+                            </CellTemplate>
+                        </TemplateColumn>
+                        <PropertyColumn Property="x => x.Id"
+                                        Editable="false">
+                        </PropertyColumn>
+                        <PropertyColumn Property="x => x.Description"
+                                        Editable="false">
+                        </PropertyColumn>
+                        <PropertyColumn Property="x => x.QuestionType"
+                                        Editable="false">
+                        </PropertyColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="GenericQuestionModel"/>
+                    </PagerContent>
+                </MudDataGrid>
+            </MudItem>
+        </MudTreeViewItem>
+        <MudTreeViewItem Text="Users" Expanded="false">
+            <MudItem xs="12">
+                <MudDataGrid T="TestUserDto" Items="@TestContainer.UpsertTestModel?.Users"
+                             Bordered="true"
+                             EditTrigger="DataGridEditTrigger.Manual"
+                             EditMode="DataGridEditMode.Form"
+                             ReadOnly="true"
+                             Dense="true"
+                             Hover="true"
+                             FilterMode="DataGridFilterMode.ColumnFilterRow"
+                             Filterable="true"
+                             FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                             Striped="true">
+                    <ToolBarContent>
+                        <MudSpacer/>
+                    </ToolBarContent>
+                    <Columns>
+                        <PropertyColumn
+                            Property="i => i.UserId">
+                        </PropertyColumn>
+                        <PropertyColumn
+                            Property="i => i.UserEmail">
+                        </PropertyColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="TestUserDto"/>
+                    </PagerContent>
+                </MudDataGrid>
+                
+            </MudItem>
+        </MudTreeViewItem>
+        <MudTreeViewItem Text="Groups" Expanded="false">
+            <MudItem xs="12">
+                <MudDataGrid T="GroupDto" Items="@TestContainer.UpsertTestModel?.Groups"
+                             Bordered="true"
+                             EditTrigger="DataGridEditTrigger.Manual"
+                             EditMode="DataGridEditMode.Form"
+                             ReadOnly="true"
+                             Dense="true"
+                             Hover="true"
+                             FilterMode="DataGridFilterMode.ColumnFilterRow"
+                             Filterable="true"
+                             FilterCaseSensitivity="DataGridFilterCaseSensitivity.CaseInsensitive"
+                             Striped="true">
+                    <ToolBarContent>
+                        <MudSpacer/>
+                    </ToolBarContent>
+                    <Columns>
+                        <PropertyColumn
+                            Property="i => i.Id">
+                        </PropertyColumn>
+                        <PropertyColumn
+                            Property="i => i.Name">
+                        </PropertyColumn>
+                    </Columns>
+                    <PagerContent>
+                        <MudDataGridPager T="GroupDto"/>
+                    </PagerContent>
+                </MudDataGrid>
+
+            </MudItem>
+        </MudTreeViewItem>
+    </MudTreeView>
 </MudGrid>

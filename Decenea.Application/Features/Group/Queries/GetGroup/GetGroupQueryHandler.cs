@@ -19,8 +19,10 @@ public class GetGroupQueryHandler : ICommandHandler<GetGroupQuery, ErrorOr<Group
     {
         var group = await _dbContext
             .Set<Domain.Aggregates.GroupAggregate.Group>()
-            .AsSplitQuery()
             .Include(i => i.GroupMembers)
+            .Include(i => i.TestGroups)
+            .ThenInclude(i => i.Test)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(i => i.Id == command.GroupId 
                                       && i.GroupMembers.Any(j => j.GroupUserEmail == command.UserEmail), ct);
             

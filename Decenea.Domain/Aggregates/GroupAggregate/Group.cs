@@ -18,12 +18,21 @@ public class Group : AuditableAggregateRoot
     public IReadOnlyCollection<TestGroup> TestGroups  => _testGroups.AsReadOnly();
     public static Group Create(string name, string? id = null)
     {
-        var test = new Group(id)
+        var group = new Group(id)
         {
             Name = name
         };
 
-        return test;
+        return group;
+    }
+    
+    public void SyncTests(List<string> testIds)
+    {
+        _testGroups = testIds.Select(i => new TestGroup()
+        {
+            TestId = i,
+            GroupId = this.Id
+        }).ToList();
     }
     
     public void AddNewGroupMember(string userEmail, string groupId, GroupRole groupRole, string? alias = null)

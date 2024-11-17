@@ -32,7 +32,9 @@ public class GetTestEndpoint : Endpoint<GetTestRequest, ApiResponseResult<TestDt
             Id = req.Id,
             UserId = userId,
             UserEmail = userEmail,
-            IncludeQuestions = req.IncludeQuestions
+            IncludeQuestions = req.IncludeQuestions,
+            IncludeGroups = req.IncludeGroups,
+            IncludeUsers = req.IncludeUsers
         }.ExecuteAsync(ct);
         
         return new ApiResponseResult<TestDto>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());

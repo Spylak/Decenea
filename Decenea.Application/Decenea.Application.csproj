@@ -11,11 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FastEndpoints.Security" Version="5.30.0" />
+      <PackageReference Include="FastEndpoints.Security" Version="5.31.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.10" />
-      <PackageReference Include="Serilog" Version="4.0.2" />
+      <PackageReference Include="Serilog" Version="4.1.0" />
     </ItemGroup>
 
 

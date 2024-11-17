@@ -5,14 +5,20 @@ namespace Decenea.Application.Mappers;
 
 public static class GroupMapper
 {
-    public static GroupDto GroupToGroupDto(this Group group, bool includeMembers)
+    public static GroupDto GroupToGroupDto(this Group group, bool includeMembers = false, bool includeTests = false)
     {
         return new GroupDto()
         {
             Id = group.Id,
             Name = group.Name,
             Version = group.Version,
-            GroupMembers = group.GroupMembers.Select(i=>i.GroupMemberToGroupMemberDto()).ToList()
+            GroupMembers = group.GroupMembers
+                .Select(i=>i.GroupMemberToGroupMemberDto())
+                .ToList(),
+            TestDtos = group.TestGroups
+                .Select(i => i.Test?.TestToTestDto())
+                .Where(i => i != null)
+                .ToList()
         };
     }
     

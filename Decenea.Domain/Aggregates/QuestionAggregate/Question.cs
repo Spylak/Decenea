@@ -25,8 +25,6 @@ public class Question : AuditableAggregateRoot
         string? testId = null
         )
     {
-        
-        
         var question = new Question
         {
             Description = description,
@@ -50,5 +48,29 @@ public class Question : AuditableAggregateRoot
             });
         }
         return question;
+    }
+    
+    public Question Update(
+        string description,
+        string title,
+        string serializedAnsweredContent)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            throw new ArgumentException("Description cannot be empty", nameof(description));
+        
+        if (string.IsNullOrWhiteSpace(serializedAnsweredContent))
+            throw new ArgumentException("Question content cannot be empty", nameof(serializedAnsweredContent));
+
+        Description = description;
+        Title = title;
+        if (Answer?.SerializedAnsweredContent != serializedAnsweredContent)
+        {
+            SerializedUnAnsweredContent = QuestionHelper.SetUnAnsweredContent(QuestionType, serializedAnsweredContent);
+            if (Answer != null)
+            {
+                Answer.SerializedAnsweredContent = serializedAnsweredContent;
+            }
+        }
+        return this;
     }
 }

@@ -1,5 +1,6 @@
 using Decenea.Common.DataTransferObjects.Question;
 using Decenea.Domain.Aggregates.QuestionAggregate;
+using Decenea.Domain.Helpers;
 
 namespace Decenea.Application.Mappers;
 
@@ -37,31 +38,44 @@ public static class QuestionMapper
         return questionDto;
     }
     
-    // public static Question QuestionDtoToQuestion(this QuestionDto questionDto, Question? question = null)
-    // {
-    //     if (question is null)
-    //     {
-    //         question = new Question()
-    //         {
-    //             UserId = questionDto.UserId,
-    //             QuestionType = questionDto.QuestionType,
-    //             Title = questionDto.Title,
-    //             Description = questionDto.Description,
-    //             SerializedQuestionContent = questionDto.SerializedQuestionContent,
-    //             Version = questionDto.Version
-    //         };
-    //     }
-    //     else
-    //     {
-    //         question.Version = questionDto.Version;
-    //         question.UserId = questionDto.UserId;
-    //         question.QuestionType = questionDto.QuestionType;
-    //         question.Title = questionDto.Title;
-    //         question.Description = questionDto.Description;
-    //         question.SerializedQuestionContent = questionDto.SerializedQuestionContent;
-    //     }
-    //     
-    //     
-    //     return question;
-    // }
+    public static Question QuestionDtoToQuestion(this QuestionDto questionDto, Question? question = null)
+    {
+        if (question is null)
+        {
+            question = new Question()
+            {
+                Id = questionDto.Id,
+                UserId = questionDto.UserId,
+                QuestionType = questionDto.QuestionType,
+                Title = questionDto.Title,
+                Description = questionDto.Description,
+                SerializedUnAnsweredContent = QuestionHelper.SetUnAnsweredContent(questionDto.QuestionType, questionDto.SerializedQuestionContent)
+            };
+        }
+        else
+        {
+            question.UserId = questionDto.UserId;
+            question.QuestionType = questionDto.QuestionType;
+            question.Title = questionDto.Title;
+            question.Description = questionDto.Description;
+            question.SerializedUnAnsweredContent = QuestionHelper.SetUnAnsweredContent(question.QuestionType, questionDto.SerializedQuestionContent);
+        }
+        question.Version = questionDto.Version;
+
+
+        if (question.Answer is null)
+        {
+            question.Answer = new QuestionAnswer()
+            {
+                QuestionId = question.Id,
+                SerializedAnsweredContent = questionDto.SerializedQuestionContent
+            };
+        }
+        else
+        {
+            question.Answer.SerializedAnsweredContent = questionDto.SerializedQuestionContent;
+        }
+        
+        return question;
+    }
 }

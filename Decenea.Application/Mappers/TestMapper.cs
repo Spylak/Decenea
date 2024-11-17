@@ -1,4 +1,5 @@
 using Decenea.Common.DataTransferObjects.Answer;
+using Decenea.Common.DataTransferObjects.Group;
 using Decenea.Common.DataTransferObjects.Test;
 using Decenea.Domain.Aggregates.TestAggregate;
 
@@ -9,7 +10,8 @@ public static class TestMapper
     public static TestDto TestToTestDto(this Test test,
         TestDto? testDto = null,
         bool includeQuestions = false,
-        bool includeTestUsers = false)
+        bool includeTestUsers = false,
+        bool includeTestGroups = false)
     {
         if (testDto != null)
         {
@@ -38,6 +40,16 @@ public static class TestMapper
             {
                 UserEmail = i.User?.Email ?? "Not Found",
                 UserId = i.UserId,
+            }).ToList()
+            : [];
+        
+        testDto.Groups = includeTestGroups
+            ? test.TestGroups
+                .Select(i => new GroupDto
+            {
+                Id = i.GroupId,
+                Name = i.Group?.Name ?? "Not Found",
+                Version = i.Group?.Version ?? "Not Found"
             }).ToList()
             : [];
         

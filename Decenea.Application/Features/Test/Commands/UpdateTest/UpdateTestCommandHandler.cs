@@ -24,6 +24,8 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Error
         {
             var existingTest = await _dbContext
                 .Set<Domain.Aggregates.TestAggregate.Test>()
+                .Include(i => i.TestQuestions)
+                .ThenInclude(i => i.Question)
                 .FirstOrDefaultAsync(i => i.Id == command.Id && 
                                           i.UserId == command.UserId, cancellationToken);
 
@@ -36,7 +38,9 @@ public class UpdateTestCommandHandler : ICommandHandler<UpdateTestCommand, Error
             }
 
             Domain.Aggregates.TestAggregate.Test.Update(existingTest, command.Title,
-                command.Description);
+                command.Description, command.Questions?
+                    .Select(q => q.QuestionDtoToQuestion())
+                    .ToList());
 
             _dbContext.Set<Domain.Aggregates.TestAggregate.Test>().Update(existingTest);
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

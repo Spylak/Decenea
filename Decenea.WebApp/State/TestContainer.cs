@@ -6,7 +6,7 @@ namespace Decenea.WebApp.State;
 public class TestContainer
 {
     private readonly IndexedDb _indexedDb;
-    private TestModel _upsertTestModel;
+    private TestModel? _upsertTestModel;
     private TestModel? _onGoingTest;
     public TestContainer(IndexedDb indexedDb)
     {
@@ -30,7 +30,7 @@ public class TestContainer
             await _indexedDb.Tests.UpdateAsync(test);
         }
     }
-    public TestModel UpsertTestModel
+    public TestModel? UpsertTestModel
     {
         get => _upsertTestModel;
         set

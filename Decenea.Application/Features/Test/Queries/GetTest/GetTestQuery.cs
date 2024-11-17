@@ -9,4 +9,6 @@ public class GetTestQuery : ICommand<ErrorOr<TestDto>>
     public required string UserId { get; set; }
     public required string UserEmail { get; set; }
     public bool IncludeQuestions { get; set; }
+    public bool IncludeGroups { get; set; }
+    public bool IncludeUsers { get; set; }
 }

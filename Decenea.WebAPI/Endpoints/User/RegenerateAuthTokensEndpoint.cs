@@ -14,7 +14,7 @@ public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest
     public override void Configure()
     {
         Put(RouteConstants.UsersRegenerateAuthTokens);
-        Roles(EnumExtensions.GetNames<UserRole>());
+        AllowAnonymous();
     }
 
     public override async Task<ApiResponseResult<AuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensRequest req,

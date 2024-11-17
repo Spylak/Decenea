@@ -22,36 +22,47 @@ public partial class UpsertTestPage
     [Parameter] public string? TestId { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var keys = await IndexedDb.GetKeysAsync();
-        if (keys.IsSuccess)
+        if (TestId is not null)
         {
-            var tests = await IndexedDb
-                .Tests
-                .GetAllAsync();
+            var testApiResponseResult =
+                await TestApi.Get(new GetTestRequest() { Id = TestId, IncludeQuestions = true, IncludeUsers = true, IncludeGroups = true});
 
-            var test = tests.Data?
-                .FirstOrDefault(i => i.Id == TestId);
+            TestContainer.UpsertTestModel = testApiResponseResult.Data?.ToTestModel();
+        }
 
-            TestContainer.UpsertTestModel = test ?? new TestModel(){ Title = "Test Name"};
+        if (TestContainer.UpsertTestModel is null)
+        {
+            var keys = await IndexedDb.GetKeysAsync();
+            if (keys.IsSuccess)
+            {
+                var tests = await IndexedDb
+                    .Tests
+                    .GetAllAsync();
+
+                var test = tests.Data?
+                    .FirstOrDefault(i => i.Id == TestId);
+
+                TestContainer.UpsertTestModel = test ?? new TestModel(){ Title = "Test Name"};
             
-            if (test is null)
-            {
-                var upsertTests = await IndexedDb.UpsertTest.GetAllAsync();
-                var upsertTest = upsertTests.Data?.FirstOrDefault();
-                if (upsertTest is not null)
+                if (test is null)
                 {
-                    TestContainer.UpsertTestModel = upsertTest;
-                }
-            }
-
-            if (!keys.Data?.Contains("upserttest") ?? false)
-            {
-                if (TestContainer.UpsertTestModel.Id == TestId)
-                {
-                    var dropTable = await IndexedDb.UpsertTest.DropTableAsync();
+                    var upsertTests = await IndexedDb.UpsertTest.GetAllAsync();
+                    var upsertTest = upsertTests.Data?.FirstOrDefault();
+                    if (upsertTest is not null)
+                    {
+                        TestContainer.UpsertTestModel = upsertTest;
+                    }
                 }
 
-                var result = await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
+                if (!keys.Data?.Contains("upserttest") ?? false)
+                {
+                    if (TestContainer.UpsertTestModel.Id == TestId)
+                    {
+                        var dropTable = await IndexedDb.UpsertTest.DropTableAsync();
+                    }
+
+                    var result = await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
+                }
             }
         }
         await base.OnInitializedAsync();
@@ -101,6 +112,9 @@ public partial class UpsertTestPage
 
     private async Task<ApiResponseResult<TestDto>> RemoteSave()
     {
+        if (TestContainer.UpsertTestModel is null)
+            throw new ApplicationException("UpsertTestModel is null");
+        
         if (string.IsNullOrWhiteSpace(TestContainer.UpsertTestModel.Version))
         {
             return await TestApi.Create(new CreateTestRequest()
@@ -169,7 +183,7 @@ public partial class UpsertTestPage
         };
         
         if (questionType is not null && questionId is not null)
-            parameters.Add("GenericQuestion",TestContainer.UpsertTestModel.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
+            parameters.Add("GenericQuestion", TestContainer.UpsertTestModel.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
         
         var dialog = await DialogService.ShowAsync<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;
