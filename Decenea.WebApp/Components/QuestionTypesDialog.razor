@@ -2,8 +2,7 @@
     <DialogContent>
         <QuestionTypesComponent 
             TestModel="TestModel"
-            Question="GenericQuestion"
-            QuestionChanged="@(question => GenericQuestion = question)"></QuestionTypesComponent>
+            @bind-Question="GenericQuestion"></QuestionTypesComponent>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>

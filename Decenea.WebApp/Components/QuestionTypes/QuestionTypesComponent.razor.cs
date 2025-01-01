@@ -63,12 +63,7 @@ public partial class QuestionTypesComponent
 
     private async Task UpdateQuestion(GenericQuestionModel genericQuestionModel)
     {
-        var question = TestModel.GenericQuestionModels
-            .FirstOrDefault(i => i.Id.Equals(genericQuestionModel.Id));
-        if (question is null)
-            return;
-        TestModel.GenericQuestionModels.Remove(question);
-        TestModel.GenericQuestionModels.Add(genericQuestionModel);
+        Question = genericQuestionModel;
         await QuestionChanged.InvokeAsync(genericQuestionModel);
     }
 }

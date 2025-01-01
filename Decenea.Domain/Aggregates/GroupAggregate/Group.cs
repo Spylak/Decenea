@@ -1,7 +1,6 @@
 using Decenea.Common.Enums;
 using Decenea.Domain.Aggregates.TestAggregate;
 using Decenea.Domain.Common;
-using Decenea.Domain.Helpers;
 
 namespace Decenea.Domain.Aggregates.GroupAggregate;
 

@@ -183,7 +183,7 @@ public partial class UpsertTestPage
         };
         
         if (questionType is not null && questionId is not null)
-            parameters.Add("GenericQuestion", TestContainer.UpsertTestModel.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
+            parameters.Add("GenericQuestion", TestContainer.UpsertTestModel?.GenericQuestionModels.FirstOrDefault(i => i.Id == questionId));
         
         var dialog = await DialogService.ShowAsync<QuestionTypesDialog>(null, parameters, dialogOptions);
         var result = await dialog.Result;

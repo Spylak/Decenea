@@ -20,9 +20,7 @@ public class RegenerateAuthTokensEndpoint : Endpoint<RegenerateAuthTokensRequest
     public override async Task<ApiResponseResult<AuthTokensResponse>> ExecuteAsync(RegenerateAuthTokensRequest req,
         CancellationToken ct)
     {
-        var accessToken = HttpContext.Request.Headers["Authorization"]
-            .ToString().Replace("Bearer ","");
-        var result = await new RegenerateAuthTokensCommand(accessToken, req.RefreshToken).ExecuteAsync(ct);
+        var result = await new RegenerateAuthTokensCommand(req.AccessToken, req.RefreshToken).ExecuteAsync(ct);
         return new ApiResponseResult<AuthTokensResponse>(result.Value, result.IsError, result.ErrorsOrEmptyList.ToErrorDictionary());
     }
 }
