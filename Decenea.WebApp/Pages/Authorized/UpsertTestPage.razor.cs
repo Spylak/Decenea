@@ -74,7 +74,7 @@ public partial class UpsertTestPage
         {
             Title = "New Test"
         };
-        TestContainer.UpsertTestModel.Description = $"Test with id: {TestContainer.UpsertTestModel.Id}";
+        TestContainer.UpsertTestModel.Description = $"Test with id: {TestId ?? TestContainer.UpsertTestModel.Id}";
         await IndexedDb.UpsertTest.DropTableAsync();
         await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
         NavigationManager.NavigateTo($"/{Routes.UpsertTest}/{TestContainer.UpsertTestModel.Id}");
@@ -99,7 +99,7 @@ public partial class UpsertTestPage
             },
         };
         
-        TestContainer.UpsertTestModel.Description = $"Test with id: {TestContainer.UpsertTestModel.Id}";
+        TestContainer.UpsertTestModel.Description = $"Test with id: {TestId ?? TestContainer.UpsertTestModel.Id}";
         await IndexedDb.UpsertTest.DropTableAsync();
         await IndexedDb.UpsertTest.AddAsync(TestContainer.UpsertTestModel);
         

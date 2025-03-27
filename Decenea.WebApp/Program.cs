@@ -24,7 +24,12 @@ builder.Services.AddSingleton<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<AuthStateProvider>());
 builder.Services.AddSingleton<IAuthStateProvider>(provider => provider.GetRequiredService<AuthStateProvider>());
 
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorizationCore(options =>
+{
+    // Define policies based on roles
+    options.AddPolicy("RequireAdmin", policy => 
+        policy.RequireClaim("role", new[] { "Admin", "SuperAdmin" }));
+});
 builder.Services.AddSingleton<IndexedDb>();
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 builder.Services.AddTransient<IUserService,UserService>();

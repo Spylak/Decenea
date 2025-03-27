@@ -1,7 +1,7 @@
 @attribute [Route($"/{Routes.Tests}")]
 
 @using Decenea.WebApp.Models
-@attribute [Authorize]
+@attribute [Authorize(Policy = "RequireAdmin")]
 
 <PageTitle>MyTests</PageTitle>
 
@@ -45,7 +45,7 @@
                     Property="i => i.Title"
                     Editable="false">
                 </PropertyColumn>
-                <PropertyColumn
+                <PropertyColumn Required="false"
                     Property="i => i.Version"
                     Editable="false">
                 </PropertyColumn>

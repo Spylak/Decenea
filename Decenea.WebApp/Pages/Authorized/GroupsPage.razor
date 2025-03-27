@@ -1,4 +1,5 @@
 @attribute [Route($"/{Routes.Groups}")]
+@attribute [Authorize(Policy = "RequireAdmin")]
 
 @using Decenea.Common.Apis
 @using Decenea.WebApp.Abstractions
@@ -17,7 +18,7 @@
         <MudItem xs="4">
         </MudItem>
         <MudItem xs="4">
-            <MudButton Color="Color.Warning" Variant="Variant.Filled">Save Groups</MudButton>
+            @* <MudButton Color="Color.Warning" Variant="Variant.Filled">Save Groups</MudButton> *@
         </MudItem>
     <MudItem xs="12">
         <MudDataGrid T="GroupDto" Items="@Groups"
@@ -62,7 +63,9 @@
                 <PropertyColumn
                     Property="i => i.Name">
                 </PropertyColumn>
-                <PropertyColumn
+                <PropertyColumn 
+                    Editable="false"
+                    Required="false"
                     Property="i => i.Version">
                 </PropertyColumn>
                 <TemplateColumn CellClass="d-flex justify-end">

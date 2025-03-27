@@ -16,8 +16,6 @@ public class GetActiveTestEndpoint : Endpoint<GetActiveTestRequest, ApiResponseR
     public override void Configure()
     {
         Get(RouteConstants.TestsGetActive);
-        Roles(UserRoleExtensions.GetAuthorizedRoles());
-
     }
     
     public override async Task<ApiResponseResult<ActiveTestDto>> ExecuteAsync(GetActiveTestRequest req, CancellationToken ct)

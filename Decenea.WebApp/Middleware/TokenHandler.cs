@@ -18,7 +18,13 @@ public class TokenHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        if (_authStateProvider.AuthTokensResponse.AccessToken is null)
+        var allowAnonymousValue = false;
+        if (request.Headers.TryGetValues("AllowAnonymous", out var values))
+        {
+            bool.TryParse(values.FirstOrDefault(), out allowAnonymousValue); ;
+        }
+        
+        if (!allowAnonymousValue && _authStateProvider.AuthTokensResponse.AccessToken is null)
         {
             throw new ArgumentNullException(nameof(_authStateProvider.AuthTokensResponse.AccessToken));
         }

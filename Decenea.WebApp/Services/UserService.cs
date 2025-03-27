@@ -34,7 +34,8 @@ public class UserService : IUserService
         {
             var response = await _userApi.Register(user);
             if (response.IsError)
-                return Error.Failure(metadata: response.Messages.ToDictionary(i=>i.Key, i => (object)i.Value));
+                return Error.Failure(description:
+                    response.Messages.FirstOrDefault().Value, metadata: response.Messages.ToDictionary(i=>i.Key, i => (object)i.Value));
             
             _authStateProvider.NotifyAuthenticationStateChanged();
             return true;

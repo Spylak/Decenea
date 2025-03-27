@@ -1,6 +1,6 @@
 @attribute [Route($"/{Routes.UpsertTest}")]
 @attribute [Route($"/{Routes.UpsertTest}/{{testId}}")]
-@attribute [Authorize]
+@attribute [Authorize(Policy = "RequireAdmin")]
 @inherits Decenea.WebApp.Pages.Shared.BasePage
 @using Decenea.Common.DataTransferObjects.Group
 @using Decenea.Common.DataTransferObjects.Question.QuestionTypes

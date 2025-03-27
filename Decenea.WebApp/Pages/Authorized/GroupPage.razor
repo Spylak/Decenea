@@ -1,6 +1,6 @@
 @attribute [Route($"/{Routes.Group}")]
 @attribute [Route($"/{Routes.Group}/{{groupId}}")]
-@attribute [Authorize]
+@attribute [Authorize(Policy = "RequireAdmin")]
 @using Decenea.Common.Apis
 @using Decenea.Common.DataTransferObjects.Group
 @using Decenea.Common.DataTransferObjects.Test
@@ -73,10 +73,12 @@
                     <PropertyColumn
                         Property="i => i.GroupUserEmail">
                     </PropertyColumn>
-                    <PropertyColumn
+                    <PropertyColumn Required="false"
                         Property="i => i.Alias">
                     </PropertyColumn>
-                    <PropertyColumn
+                    <PropertyColumn 
+                        Required="false"
+                        Editable="false"
                         Property="i => i.Version">
                     </PropertyColumn>
                     <TemplateColumn CellClass="d-flex justify-end">

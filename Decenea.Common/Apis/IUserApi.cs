@@ -9,5 +9,6 @@ namespace Decenea.Common.Apis;
 public interface IUserApi
 {
     [Post(RouteConstants.UsersRegister)]
+    [Headers("AllowAnonymous: true")]
     Task<ApiResponseResult<UserDto>> Register([Body] RegisterUserRequest request);
 }

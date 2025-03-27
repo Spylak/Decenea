@@ -14,9 +14,6 @@ public class UpsertAnswersEndpoint : Endpoint<UpsertAnswersRequest, ApiResponseR
     public override void Configure()
     {
         Post(RouteConstants.AnswersUpsert);
-        Roles(nameof(UserRole.SuperAdmin),
-            nameof(UserRole.Admin),
-            nameof(UserRole.Member));
     }
     
     public override async Task<ApiResponseResult<List<TestAnswerDto>>> ExecuteAsync(UpsertAnswersRequest req, CancellationToken ct)

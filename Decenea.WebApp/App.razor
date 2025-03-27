@@ -5,10 +5,17 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <Authorizing>
-                    <p>Please wait, we are authorizing the user.</p>
+                    <div style="text-align: center;margin-top: 30vh">
+                        <h1>Please wait, we are authorizing the user.</h1>
+                    </div>
                 </Authorizing>
                 <NotAuthorized>
-                    <Login/>
+                    <div style="text-align: center;margin-top: 30vh">
+                        <h1>You are not authorized to see this section!</h1>
+                        <p>
+                            You can request access from an admin.
+                        </p>
+                    </div>
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1"/>

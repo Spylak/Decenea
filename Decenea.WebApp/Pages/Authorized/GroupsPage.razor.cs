@@ -26,7 +26,9 @@ public partial class GroupsPage
 
     private async Task SaveGroups()
     {
-        var groupDtos = Groups.Select(i => new GroupDto()
+        var groupDtos = Groups
+            .Where(i => string.IsNullOrWhiteSpace(i.Version))
+            .Select(i => new GroupDto()
         {
             Id = i.Id,
             Name = i.Name,
@@ -48,5 +50,8 @@ public partial class GroupsPage
     private async Task UpdateGroup(string id, string name, string version)
     {
         await GroupApi.Update(new UpdateGroupRequest(id, name, version));
+        var result = await GroupApi.Get();
+        if (!result.IsError)
+            Groups = result.Data ?? [];
     }
 }

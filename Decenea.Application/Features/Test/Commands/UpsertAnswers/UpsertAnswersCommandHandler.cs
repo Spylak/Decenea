@@ -27,10 +27,13 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                 .ThenInclude(i => i!.TestQuestions)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(i => i.EndTime >= DateTime.UtcNow && i.UserId == command.UserId && i.TestId == command.TestId, ct);
-
+            var isNewTestUser = false;
+            
             if (testUser == null)
             {
                 var testGroup = await _dbContext.Set<TestGroup>()
+                    .Include(i => i.Test)
+                    .ThenInclude(i => i!.TestQuestions)
                     .FirstOrDefaultAsync(i => i.TestId.Equals(command.TestId) 
                                               && i.Group!.GroupMembers.Select(j => j.GroupUserEmail).Contains(command.UserEmail), ct);
                 
@@ -40,7 +43,9 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                     {
                         UserId = command.UserId,
                         TestId = command.TestId,
+                        Test = testGroup.Test
                     };
+                    isNewTestUser = true;
                 }
             }
             
@@ -48,12 +53,15 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                 return Error.NotFound(description:"Test user not found");
 
             var testQuestionIds = testUser
-                .Test!
+                .Test?
                 .TestQuestions
                 .Where(i => command.Answers.Select(j => j.QuestionId).Contains(i.QuestionId))
                 .Select(i => i.QuestionId)
                 .ToList();
             
+            if (testQuestionIds == null)
+                return Error.NotFound(description:"Test questions not found");
+
             var addAnswers = command
                 .Answers
                 .Where(i => i.Version is null)
@@ -89,7 +97,15 @@ public class UpsertAnswersCommandHandler : ICommandHandler<UpsertAnswersCommand,
                     .First(i => i.Id == answer.Id)
                     .SerializedQuestionContent;
             }
-            _dbContext.Set<TestUser>().Update(testUser);
+
+            if (isNewTestUser)
+            {
+                await _dbContext.Set<TestUser>().AddAsync(testUser, ct);
+            }
+            else
+            {
+                _dbContext.Set<TestUser>().Update(testUser);
+            }
 
             await _dbContext.SaveChangesAsync(ct);
 

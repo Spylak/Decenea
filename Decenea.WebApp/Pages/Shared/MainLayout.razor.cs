@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using Decenea.WebApp.Database;
+using Decenea.WebApp.State;
 
 namespace Decenea.WebApp.Pages.Shared;
 
 public partial class MainLayout
 {
     [Inject] private IndexedDb IndexedDb { get; set; }
+    [Inject] private AuthStateProvider AuthStateProvider { get; set; }
     MudTheme currentTheme = new MudTheme();
     List<string> list = new List<string>()
     {

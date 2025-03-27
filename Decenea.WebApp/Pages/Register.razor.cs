@@ -3,6 +3,7 @@ using Decenea.WebApp.Abstractions;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Severity = MudBlazor.Severity;
 
 namespace Decenea.WebApp.Pages;
 
@@ -21,6 +22,16 @@ public partial class Register
         if (form.IsValid)
         {
             Snackbar.Add("Submitted!");
+        }
+        var result = await UserService.RegisterUser(Request);
+        if (!result.IsError)
+        {
+            Snackbar.Add("Created Successfully!", Severity.Success);
+
+        }
+        else
+        {
+            Snackbar.Add(result.FirstError.Description, Severity.Error);
         }
     }
 }

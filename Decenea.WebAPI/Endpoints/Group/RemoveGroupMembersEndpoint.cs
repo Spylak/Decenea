@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Decenea.Application.Features.Group.Commands.RemoveGroupMembers;
 using Decenea.Common.Common;
 using Decenea.Common.Constants;
@@ -27,15 +28,15 @@ public class RemoveGroupMembersEndpoint : Endpoint<RemoveGroupMembersRequest, Ap
         var claims = accessToken.GetTokenClaimJwts();
 
         var userId = claims.Value?.GetClaimValueByKey("userId");
-        var email = claims.Value?.GetClaimValueByKey("email");
+        var userEmail = claims.Value?.GetClaimValueByKey(ClaimTypes.Email);
         
-        if(userId is null || email is null)
+        if(userId is null || userEmail is null)
             return new ApiResponseResult<object>(null, true, "Invalid JWT.");
         
         var result = await new RemoveGroupMembersCommand()
         {
             UserId = userId,
-            UserEmail = email,
+            UserEmail = userEmail,
             GroupId = req.GroupId,
             GroupUserEmails = req.GroupUserEmails
         }.ExecuteAsync(ct);

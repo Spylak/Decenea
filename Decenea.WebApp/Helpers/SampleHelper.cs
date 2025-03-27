@@ -91,7 +91,7 @@ public static class SampleHelper
         var question = new GenericQuestionModel<FillBlankDropdown>(new FillBlankDropdown())
         {
             QuestionType = QuestionType.FillBlankDropdown,
-            Description = "What is your given and last _____, what is the _____ of your birth?",
+            Description = "What is your current _____, what is the _____ of your birth?",
             QuestionContent = new FillBlankDropdown()
             {
                 Options = new List<FillBlankDropdown.SpaceOption>

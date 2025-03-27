@@ -9,6 +9,7 @@ namespace Decenea.WebApp.State;
 
 public class AuthStateProvider : AuthenticationStateProvider, IAuthStateProvider
 {
+    public string UserEmailRole { get; set; } = string.Empty;
     private readonly ILocalStorageService _localStorage;
     public AuthTokensResponse AuthTokensResponse { get; private set; } = new ();
     public AuthStateProvider(ILocalStorageService localStorage)
@@ -28,6 +29,9 @@ public class AuthStateProvider : AuthenticationStateProvider, IAuthStateProvider
         var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(response.AccessToken);
         var userIdentity = new ClaimsIdentity(jwtToken.Claims, "Basic");
         var principal = new ClaimsPrincipal(userIdentity);
+        var userEmail = principal.FindFirst(ClaimTypes.Email)?.Value;
+        var userRole = principal.FindFirst("role")?.Value;
+        UserEmailRole = $"{userEmail} - {userRole}";
         return new AuthenticationState(principal);
     }
     
