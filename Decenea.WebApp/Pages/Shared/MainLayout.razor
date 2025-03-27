@@ -16,7 +16,11 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerLeftToggle())"/>
         <MudFab StartIcon="@Icons.Material.Filled.Home" Color="Color.Info" Style="color: whitesmoke" Size="Size.Small" OnClick="@(e => OnClick("/"))"></MudFab>
         <MudSpacer/>
-            @AuthStateProvider.UserEmailRole
+        <AuthorizeView>
+            <Authorized>
+                @AuthStateProvider.UserEmailRole
+            </Authorized>
+        </AuthorizeView>
         <MudSpacer/>
         <MudFab OnClick="@((e) => DarkMode())" StartIcon="@Icons.Material.Filled.WbSunny" Style="color:whitesmoke;margin: 2px;" Color="Color.Info" Size="Size.Small"></MudFab>
     </MudAppBar>

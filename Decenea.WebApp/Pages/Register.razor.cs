@@ -14,7 +14,13 @@ public partial class Register
     private RegisterUserRequest Request { get; set; } = new();
     private MudForm form;
     private RegisterUserRequestValidator RegisterUserRequestValidator = new RegisterUserRequestValidator();
-
+    
+    private string? PasswordMatch(string arg)
+    {
+        if (Request.Password != arg)
+            return "Passwords don't match";
+        return null;
+    }
     private async Task Submit()
     {
         await form.Validate();
@@ -22,6 +28,11 @@ public partial class Register
         if (form.IsValid)
         {
             Snackbar.Add("Submitted!");
+        }
+        else
+        {
+            Snackbar.Add(form.Errors.First(), Severity.Error);
+            return;
         }
         var result = await UserService.RegisterUser(Request);
         if (!result.IsError)
